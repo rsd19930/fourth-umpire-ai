@@ -1,0 +1,7 @@
+anthropic
+voyageai
+PyPDF2
+langchain-core
+langchain-text-splitters
+python-dotenv
+chromadb

@@ -1,12 +1,12 @@
 import os
 import re
 import json
+import sys
 import urllib.request
 from PyPDF2 import PdfReader
 
 PDF_URL = "https://www.lords.org/getmedia/1d908298-5c44-468d-b6a7-e1414a1296e0/Laws-of-Cricket-2017-Code-4th-Edition-(2026)_3.pdf"
 PDF_PATH = "laws_of_cricket.pdf"
-OUTPUT_PATH = "real_cricket_rules.json"
 
 # Page 0: cover, Pages 1-2: preface + history, Page 3: TOC (skip),
 # Pages 4-83: preamble + laws + appendices, Pages 84-89: index/notes/copyright (skip)
@@ -85,12 +85,15 @@ def extract_preface_and_history(reader):
     # Parse individual historical dates as separate chunks
     # Pattern: year followed by text (e.g., "1744   The earliest known...")
     date_pattern = re.compile(r"(\d{4})\s{2,}(.+?)(?=\d{4}\s{2,}|\Z)", re.DOTALL)
+    year_counts = {}
     for m in date_pattern.finditer(history_text):
         year = m.group(1)
         event_text = clean_text(m.group(2))
         if event_text:
+            year_counts[year] = year_counts.get(year, 0) + 1
+            chunk_id = f"history_{year}" if year_counts[year] == 1 else f"history_{year}_{year_counts[year]}"
             chunks.append({
-                "id": f"history_{year}",
+                "id": chunk_id,
                 "law_number": None,
                 "law_title": "SIGNIFICANT DATES IN THE HISTORY OF THE LAWS",
                 "section": year,
@@ -184,8 +187,11 @@ def split_into_sections(raw_text):
     return sections
 
 
-def chunk_section(section):
-    """Split a section into deep sub-law chunks with parent context preserved."""
+def chunk_section(section, broader=False):
+    """Split a section into sub-law chunks.
+    broader=False: split at N.N and N.N.N (finer, more chunks)
+    broader=True:  split at N.N only (broader, fewer but larger chunks)
+    """
     chunks = []
     section_type = section["type"]
     number = section["number"]
@@ -210,11 +216,13 @@ def chunk_section(section):
         prefix = str(number)
         id_prefix = f"appendix_{number.lower()}"
 
-    # Split at depth N.N and N.N.N (e.g., 2.3 and 2.3.1) but NOT deeper.
-    # N.N.N.N and below stay inside their parent N.N.N chunk for context.
-    all_sublaw_pattern = re.compile(
-        rf"^({re.escape(prefix)}\.\d+(?:\.\d+)?)\s{{2,}}(\S.+)", re.MULTILINE
-    )
+    # broader=True:  split only at N.N (e.g., 2.3) — fewer, larger chunks
+    # broader=False: split at N.N and N.N.N (e.g., 2.3 and 2.3.1) — more, smaller chunks
+    if broader:
+        sublaw_regex = rf"^({re.escape(prefix)}\.\d+)\s{{2,}}(\S.+)"
+    else:
+        sublaw_regex = rf"^({re.escape(prefix)}\.\d+(?:\.\d+)?)\s{{2,}}(\S.+)"
+    all_sublaw_pattern = re.compile(sublaw_regex, re.MULTILINE)
     all_splits = list(all_sublaw_pattern.finditer(text))
 
     if not all_splits:
@@ -286,6 +294,17 @@ def chunk_section(section):
 
 
 def main():
+    broader = "--broader" in sys.argv
+
+    if broader:
+        output_path = "real_cricket_rules_broader_chunking.json"
+        mode_label = "BROADER (N.N only)"
+    else:
+        output_path = "real_cricket_rules_finer_chunking.json"
+        mode_label = "FINER (N.N + N.N.N)"
+
+    print(f"Chunking mode: {mode_label}")
+
     download_pdf()
     reader = PdfReader(PDF_PATH)
 
@@ -304,7 +323,7 @@ def main():
     print("Chunking sections into sub-laws...")
     content_chunks = []
     for section in sections:
-        content_chunks.extend(chunk_section(section))
+        content_chunks.extend(chunk_section(section, broader=broader))
 
     # Filter out any empty chunks
     content_chunks = [c for c in content_chunks if c["text"]]
@@ -319,14 +338,15 @@ def main():
             "total_laws": law_count,
             "total_appendices": appendix_count,
             "total_chunks": len(all_chunks),
+            "chunking_mode": "broader" if broader else "finer",
         },
         "chunks": all_chunks,
     }
 
-    with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
+    with open(output_path, "w", encoding="utf-8") as f:
         json.dump(output, f, indent=2, ensure_ascii=False)
 
-    print(f"\nDone! Saved {len(all_chunks)} chunks to {OUTPUT_PATH}")
+    print(f"\nDone! Saved {len(all_chunks)} chunks to {output_path}")
     print(f"  Laws: {law_count}, Appendices: {appendix_count}")
 
     print("\nSample chunks:")

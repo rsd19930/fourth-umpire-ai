@@ -4,7 +4,8 @@
     "url": "https://www.lords.org/getmedia/1d908298-5c44-468d-b6a7-e1414a1296e0/Laws-of-Cricket-2017-Code-4th-Edition-(2026)_3.pdf",
     "total_laws": 42,
     "total_appendices": 5,
-    "total_chunks": 717
+    "total_chunks": 717,
+    "chunking_mode": "finer"
   },
   "chunks": [
     {
@@ -96,7 +97,7 @@
       "text": "1979 - After five editions of the"
     },
     {
-      "id": "history_1947",
+      "id": "history_1947_2",
       "law_number": null,
       "law_title": "SIGNIFICANT DATES IN THE HISTORY OF THE LAWS",
       "section": "1947",

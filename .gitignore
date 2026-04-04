@@ -15,3 +15,6 @@ __pycache__/
 
 # Large files
 *.pdf
+
+# Database
+chroma_storage/

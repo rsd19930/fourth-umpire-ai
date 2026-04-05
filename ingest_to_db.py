@@ -16,22 +16,9 @@ from dotenv import load_dotenv
 import voyageai
 import chromadb
 
+from config import CHROMA_PATH, COLLECTIONS, EMBEDDING_MODEL, BATCH_SIZE, WAIT_SECONDS
+
 load_dotenv()
-
-CHROMA_PATH = "chroma_storage"
-BATCH_SIZE = 20  # ~1,600 tokens per batch — conservative to stay under 10K TPM
-WAIT_SECONDS = 25  # Stay well under 3 RPM limit
-
-TARGETS = {
-    "broader": {
-        "json_file": "real_cricket_rules_broader_chunking.json",
-        "collection": "mcc_rules_broader",
-    },
-    "finer": {
-        "json_file": "real_cricket_rules_finer_chunking.json",
-        "collection": "mcc_rules_finer",
-    },
-}
 
 
 def load_chunks(json_file):
@@ -60,10 +47,10 @@ def call_voyage_with_retry(voyage_client, texts, max_retries=5):
     """Call Voyage AI embed with automatic retry on rate limit errors."""
     for attempt in range(max_retries):
         try:
-            return voyage_client.embed(texts, model="voyage-4-lite")
+            return voyage_client.embed(texts, model=EMBEDDING_MODEL)
         except Exception as e:
             if "RateLimitError" in type(e).__name__ or "rate" in str(e).lower():
-                wait = 30 * (attempt + 1)  # 30s, 60s, 90s...
+                wait = 30 * (attempt + 1)
                 print(f"  Rate limited. Waiting {wait}s before retry ({attempt + 1}/{max_retries})...")
                 time.sleep(wait)
             else:
@@ -81,11 +68,9 @@ def embed_and_load(voyage_client, chroma_collection, ids, texts, metadatas):
         batch_texts = texts[i : i + BATCH_SIZE]
         batch_meta = metadatas[i : i + BATCH_SIZE]
 
-        # Generate embeddings via Voyage AI (with retry on rate limit)
         result = call_voyage_with_retry(voyage_client, batch_texts)
         batch_embeddings = result.embeddings
 
-        # Insert into ChromaDB
         chroma_collection.add(
             ids=batch_ids,
             embeddings=batch_embeddings,
@@ -96,7 +81,6 @@ def embed_and_load(voyage_client, chroma_collection, ids, texts, metadatas):
         loaded += len(batch_ids)
         print(f"  Batch {i // BATCH_SIZE + 1}: added {len(batch_ids)} chunks ({loaded}/{total})")
 
-        # Wait between batches to respect rate limits (skip after last batch)
         if loaded < total:
             print(f"  Waiting {WAIT_SECONDS}s for rate limit...")
             time.sleep(WAIT_SECONDS)
@@ -105,7 +89,6 @@ def embed_and_load(voyage_client, chroma_collection, ids, texts, metadatas):
 
 
 def main():
-    # Determine which targets to load
     if "--broader" in sys.argv:
         keys = ["broader"]
     elif "--finer" in sys.argv:
@@ -117,21 +100,21 @@ def main():
     chroma_client = chromadb.PersistentClient(path=CHROMA_PATH)
 
     for key in keys:
-        target = TARGETS[key]
+        target = COLLECTIONS[key]
         print(f"\n{'='*50}")
         print(f"Loading: {key} chunks")
         print(f"  Source: {target['json_file']}")
-        print(f"  Collection: {target['collection']}")
+        print(f"  Collection: {target['name']}")
         print(f"{'='*50}")
 
         ids, texts, metadatas = load_chunks(target["json_file"])
         print(f"  Read {len(ids)} chunks from JSON")
 
-        collection = chroma_client.get_collection(name=target["collection"])
+        collection = chroma_client.get_collection(name=target["name"])
         loaded = embed_and_load(voyage_client, collection, ids, texts, metadatas)
 
         final_count = collection.count()
-        print(f"\n  Done! Collection '{target['collection']}' now has {final_count} documents.")
+        print(f"\n  Done! Collection '{target['name']}' now has {final_count} documents.")
 
     print(f"\nAll done!")
 

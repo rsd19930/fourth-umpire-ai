@@ -1,0 +1,1675 @@
+{
+  "metadata": {
+    "version": "draft_v1",
+    "generated_at": "2026-04-05 18:05:03",
+    "total_questions": 51,
+    "sources": {
+      "bcci_exam": 8,
+      "blog": 15,
+      "llm_generated": 18,
+      "scraped": 10
+    },
+    "difficulty_distribution": {
+      "hard": 26,
+      "edge_case": 12,
+      "easy": 13
+    },
+    "category_distribution": {
+      "fair_delivery": 1,
+      "scoring": 2,
+      "wicket_keeper": 1,
+      "run_out": 2,
+      "appeals": 1,
+      "match_management": 1,
+      "Dismissals - Caught": 1,
+      "Dismissals - Caught / Hit the Ball Twice": 1,
+      "No Ball - Mode of Delivery": 1,
+      "Hit the Ball Twice": 1,
+      "Ball in Play / Fair Delivery": 1,
+      "Dismissals - Bowled / Dead Ball": 1,
+      "Dismissals - Bowled (No Bails)": 1,
+      "Dismissals - Run Out": 1,
+      "Umpiring Jurisdiction - Caught Behind": 1,
+      "Dismissals - Run Out / Batters Ground": 1,
+      "Result of Match": 1,
+      "Dismissals - Stumped": 1,
+      "Short Runs": 1,
+      "Dismissals - LBW": 1,
+      "Scoring - No Ball / Boundary": 1,
+      "Fielding / Scoring": 1,
+      "Fielding / Substitutes": 1,
+      "Modes of Dismissal / LBW": 1,
+      "Modes of Dismissal / Caught": 1,
+      "Scoring / Boundaries / Result": 1,
+      "Match Procedures / Follow-on": 1,
+      "Unfair Play / Ball Tampering": 1,
+      "Unfair Play / Time Wasting": 1,
+      "Modes of Dismissal / No Ball interaction": 1,
+      "Scoring / Short Runs / Boundaries": 1,
+      "Bowling / Run Out / Non-striker": 1,
+      "Bowling / No Ball / Scoring": 1,
+      "Match Procedures / Declaration / Intervals": 1,
+      "Modes of Dismissal / Bowled": 1,
+      "Modes of Dismissal / Hit Wicket": 1,
+      "Modes of Dismissal / Stumped / Wide": 1,
+      "Modes of Dismissal / Run Out / Broken Wicket": 1,
+      "Bowling / Over Completion": 1,
+      "No-Ball / Front Foot": 1,
+      "Dead Ball / LBW": 1,
+      "Illegal Bowling Action": 1,
+      "Obstructing the Field": 1,
+      "Boundary / Overthrows": 1,
+      "Run Out / Wicket": 1,
+      "Run Out / Mankading": 1,
+      "Batting Order / Running": 1,
+      "No-Ball / Dismissals": 1,
+      "DRS / Review": 1
+    },
+    "status": "DRAFT - needs manual review and verification",
+    "instructions": "Review each question. Verify: (1) expected_ruling is correct, (2) relevant_chunk_ids_finer/broader contain the RIGHT chunks (not just what retrieval found). Once verified, save as evals/golden_dataset.json"
+  },
+  "questions": [
+    {
+      "question": "A batter, facing a delivery, switches stance from right-handed to left-handed during the bowler's delivery stride, then switches back to right-handed before the ball arrives. The ball passes outside the leg stump of a right-handed batter. Is this a fair delivery, and has the batter acted correctly?",
+      "expected_ruling": "Fair delivery. The batter is permitted to change stance. The delivery is legal as it is assessed against the batter's final stance at the time the ball reaches them.",
+      "expected_ruling_type": "guidance",
+      "difficulty": "hard",
+      "category": "fair_delivery",
+      "id": "bcci_001",
+      "source": "bcci_exam",
+      "relevant_chunk_ids_finer": [
+        "law21_s21.5.1",
+        "law21_s21.5.2",
+        "law21_s21.2",
+        "law22_s22.4.1"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law21_s21.5",
+        "law21_s21.2",
+        "law22_s22.4"
+      ],
+      "laws_involved": [
+        21,
+        22
+      ]
+    },
+    {
+      "question": "Batter A hits the first ball of the over down the ground and completes one run. However, Batter B unintentionally fails to make good his ground at the strikers end. Both batters turn for a further run when the fielder throws the ball. The throw misses the stumps and the ball reaches the boundary. How many runs are scored and who will face the next delivery",
+      "expected_ruling": "5 runs scored (1 run completed + 4 for the boundary from the overthrow). Batter A faces the next delivery",
+      "expected_ruling_type": "definitive",
+      "difficulty": "hard",
+      "category": "scoring",
+      "id": "bcci_002",
+      "source": "bcci_exam",
+      "relevant_chunk_ids_finer": [
+        "law18_s18.4.1",
+        "law18_s18.4.2",
+        "law19_s19.8"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law18_s18.4",
+        "law19_s19.8",
+        "law18_s18.3"
+      ],
+      "laws_involved": [
+        18,
+        19
+      ]
+    },
+    {
+      "question": "The batters have crossed for the 2nd run of the last ball of the over when the first throw from a fielder is made. The wicket-keeper fails to collect it. The ball is then collected and thrown again by a fielder when the batters have crossed for the 3rd run. This second throw is wayward and the ball reaches the boundary. How many runs are scored and who faces the first ball of the next over?",
+      "expected_ruling": "7 runs scored (3 completed runs plus 4 overthrow boundary). The batter who was at the non-striker's end for the last ball OR The batter who was at non-striker's end when the final throw was made faces the next over.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "edge_case",
+      "category": "scoring",
+      "id": "bcci_003",
+      "source": "bcci_exam",
+      "relevant_chunk_ids_finer": [
+        "law19_s19.8",
+        "law18_s18.11.2",
+      ],
+      "relevant_chunk_ids_broader": [
+        "law19_s19.8",
+        "law18_s18.11"
+      ],
+      "laws_involved": [
+        18,
+        19
+      ]
+    },
+    {
+      "question": "The nominated wicket-keeper drops catches early in the innings. Another nominated player from the playing XI takes over as wicket-keeper during a drinks break. This second wicket-keeper is then severely injured. The fielding captain requests a substitute fielder to act as wicket-keeper. As umpire, what is your ruling?",
+      "expected_ruling": "The request must be denied. A substitute fielder cannot act as wicket-keeper. Another member of the playing XI must assume the role.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "hard",
+      "category": "wicket_keeper",
+      "id": "bcci_004",
+      "source": "bcci_exam",
+      "relevant_chunk_ids_finer": [
+        "law27_s27.2",
+        "law24_s24.1",
+        "law24_s24.1.1",
+        "law24_s24.1.2",
+        "law42_s42.7.1",
+        "law2_s2.2",
+        "law24_s24.1.3"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law27_s27.2",
+        "law24_s24.1",
+        "law2_s2.2",
+        "law1_s1.2",
+        "law42_s42.7",
+        "appendix_a_sA.7"
+      ],
+      "laws_involved": [
+        1,
+        2,
+        24,
+        27,
+        42
+      ]
+    },
+    {
+      "question": "A bowler attempts to run out the non-striker before entering the delivery stride. The non-striker is short of his crease. Immediately after, the striker calls for medical attention due to severe cramps. An appeal for the run out is made 4 minutes later, during the medical break. What is your decision?",
+      "expected_ruling": "OUT - Run out. The dismissal occurred before the medical stoppage; the appeal is valid as it relates to an incident that occurred before play was interrupted and was made at the first reasonable opportunity.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "hard",
+      "category": "run_out",
+      "id": "bcci_005",
+      "source": "bcci_exam",
+      "relevant_chunk_ids_finer": [
+        "law38_s38.3",
+        "law31_s31.1",
+        "law25_s25.7.2",
+        "law38_s38.3.2",
+        "law39_s39.1.2",
+        "law39_s39.3.1",
+        "law17_s17.8"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law38_s38.3",
+        "law31_s31.1",
+        "law25_s25.7",
+        "law39_s39.3",
+        "law17_s17.8",
+        "law32_s32.2"
+      ],
+      "laws_involved": [
+        17,
+        25,
+        31,
+        32,
+        38,
+        39
+      ]
+    },
+    {
+      "question": "Following a run-out appeal for the non-striker being out of their ground before delivery, can the fielding captain withdraw the appeal after a new batter has made their way to the wicket but before any further ball has been bowled?",
+      "expected_ruling": "Yes. The fielding captain may withdraw the appeal before the next ball is bowled, subject to the umpire's agreement.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "easy",
+      "category": "appeals",
+      "id": "bcci_006",
+      "source": "bcci_exam",
+      "relevant_chunk_ids_finer": [
+        "law31_s31.7",
+        "law31_s31.8",
+        "law38_s38.3.3",
+        "law38_s38.3.2",
+        "law38_s38.3.1",
+        "law31_s31.1"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law31_s31.7",
+        "law31_s31.8",
+        "law38_s38.3",
+        "law31_s31.1",
+        "law38_s38.1",
+        "law38_s38.2"
+      ],
+      "laws_involved": [
+        31,
+        38
+      ]
+    },
+    {
+      "question": "What factors must an umpire consider when adjudicating on a run-out appeal where the bowler has attempted to run out the non-striker before delivering the ball?",
+      "expected_ruling": "The umpire must consider: (1) whether the non-striker was out of their ground before the bowler would have been expected to release the ball; (2) whether the wicket was fairly broken; (3) whether a valid appeal was made.",
+      "expected_ruling_type": "guidance",
+      "difficulty": "hard",
+      "category": "run_out",
+      "id": "bcci_007",
+      "source": "bcci_exam",
+      "relevant_chunk_ids_finer": [
+        "law38_s38.3",
+        "law29_s29.1",
+        "law38_s38.3.2",
+        "law38_s38.3.3",
+        "law38_s38.3.1",
+        "law23_s23.2.1",
+        "law35_s35.2"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law38_s38.3",
+        "law29_s29.1",
+        "law35_s35.2",
+        "law21_s21.4",
+        "law41_s41.16",
+        "law20_s20.4"
+      ],
+      "laws_involved": [
+        20,
+        21,
+        23,
+        29,
+        35,
+        38,
+        41
+      ]
+    },
+    {
+      "question": "Play in a multi-day match is interrupted by rain. List six procedural duties the umpires must carry out during and after the interruption until play resumes the following day.",
+      "expected_ruling": "Umpires must: (1) call and signal Time and ensure players leave the field; (2) ensure the pitch is covered; (3) monitor and assess ground/weather conditions; (4) liaise with ground staff regarding fitness of the ground; (5) calculate time lost to determine any adjustment to minimum overs; (6) inform both captains of any revised schedule before play resumes.",
+      "expected_ruling_type": "guidance",
+      "difficulty": "easy",
+      "category": "match_management",
+      "id": "bcci_008",
+      "source": "bcci_exam",
+      "relevant_chunk_ids_finer": [
+        "law2_s2.8",
+        "law10_s10.1",
+        "law11_s11.1",
+        "law16_s16.1",
+        "law2_s2.8.2",
+        "law12_s12.1",
+        "law2_s2.8.3",
+        "law10_s10.2",
+        "law10_s10.2.2"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law2_s2.8",
+        "law10_s10.1",
+        "law11_s11.1",
+        "law16_s16.1",
+        "law12_s12.1",
+        "law2_s2.7",
+        "law11_s11.6",
+        "law10_s10.2",
+        "law11_s11.4"
+      ],
+      "laws_involved": [
+        2,
+        10,
+        11,
+        12,
+        16
+      ]
+    },
+    {
+      "question": "A batter deliberately pads away a delivery without attempting to play a shot. The ball balloons up off the pad, makes inadvertent contact with the bat, and a fielder takes a clean catch. The fielding team appeals for caught. Is the batter out?",
+      "expected_ruling": "Yes, the batter is out caught. The ball is not dead simply because the batter deliberately used their pad, and the subsequent contact with the bat is sufficient for a caught dismissal.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "hard",
+      "category": "Dismissals - Caught",
+      "id": "blog_001",
+      "source": "blog",
+      "relevant_chunk_ids_finer": [
+        "law33_s33.1",
+        "law37_s37.4",
+        "law30_s30.1.1",
+        "law30_s30.1.2",
+        "law37_s37.1.1",
+        "law37_s37.3.1"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law33_s33.1",
+        "law37_s37.4",
+        "law30_s30.1",
+        "law33_s33.3",
+        "law21_s21.17"
+      ],
+      "laws_involved": [
+        21,
+        30,
+        33,
+        37
+      ]
+    },
+    {
+      "question": "A batter plays a lifting delivery that strikes their upper arm. The ball lands on the ground, rolls back toward the stumps, and the batter hits it away. A fielder catches it on the full. The fielding team appeals for caught. Is the batter out?",
+      "expected_ruling": "Not out. The batter cannot be out caught off a second lawful strike once the ball has touched the ground since it was first struck. Law 33.2.2 states a fielder may catch a ball struck more than once only if the ball has not been grounded since first struck.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "hard",
+      "category": "Dismissals - Caught / Hit the Ball Twice",
+      "id": "blog_002",
+      "source": "blog",
+      "relevant_chunk_ids_finer": [
+        "law33_s33.1",
+        "law34_s34.1",
+        "law33_s33.2.2",
+        "law30_s30.1.1",
+        "law30_s30.1.2",
+        "law37_s37.4",
+        "law33_s33.2.1"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law33_s33.1",
+        "law34_s34.1",
+        "law33_s33.2",
+        "law30_s30.1",
+        "law37_s37.4",
+        "law38_s38.1",
+        "law38_s38.3"
+      ],
+      "laws_involved": [
+        30,
+        33,
+        34,
+        37,
+        38
+      ]
+    },
+    {
+      "question": "A slow bowler has bowled three balls left arm over the wicket. He then informs the bowler's end umpire he is changing to bowl round the wicket. The umpire informs the batter. The bowler then delivers the ball with his right arm, having never informed the umpire of the arm change, and bowls the surprised batter. The batter protests. What is the correct decision?",
+      "expected_ruling": "Not out and no ball. The bowler failed to inform the bowler's end umpire that he was changing bowling arms. Changing to round the wicket is not the same as changing bowling arm. The delivery is a no ball.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "hard",
+      "category": "No Ball - Mode of Delivery",
+      "id": "blog_003",
+      "source": "blog",
+      "relevant_chunk_ids_finer": [
+        "law21_s21.1",
+        "law21_s21.1",
+        "law21_s21.1.1",
+        "law21_s21.3.1",
+        "law21_s21.3.2",
+        "law21_s21.2",
+        "law41_s41.3.5"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law21_s21.1",
+        "law21_s21.1",
+        "law21_s21.3",
+        "law21_s21.2",
+        "law17_s17.6",
+        "law41_s41.8"
+      ],
+      "laws_involved": [
+        17,
+        21,
+        41
+      ]
+    },
+    {
+      "question": "A bowler fields a drive hit back down the pitch and attempts to throw the ball at the striker's wicket to effect a run out. His aim is poor and the ball flies at the batter's face. Instinctively, the batter swats it away with the bat and the ball goes to the boundary. What is the correct decision?",
+      "expected_ruling": "Four runs are scored. The batter cannot be dismissed in this circumstance as he is instinctively protecting himself from injury. The ball is not dead, so the runs stand. It is the bowler's responsibility not to endanger the batter.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "hard",
+      "category": "Hit the Ball Twice",
+      "id": "blog_004",
+      "source": "blog",
+      "relevant_chunk_ids_finer": [
+        "law34_s34.1",
+        "law19_s19.8",
+        "law21_s21.8",
+        "law18_s18.13.1",
+        "law21_s21.4",
+        "law25_s25.8"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law34_s34.1",
+        "law19_s19.8",
+        "law21_s21.8",
+        "law21_s21.4",
+        "law25_s25.8",
+        "law18_s18.13"
+      ],
+      "laws_involved": [
+        18,
+        19,
+        21,
+        25,
+        34
+      ]
+    },
+    {
+      "question": "A fast bowler, still five metres from the popping crease, releases the ball during his run-up. The ball is a fast delivery that surprises the batter and bowls him. The batter claims it cannot be a fair delivery as the bowler had not yet reached the crease. What is the correct decision?",
+      "expected_ruling": "The batter is out bowled. The ball is live as soon as the bowler begins his run-up. The bowler does not have to deliver the ball at the crease line, provided he does not bowl from behind the umpire obscuring the batter's view.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "edge_case",
+      "category": "Ball in Play / Fair Delivery",
+      "id": "blog_005",
+      "source": "blog",
+      "relevant_chunk_ids_finer": [
+        "law20_s20.1",
+        "law20_s20.5",
+        "law21_s21.5.2",
+        "law41_s41.7.1",
+        "law41_s41.6.2",
+        "law22_s22.4.1",
+        "law21_s21.5.1"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law20_s20.1",
+        "law20_s20.5",
+        "law21_s21.5",
+        "law22_s22.1",
+        "law22_s22.2",
+        "law38_s38.3",
+        "law22_s22.4"
+      ],
+      "laws_involved": [
+        20,
+        21,
+        22,
+        38,
+        41
+      ]
+    },
+    {
+      "question": "A match is being played with bails in place. Before a delivery is bowled, the wicketkeeper accidentally dislodges the bails while standing up. No dead ball is called. The bowler then bowls the ball, which hits the stumps. The fielding team appeals for bowled. Is the batter out?",
+      "expected_ruling": "No, the batter is not out bowled. The bails were not dislodged by the ball. The striker's end umpire should have called dead ball as soon as the bails were accidentally dislodged by the wicketkeeper.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "hard",
+      "category": "Dismissals - Bowled / Dead Ball",
+      "id": "blog_006",
+      "source": "blog",
+      "relevant_chunk_ids_finer": [
+        "law20_s20.1",
+        "law29_s29.1",
+        "law20_s20.4",
+        "law31_s31.7",
+        "law29_s29.2.2",
+        "law39_s39.1.1",
+        "law21_s21.6"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law20_s20.1",
+        "law29_s29.1",
+        "law20_s20.4",
+        "law31_s31.7",
+        "law21_s21.6",
+        "law35_s35.2",
+        "law39_s39.1"
+      ],
+      "laws_involved": [
+        20,
+        21,
+        29,
+        31,
+        35,
+        39
+      ]
+    },
+    {
+      "question": "A match is played without bails due to windy conditions. A delivery beats the bat and hits the stumps. The stump is not dislodged or tilted. The fielding team appeals for bowled. Is the batter out?",
+      "expected_ruling": "Yes, the batter is out bowled. Under Laws 20.4.2.4 and 29.4.1, when a match is played without bails, the umpire must decide if the ball has struck the stumps. The stump does not need to be displaced for the batter to be out.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "edge_case",
+      "category": "Dismissals - Bowled (No Bails)",
+      "id": "blog_007",
+      "source": "blog",
+      "relevant_chunk_ids_finer": [
+        "law20_s20.1",
+        "law29_s29.1",
+        "law20_s20.4",
+        "law29_s29.4",
+        "law39_s39.1.1",
+        "law32_s32.1.1",
+        "law29_s29.2.2",
+        "law29_s29.5.2"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law20_s20.1",
+        "law29_s29.1",
+        "law20_s20.4",
+        "law29_s29.4",
+        "law38_s38.2",
+        "law29_s29.5",
+        "law39_s39.1",
+        "law32_s32.1"
+      ],
+      "laws_involved": [
+        20,
+        29,
+        32,
+        38,
+        39
+      ]
+    },
+    {
+      "question": "A throw from a fielder misses the stumps. The running batter jumps to avoid the ball, but in doing so the ball strikes the batter's foot and deflects onto the stumps. The batter is out of his ground when the stumps are broken. The fielding team appeals for run out. Is the batter out?",
+      "expected_ruling": "Yes, the batter is out run out, unless the batter had already made his ground before jumping. A ball in play hitting a batter does not constitute a dead ball situation.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "hard",
+      "category": "Dismissals - Run Out",
+      "id": "blog_008",
+      "source": "blog",
+      "relevant_chunk_ids_finer": [
+        "law38_s38.1",
+        "law38_s38.2.1",
+        "law30_s30.1.2",
+        "law38_s38.2.2",
+        "law39_s39.3.1"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law38_s38.1",
+        "law38_s38.2",
+        "law39_s39.1",
+        "law39_s39.3",
+        "law30_s30.1"
+      ],
+      "laws_involved": [
+        30,
+        38,
+        39
+      ]
+    },
+    {
+      "question": "There is an appeal for caught behind. The bowler's end umpire gives the batter not out. The striker's end umpire signals to the bowler's end umpire that he heard bat on ball and believes it is out. After consultation, the bowler's end umpire reverses his decision and gives the batter out. Is this correct?",
+      "expected_ruling": "No, this is incorrect. The bowler's end umpire is the sole judge as to whether the ball touched the bat. The two umpires may only consult on whether the ball was caught cleanly, not on whether it hit the bat. The decision must stand as not out.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "hard",
+      "category": "Umpiring Jurisdiction - Caught Behind",
+      "id": "blog_009",
+      "source": "blog",
+      "relevant_chunk_ids_finer": [
+        "law2_s2.1",
+        "law31_s31.5",
+        "law31_s31.7",
+        "law31_s31.8",
+        "law31_s31.6",
+        "law38_s38.3.2"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law2_s2.1",
+        "law31_s31.5",
+        "law31_s31.7",
+        "law31_s31.8",
+        "law31_s31.6",
+        "law33_s33.5"
+      ],
+      "laws_involved": [
+        2,
+        31,
+        33,
+        38
+      ]
+    },
+    {
+      "question": "Both batters are at the non-striker's end. Striker A grounds his bat at the non-striker's end before non-striker B returns to that end. The wicket is then put down at the striker's end with both batters still at the non-striker's end. Who is out?",
+      "expected_ruling": "Non-striker B is out run out. Under Law 29, once Striker A grounded his bat at the non-striker's end, it became his ground. Non-striker B had vacated that end and failed to return to it before Striker A, so the non-striker's original end belongs to the non-striker B, which was the striker's end. As the wicket was put down at the striker's end and non-striker B is not in that ground, non-striker B is run out.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "edge_case",
+      "category": "Dismissals - Run Out / Batters Ground",
+      "id": "blog_010",
+      "source": "blog",
+      "relevant_chunk_ids_finer": [
+        "law29_s29.1",
+        "law38_s38.3.3",
+        "law25_s25.6.3",
+        "law38_s38.2.2",
+        "law30_s30.2.5",
+        "appendix_a_sA.6.4"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law29_s29.1",
+        "law30_s30.2",
+        "law38_s38.3",
+        "law38_s38.2",
+        "law39_s39.1",
+        "law36_s36.1"
+      ],
+      "laws_involved": [
+        25,
+        29,
+        30,
+        36,
+        38,
+        39
+      ]
+    },
+    {
+      "question": "The batting side requires one run to win. The striker hits the ball high in the air and both batters complete the single needed to win before a fielder takes the catch. The last wicket falls on the catch. Does the batting side win, or is the match tied or drawn?",
+      "expected_ruling": "The batter is out caught and the run does not count. Under Law 16.6.2, any runs completed by the batters before the completion of a catch do not count toward the winning total. The match result depends on the scores at that point without that run - either a tie or a loss for the batting side.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "edge_case",
+      "category": "Result of Match",
+      "id": "blog_011",
+      "source": "blog",
+      "relevant_chunk_ids_finer": [
+        "law16_s16.1",
+        "law16_s16.6.2",
+        "law16_s16.6.3",
+        "law23_s23.2.1",
+        "law39_s39.4"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law16_s16.1",
+        "law16_s16.6",
+        "law39_s39.4",
+        "law33_s33.1",
+        "law33_s33.4"
+      ],
+      "laws_involved": [
+        16,
+        23,
+        33,
+        39
+      ]
+    },
+    {
+      "question": "A batter plays a sweep shot, misses the ball, and it flicks off the pad and strikes the wicketkeeper's cap before deflecting onto the stumps. The batter is out of his ground. The fielding team appeals for stumped. The batter claims he cannot be out because the ball hit the keeper's cap. What is the correct decision?",
+      "expected_ruling": "Out, stumped. A cap is an article of clothing and does not invalidate the stumping. Had the ball struck a helmet, the batter would not be out. Caps and helmets are treated differently under the Laws of Cricket.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "edge_case",
+      "category": "Dismissals - Stumped",
+      "id": "blog_012",
+      "source": "blog",
+      "relevant_chunk_ids_finer": [
+        "law39_s39.1",
+        "law39_s39.2",
+        "law18_s18.13.1",
+        "law39_s39.1.1",
+        "law25_s25.6.3",
+        "law38_s38.2.2"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law39_s39.1",
+        "law39_s39.2",
+        "law38_s38.2",
+        "law33_s33.1",
+        "law25_s25.8"
+      ],
+      "laws_involved": [
+        18,
+        25,
+        33,
+        38,
+        39
+      ]
+    },
+    {
+      "question": "A batter is at the non-striker's end and takes guard standing in front of the batting crease line. He completes a single but does not ground his bat over the crease line, instead facing up in front of the crease. The fielding team claims a short run. What is the correct decision?",
+      "expected_ruling": "It is not a short run as there was no deliberate attempt to run short. However, the fielding team could have effected a run out while the batter failed to make his ground.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "hard",
+      "category": "Short Runs",
+      "id": "blog_013",
+      "source": "blog",
+      "relevant_chunk_ids_finer": [
+        "law18_s18.1",
+        "law18_s18.3.1",
+        "law25_s25.6.3",
+        "law30_s30.2.5",
+        "law18_s18.5.1",
+        "law18_s18.4.1"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law18_s18.1",
+        "law18_s18.3",
+        "law30_s30.2",
+        "law30_s30.1",
+        "appendix_a_sA.13",
+        "law18_s18.4"
+      ],
+      "laws_involved": [
+        18,
+        25,
+        30
+      ]
+    },
+    {
+      "question": "A right-handed batter changes grip and stance to left-handed and plays a sweep shot, missing the ball. The ball strikes his back pad in front of the stumps. The bowler appeals for lbw. The ball pitched outside the batter's leg stump relative to the left-handed stance. The batter claims he cannot be out as the ball pitched outside leg stump. What is the correct decision?",
+      "expected_ruling": "Out, lbw. The umpire uses the batter's original right-handed stance - which the bowler began his run-up against - to evaluate the lbw appeal. The ball did not pitch outside the off stump in that original stance assessment, so the dismissal is valid.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "edge_case",
+      "category": "Dismissals - LBW",
+      "id": "blog_014",
+      "source": "blog",
+      "relevant_chunk_ids_finer": [
+        "law36_s36.1",
+        "law36_s36.1.4",
+        "law36_s36.1.2",
+        "law36_s36.1.3",
+        "law30_s30.1.1",
+        "law36_s36.3"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law36_s36.1",
+        "law36_s36.3",
+        "law30_s30.3",
+        "law30_s30.1",
+        "law22_s22.1"
+      ],
+      "laws_involved": [
+        22,
+        30,
+        36
+      ]
+    },
+    {
+      "question": "A wide ball is bowled. After the ball is called wide, it hits the top of the stumps at the bowler's end and deflects to the boundary. No bails were dislodged by the ball hitting the stumps. How many runs are scored?",
+      "expected_ruling": "Five runs are scored: one wide plus four for the boundary. The ball hitting the stumps without dislodging the bails does not affect the scoring.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "hard",
+      "category": "Scoring - No Ball / Boundary",
+      "id": "blog_015",
+      "source": "blog",
+      "relevant_chunk_ids_finer": [
+        "law26_s26.1",
+        "law22_s22.7",
+        "law39_s39.4",
+        "law19_s19.7.2",
+        "law19_s19.7.5",
+        "law35_s35.3"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law26_s26.1",
+        "law22_s22.7",
+        "law39_s39.4",
+        "law35_s35.3",
+        "law23_s23.1",
+        "law19_s19.7"
+      ],
+      "laws_involved": [
+        19,
+        22,
+        23,
+        26,
+        35,
+        39
+      ]
+    },
+    {
+      "question": "The striker plays a shot and the ball goes to the boundary rope, rolling along the ground. However, before the ball reaches the boundary, it strikes a fielder's helmet that had been left on the ground near the boundary by the fielding captain. The ball then crosses the boundary. How many runs are scored and how are they attributed?",
+      "expected_ruling": "5 penalty runs are awarded to the batting side for the ball striking the fielding side's helmet placed on the ground, plus a boundary 4 is also scored. The penalty runs are scored as extras (not credited to the batsman or the bowler's analysis in the usual manner), and the 4 boundary runs are also scored. Total: 9 runs to the batting side.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "hard",
+      "category": "Fielding / Scoring",
+      "id": "llm_001",
+      "source": "llm_generated",
+      "relevant_chunk_ids_finer": [
+        "law28_s28.3.2",
+        "law41_s41.17.3",
+        "law19_s19.7.2",
+        "law19_s19.7.1",
+        "law19_s19.7.5",
+        "law19_s19.8"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law28_s28.3",
+        "law41_s41.17",
+        "law19_s19.7",
+        "law37_s37.5",
+        "law19_s19.8",
+        "law18_s18.1",
+        "law18_s18.9"
+      ],
+      "laws_involved": [
+        18,
+        19,
+        28,
+        37,
+        41
+      ]
+    },
+    {
+      "question": "During a Test match, a fielder leaves the field of play at the start of the 10th over due to illness without the umpire's permission. He returns after 25 minutes of playing time. Can he immediately bowl when he returns?",
+      "expected_ruling": "No. Under Law 24.2, a fielder who leaves the field of play without the umpire's consent must serve a Penalty time equal to the time absent before being permitted to bowl. Since the fielder was absent for 25 minutes, he must be on the field for 25 minutes before he is allowed to bowl.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "easy",
+      "category": "Fielding / Substitutes",
+      "id": "llm_002",
+      "source": "llm_generated",
+      "relevant_chunk_ids_finer": [
+        "law24_s24.2.2",
+        "law24_s24.2.5",
+        "law25_s25.4.2",
+        "law24_s24.2.6",
+        "law24_s24.2.8",
+        "law25_s25.3.1"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law24_s24.2",
+        "law25_s25.4",
+        "law24_s24.1",
+        "law24_s24.4",
+        "law25_s25.8"
+      ],
+      "laws_involved": [
+        24,
+        25
+      ]
+    },
+    {
+      "question": "The striker receives a delivery on leg stump, attempts to play a shot, and misses. The ball strikes the pad. There is no attempt to play the ball. The ball would have hit leg stump. The ball landed outside the line of leg stump. Can the batter be out LBW?",
+      "expected_ruling": "No. Under Law 36.1.2, if the ball pitches outside the line of leg stump, the striker cannot be out LBW, regardless of where the ball strikes the striker or whether the ball would have hit the wicket. This is an absolute protection for the striker.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "easy",
+      "category": "Modes of Dismissal / LBW",
+      "id": "llm_003",
+      "source": "llm_generated",
+      "relevant_chunk_ids_finer": [
+        "law36_s36.1.2",
+        "law36_s36.1.4",
+        "law36_s36.1.3",
+        "law36_s36.1.1",
+        "law36_s36.1.5"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law36_s36.1",
+        "law39_s39.1",
+        "law39_s39.3",
+        "law21_s21.8",
+        "law38_s38.2"
+      ],
+      "laws_involved": [
+        21,
+        36,
+        38,
+        39
+      ]
+    },
+    {
+      "question": "A bowler bowls a delivery. The striker hits the ball in the air. A fielder running towards the ball dives and catches it, but in doing so slides over the boundary rope while still holding the ball. Is the striker out caught?",
+      "expected_ruling": "No. The striker is not out caught. Under Law 19.5.1 and Law 33.2.1, a catch is only fair if the fielder has no part of their person grounded beyond the boundary while completing the catch. Since the fielder slid over the boundary rope while holding the ball, the catch is not fair and a boundary 6 is awarded instead.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "easy",
+      "category": "Modes of Dismissal / Caught",
+      "id": "llm_004",
+      "source": "llm_generated",
+      "relevant_chunk_ids_finer": [
+        "law33_s33.2.1",
+        "law19_s19.5.1",
+        "law19_s19.7.1",
+        "law33_s33.1",
+        "law19_s19.4.2",
+        "law19_s19.5.2",
+        "law33_s33.2.2",
+        "law37_s37.3.1"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law33_s33.2",
+        "law19_s19.5",
+        "law19_s19.7",
+        "law33_s33.1",
+        "law19_s19.4",
+        "law21_s21.8"
+      ],
+      "laws_involved": [
+        19,
+        21,
+        33,
+        37
+      ]
+    },
+    {
+      "question": "The batting side need 3 runs to win off the last ball of the match. The striker hits the ball towards the boundary. The batters complete 2 runs, and the ball reaches the boundary for a Boundary 4. How many runs does the batting side score and what is the result?",
+      "expected_ruling": "Under Law 19.7.3, when a boundary is scored, the batting side scores the boundary allowance (4 runs) and does not also count the runs completed by the batters. The batting side scores 4 runs from the boundary, which exceeds the 3 runs needed. The batting side wins the match. Per Law 16.6.3, if a boundary is scored before the batters complete enough runs to win, the boundary allowance is what counts.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "easy",
+      "category": "Scoring / Boundaries / Result",
+      "id": "llm_005",
+      "source": "llm_generated",
+      "relevant_chunk_ids_finer": [
+        "law19_s19.7.3",
+        "law16_s16.6.3",
+        "law19_s19.7.2",
+        "law16_s16.6.2",
+        "law19_s19.7.5"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law19_s19.7",
+        "law16_s16.6",
+        "law18_s18.1",
+        "law38_s38.5",
+        "law35_s35.3"
+      ],
+      "laws_involved": [
+        16,
+        18,
+        19,
+        35,
+        38
+      ]
+    },
+    {
+      "question": "In a two-innings match of 5 days, the team batting first are bowled out for 180. The fielding side then score 380 in their first innings, a lead of 200 runs. Can the fielding side enforce the follow-on?",
+      "expected_ruling": "Yes. Under Law 14.1.1, in a two-innings match of 5 days or more, the side which bats first can be made to follow on if they trail by 200 runs or more after their first innings. Since the deficit is exactly 200 runs, the follow-on can be enforced.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "easy",
+      "category": "Match Procedures / Follow-on",
+      "id": "llm_006",
+      "source": "llm_generated",
+      "relevant_chunk_ids_finer": [
+        "law14_s14.1.1",
+        "law15_s15.2",
+        "law16_s16.9.1",
+        "law16_s16.6.2",
+        "law14_s14.1.2"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law14_s14.1",
+        "law15_s15.2",
+        "law16_s16.9",
+        "law37_s37.5",
+        "law41_s41.16"
+      ],
+      "laws_involved": [
+        14,
+        15,
+        16,
+        37,
+        41
+      ]
+    },
+    {
+      "question": "It is a sunny, dry day. The umpires notice that the ball has been scuffed and scratched in a way inconsistent with normal wear. They suspect deliberate ball tampering. What is the correct procedure for the umpires, and what are the penalties?",
+      "expected_ruling": "Under Law 41.3, the umpires must make frequent inspections of the ball. If they consider the condition has been changed by unfair actions, they shall: (1) consult together, (2) inform the fielding captain of the reason for their suspicion, (3) change the ball for one of similar condition (if they consider it appropriate), and (4) award 5 penalty runs to the batting side. The umpires shall also report the matter to the opposing captain and the executive of the fielding side, and to any governing body responsible.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "easy",
+      "category": "Unfair Play / Ball Tampering",
+      "id": "llm_007",
+      "source": "llm_generated",
+      "relevant_chunk_ids_finer": [
+        "law41_s41.3.2",
+        "law41_s41.3.4",
+        "law41_s41.3.5",
+        "law41_s41.3.1",
+        "law41_s41.3.3",
+        "law41_s41.2.1"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law41_s41.3",
+        "law41",
+        "law4_s4.5",
+        "law26_s26.4",
+        "law41_s41.14",
+        "law21_s21.3"
+      ],
+      "laws_involved": [
+        4,
+        21,
+        26,
+        41
+      ]
+    },
+    {
+      "question": "The fielding captain deliberately wastes time during an over by repeatedly repositioning fielders, causing the umpire to consider progress is unreasonably slow. After a warning is given, there is a further instance of time wasting. What action should the umpires take?",
+      "expected_ruling": "Under Law 41.9.2, if the umpire considers that the progress of an over is unnecessarily slow, they shall caution the captain and indicate that this is a first and final warning. Under Law 41.9.3, if there is any further time wasting by any fielder in that innings, the umpire shall award 5 penalty runs to the batting side and repeat this for each subsequent occurrence. The umpires shall also report the matter per Law 41.9.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "easy",
+      "category": "Unfair Play / Time Wasting",
+      "id": "llm_008",
+      "source": "llm_generated",
+      "relevant_chunk_ids_finer": [
+        "law41_s41.9.2",
+        "law41_s41.9.3",
+        "law41_s41.10.3",
+        "law41_s41.10.2",
+        "law41_s41.9.1"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law41_s41.9",
+        "law41_s41.10",
+        "law26_s26.4",
+        "law42_s42.1",
+        "law41_s41.12"
+      ],
+      "laws_involved": [
+        26,
+        41,
+        42
+      ]
+    },
+    {
+      "question": "The bowler delivers a No ball. The ball hits the striker's pad, not the bat, and deflects towards the stumps. The wicket-keeper, moving forward, breaks the wicket with the ball before the striker has regained their ground. How is this judged, and can the striker be given out?",
+      "expected_ruling": "The striker cannot be out Stumped from a No ball (Law 39.3). However, they can be out Run out. Since it is a No ball, the wicket-keeper breaking the wicket with the ball while the striker is out of their ground would result in Run out only if there was a genuine attempt to run. If the striker merely played and missed and the ball deflected, this is still potentially Run out under Law 38 as the wicket was put down with the striker out of their ground. Under Law 21.17, the only modes of dismissal from a No ball are: handled the ball (now Obstructing the field), hit the ball twice, hit wicket, obstructing the field, run out, and timed out. Run out is applicable, so the striker can be given out Run out but not Stumped.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "hard",
+      "category": "Modes of Dismissal / No Ball interaction",
+      "id": "llm_009",
+      "source": "llm_generated",
+      "relevant_chunk_ids_finer": [
+        "law39_s39.3.1",
+        "law21_s21.17",
+        "law38_s38.1",
+        "law39_s39.1.1",
+        "law32_s32.1.1",
+        "law35_s35.2",
+        "law21_s21.8",
+        "law21_s21.6"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law39_s39.3",
+        "law21_s21.17",
+        "law38_s38.1",
+        "law39_s39.1",
+        "law35_s35.2",
+        "law32_s32.1",
+        "law21_s21.8",
+        "law21_s21.6"
+      ],
+      "laws_involved": [
+        21,
+        32,
+        35,
+        38,
+        39
+      ]
+    },
+    {
+      "question": "Both batters run a short run unintentionally on the third run of an attempted three. The umpire signals short run. The fielding side then overthrows the ball, which goes to the boundary. How many runs are scored?",
+      "expected_ruling": "Under Law 18.4.2, if after either or both batters run short, a boundary is scored, all the runs completed before the short run as well as the boundary allowance shall be scored but the short run(s) are disregarded. The batters had completed 2 runs before the short run. Since a boundary then results from the overthrow under Law 19.8, the batting side scores 2 runs (completed before the short run) plus the boundary allowance (4 runs for a ground boundary) = 6 runs in total. The short run is not counted.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "hard",
+      "category": "Scoring / Short Runs / Boundaries",
+      "id": "llm_010",
+      "source": "llm_generated",
+      "relevant_chunk_ids_finer": [
+        "law18_s18.4.2",
+        "law19_s19.8",
+        "law18_s18.4.1",
+        "law18_s18.4.5",
+        "law18_s18.4.4",
+        "law37_s37.5"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law18_s18.4",
+        "law19_s19.8",
+        "law38_s38.5",
+        "law35_s35.3",
+        "law18_s18.3"
+      ],
+      "laws_involved": [
+        18,
+        19,
+        35,
+        37,
+        38
+      ]
+    },
+    {
+      "question": "A bowler runs in to bowl. Before delivering the ball, the bowler throws the ball towards the non-striker's wicket in an attempt to run out the non-striker who has backed up too far. The throw misses the wicket and goes to the boundary. What is the correct ruling?",
+      "expected_ruling": "Under Law 21.4, if the bowler throws the ball towards the striker's end before delivery, that is a No ball. However, this Law applies to the striker's end. For the non-striker's end, under Law 38.3.1, if the non-striker is out of their ground from the moment the ball comes into play until the bowler would normally have released the ball, the bowler may attempt to run them out. However, the ball has not yet been delivered so the ball is not in play in the normal sense. Under Law 38.3, the bowler may attempt to run out the non-striker before entering the delivery stride, and if unsuccessful, the ball is not dead. If the throw goes to the boundary, 4 penalty runs are awarded to the batting side because the ball was not delivered, this is not a boundary under the normal sense, but any overthrow boundary off such an action is credited. The umpire should rule this as Dead ball if the attempt fails and the ball was not delivered after the bowler had entered the delivery stride — in that case, 4 runs to the batting side as a boundary from overthrows. If before the delivery stride, the bowler may attempt the run out lawfully.",
+      "expected_ruling_type": "guidance",
+      "difficulty": "hard",
+      "category": "Bowling / Run Out / Non-striker",
+      "id": "llm_011",
+      "source": "llm_generated",
+      "relevant_chunk_ids_finer": [
+        "law38_s38.3.1",
+        "law38_s38.3.2",
+        "law21_s21.4",
+        "law21_s21.6",
+        "law19_s19.8",
+        "law38_s38.3.3"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law38_s38.3",
+        "law21_s21.4",
+        "law21_s21.6",
+        "law19_s19.8",
+        "law35_s35.2"
+      ],
+      "laws_involved": [
+        19,
+        21,
+        35,
+        38
+      ]
+    },
+    {
+      "question": "A bowler bowls a delivery that bounces twice before reaching the striker. The striker hits the ball and it goes to the boundary. A No ball has been called for the double bounce. How many runs are credited and to whom?",
+      "expected_ruling": "Under Law 21.7.1, a ball that bounces more than once before reaching the striker is a No ball. The ball is not dead after the No ball call (Law 21.13), so the striker can still hit it. Under Law 21.15 and Law 18.10, since the ball was struck by the bat from a No ball, the runs (boundary 4 or 6 as appropriate) are credited to the striker, plus 1 No ball extra. Under Law 21.14, the penalty for a No ball is 1 run. Under Law 18.10.1, all runs scored from a ball struck by the bat are credited to the striker. So the striker gets the boundary runs (4 or 6) and 1 No ball extra is also added. Total: 5 or 7 runs (boundary + 1 No ball penalty). The runs from the bat stroke are credited to the striker; the No ball penalty is an extra.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "hard",
+      "category": "Bowling / No Ball / Scoring",
+      "id": "llm_012",
+      "source": "llm_generated",
+      "relevant_chunk_ids_finer": [
+        "law21_s21.7.1",
+        "law21_s21.14",
+        "law21_s21.15",
+        "law18_s18.10.1",
+        "law23_s23.1",
+        "law18_s18.10.3",
+        "law23_s23.2.3",
+        "law23_s23.2.2"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law21_s21.7",
+        "law21_s21.14",
+        "law21_s21.15",
+        "law18_s18.10",
+        "law23_s23.1",
+        "law23_s23.2",
+        "law34_s34.4"
+      ],
+      "laws_involved": [
+        18,
+        21,
+        23,
+        34
+      ]
+    },
+    {
+      "question": "A declaration is made with 9 wickets down. The incoming new batter is already walking to the wicket when the captain declares. The interval between innings is 10 minutes. Does play restart after the 10-minute interval, or immediately?",
+      "expected_ruling": "Under Law 11.3.2, if a captain declares an innings closed, the 10-minute interval between innings applies from the moment of declaration. Under Law 15.1, a captain may declare at any time when the ball is dead. The declaration is valid even with 9 wickets down. The 10-minute interval between innings commences from the moment of the declaration (Law 11.2.2). Play restarts after that interval.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "hard",
+      "category": "Match Procedures / Declaration / Intervals",
+      "id": "llm_013",
+      "source": "llm_generated",
+      "relevant_chunk_ids_finer": [
+        "law15_s15.1",
+        "law11_s11.2.2",
+        "law11_s11.3.2",
+        "law11_s11.3.3",
+        "law12_s12.8",
+        "law12_s12.8.1",
+        "law11_s11.3.1"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law15_s15.1",
+        "law11_s11.2",
+        "law11_s11.3",
+        "law12_s12.3",
+        "law12_s12.1",
+        "law12_s12.5",
+        "law12_s12.8"
+      ],
+      "laws_involved": [
+        11,
+        12,
+        15
+      ]
+    },
+    {
+      "question": "The striker is bowled by a delivery. However, the ball had previously struck the striker's helmet (worn by the striker) before hitting the stumps. Is the striker out bowled?",
+      "expected_ruling": "Yes. Under Law 32.1.1, the striker is out Bowled if their wicket is broken by a ball delivered by the bowler. Law 32.1.2 provides that the striker shall not be out Bowled if, before striking the wicket, the ball has been in contact with another fielder. There is no exception for the ball touching the striker's own person or equipment. Since the ball struck the striker's helmet (part of their person/equipment, not another fielder) and then broke the wicket, the striker is out Bowled. The contact with the striker's own helmet does not invalidate the bowled dismissal.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "hard",
+      "category": "Modes of Dismissal / Bowled",
+      "id": "llm_014",
+      "source": "llm_generated",
+      "relevant_chunk_ids_finer": [
+        "law32_s32.1.1",
+        "law32_s32.1.2",
+        "law35_s35.2",
+        "law23_s23.2.1",
+        "law33_s33.1"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law32_s32.1",
+        "law35_s35.2",
+        "law33_s33.1",
+        "law39_s39.3",
+        "law21_s21.8"
+      ],
+      "laws_involved": [
+        21,
+        23,
+        32,
+        33,
+        35,
+        39
+      ]
+    },
+    {
+      "question": "The striker, having played a shot, accidentally dislodges a bail with their bat on the follow-through after the ball is dead (the ball was fielded cleanly by mid-on and the umpire had called Dead ball). Can the striker be out Hit wicket?",
+      "expected_ruling": "No. Under Law 35.1.1, the striker is out Hit wicket only if they break their wicket after the bowler has entered their delivery stride and while the ball is in play. Since the ball was dead when the bail was dislodged, the striker cannot be out Hit wicket. The dislodging of the bail has no dismissal consequence.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "edge_case",
+      "category": "Modes of Dismissal / Hit Wicket",
+      "id": "llm_015",
+      "source": "llm_generated",
+      "relevant_chunk_ids_finer": [
+        "law35_s35.1.1",
+        "law20_s20.1.1",
+        "law35_s35.2",
+        "law25_s25.8",
+        "law35_s35.1.2",
+        "law34_s34.3"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law35_s35.1",
+        "law20_s20.1",
+        "law35_s35.2",
+        "law25_s25.8",
+        "law34_s34.3",
+        "law21_s21.8"
+      ],
+      "laws_involved": [
+        20,
+        21,
+        25,
+        34,
+        35
+      ]
+    },
+    {
+      "question": "The bowler delivers a wide ball. The wide goes through to the wicket-keeper, who fumbles it. The striker, who did not attempt to play the ball, steps out of their crease and is stumped by the wicket-keeper. Is the striker out stumped from a wide?",
+      "expected_ruling": "Yes. Under Law 39.1.1, the striker can be out Stumped from a Wide. Law 22.9 confirms that dismissals available from a Wide include Stumped. The striker stepped out of their crease and the wicket-keeper broke the wicket; this is a valid Stumped dismissal. The 1 Wide penalty run is still scored.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "edge_case",
+      "category": "Modes of Dismissal / Stumped / Wide",
+      "id": "llm_016",
+      "source": "llm_generated",
+      "relevant_chunk_ids_finer": [
+        "law39_s39.1.1",
+        "law22_s22.9",
+        "law38_s38.2.2",
+        "law22_s22.1.1",
+        "law22_s22.4.1"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law39_s39.1",
+        "law22_s22.9",
+        "law38_s38.2",
+        "law22_s22.1",
+        "law39_s39.3"
+      ],
+      "laws_involved": [
+        22,
+        38,
+        39
+      ]
+    },
+    {
+      "question": "Both bails have already been dislodged earlier in the over (the wicket was broken but not put down as a dismissal). The wicket-keeper now takes the ball and throws it to strike a stump while the striker is out of their ground. Is the striker run out?",
+      "expected_ruling": "Under Law 29.1, the wicket is broken if a bail is completely removed from the top of the stumps, or a stump is struck out of the ground. When the bails are already off, under Law 29.3, if one bail is already off, the wicket is broken by removing the remaining bail or by striking a stump out of the ground. If both bails are already off, the wicket is broken by striking a stump out of the ground. Under Law 29.4, the fielding side may remake the wicket. If the wicket has not been remade, for a run out attempt, the fielding side must strike a stump out of the ground with the ball. If the throw strikes a stump and knocks it out of the ground (or the wicket-keeper pulls a stump out with the ball in hand), the wicket is broken fairly and the striker can be run out under Law 38. Simply touching the stump with the ball when both bails are off is not sufficient — a stump must be struck out of the ground.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "edge_case",
+      "category": "Modes of Dismissal / Run Out / Broken Wicket",
+      "id": "llm_017",
+      "source": "llm_generated",
+      "relevant_chunk_ids_finer": [
+        "law29_s29.1",
+        "law29_s29.3",
+        "law29_s29.4",
+        "law38_s38.1",
+        "law39_s39.1.1",
+        "law38_s38.2.2",
+        "law25_s25.6.4",
+        "law25_s25.6.3",
+        "law38_s38.3.3"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law29_s29.1",
+        "law29_s29.3",
+        "law29_s29.4",
+        "law38_s38.1",
+        "law39_s39.1",
+        "law38_s38.2",
+        "law38_s38.3",
+        "law25_s25.8",
+        "law25_s25.6"
+      ],
+      "laws_involved": [
+        25,
+        29,
+        38,
+        39
+      ]
+    },
+    {
+      "question": "A bowler is about to complete the final delivery of an over when they suddenly become incapacitated mid-run-up due to a hamstring injury and cannot deliver the ball. Another bowler is asked to bowl the remaining delivery. The same bowler had bowled the previous over. Can the replacement bowler bowl that one remaining delivery even if they bowled the previous over?",
+      "expected_ruling": "Under Law 17.8, if a bowler is incapacitated or suspended during an over, the over shall be completed by another bowler. Under Law 17.6, a bowler may not bowl two overs consecutively. However, Law 17.8 provides that the bowler completing the over shall not have bowled the previous over. If the replacement bowler bowled the previous over, they are not permitted to complete this over under Law 17.8 (same restriction as Law 17.6 applies). A different bowler who did not bowl the previous over must complete the remaining delivery.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "edge_case",
+      "category": "Bowling / Over Completion",
+      "id": "llm_018",
+      "source": "llm_generated",
+      "relevant_chunk_ids_finer": [
+        "law17_s17.8",
+        "law17_s17.6",
+        "law12_s12.11",
+        "law17_s17.7.1",
+        "law21_s21.3.2"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law17_s17.8",
+        "law17_s17.6",
+        "law12_s12.11",
+        "law17_s17.7",
+        "law21_s21.3"
+      ],
+      "laws_involved": [
+        12,
+        17,
+        21
+      ]
+    },
+    {
+      "question": "During a T20I, a bowler delivers a ball that dismisses the batter. The third umpire reviews whether the bowler's front foot landed behind the popping crease. Camera angles are partially obstructed. Should the benefit of the doubt go to the bowler or should it be called a no-ball?",
+      "expected_ruling": "The on-field umpire is the sole judge of a no-ball for front-foot overstepping. On review, the third umpire must find clear evidence that the foot has landed on or beyond the popping crease (i.e., no part of the grounded foot behind the line) to overturn a legal delivery call. Where camera angles are obstructed and no conclusive evidence exists, the benefit of the doubt remains with the original on-field decision — a legal delivery stands.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "hard",
+      "category": "No-Ball / Front Foot",
+      "id": "web_001",
+      "source": "scraped",
+      "relevant_chunk_ids_finer": [
+        "law21_s21.1",
+        "law21_s21.5.2",
+        "law41_s41.7.1",
+        "law21_s21.7.1",
+        "law22_s22.1.1",
+        "law21_s21.7"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law21_s21.1",
+        "law21_s21.5",
+        "law22_s22.1",
+        "law21_s21.7",
+        "law21_s21.4",
+        "law20_s20.2"
+      ],
+      "laws_involved": [
+        20,
+        21,
+        22,
+        41
+      ]
+    },
+    {
+      "question": "A batter is struck on the pad and an LBW appeal is made. The batting pair attempt a run while the umpire deliberates. The umpire raises the finger (out) while the batters are mid-pitch completing the run. Does the batting team retain the run they were attempting?",
+      "expected_ruling": "No. Under the Laws, the ball becomes dead the instant the umpire gives the batter out. Any runs in progress at that moment are not credited; the dismissal is the only result of that delivery. The batting team does not retain the run.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "hard",
+      "category": "Dead Ball / LBW",
+      "id": "web_002",
+      "source": "scraped",
+      "relevant_chunk_ids_finer": [
+        "law20_s20.1",
+        "law25_s25.1",
+        "law35_s35.1",
+        "appendix_a_sA.11.2",
+        "law18_s18.5.1",
+        "law23_s23.2.1",
+        "law41_s41.5.8",
+        "law38_s38.5"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law20_s20.1",
+        "law25_s25.1",
+        "law35_s35.1",
+        "law38_s38.5",
+        "law41_s41.16",
+        "appendix_a_sA.13",
+        "law23_s23.3",
+        "law31_s31.7"
+      ],
+      "laws_involved": [
+        18,
+        20,
+        23,
+        25,
+        31,
+        35,
+        38,
+        41
+      ]
+    },
+    {
+      "question": "An umpire calls a bowler for throwing (illegally straightening the arm at the point of delivery) and signals no-ball. What Law governs this, and what is the correct procedure?",
+      "expected_ruling": "Law 21.2 governs illegal bowling actions. If either umpire considers that the ball has been thrown, they shall call and signal No ball and, after the over, inform the other umpire and together report the matter to the captain of the fielding side and to the Executive of the fielding side. The bowler is not allowed to bowl again in the innings unless their action is cleared. The delivery counts as a no-ball with all associated penalties.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "hard",
+      "category": "Illegal Bowling Action",
+      "id": "web_003",
+      "source": "scraped",
+      "relevant_chunk_ids_finer": [
+        "law21_s21.2",
+        "law21_s21.3.1",
+        "law21_s21.4",
+        "law21_s21.3.2",
+        "law21_s21.1.1"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law21_s21.2",
+        "law21_s21.3",
+        "law21_s21.4",
+        "law21_s21.1",
+        "law41_s41.8"
+      ],
+      "laws_involved": [
+        21,
+        41
+      ]
+    },
+    {
+      "question": "A batter, facing a half-tracker, top-edges the ball high in the air. The wicketkeeper runs forward to catch it. The batter deliberately drops their shoulder and charges into the keeper, causing the catch to be dropped. How should the umpire rule?",
+      "expected_ruling": "The batter should be given out Obstructing the Field under Law 37. Deliberately using the body to obstruct or distract a fielder attempting to make a catch constitutes wilful obstruction. The correct mode of dismissal is Obstructing the Field, not Handled the Ball. The opposing captain must make the appeal.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "easy",
+      "category": "Obstructing the Field",
+      "id": "web_004",
+      "source": "scraped",
+      "relevant_chunk_ids_finer": [
+        "law37_s37.1",
+        "law27_s27.5",
+        "law39_s39.2",
+        "law18_s18.13.1",
+        "law37_s37.1.2",
+        "law19_s19.8"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law37_s37.1",
+        "law27_s27.5",
+        "law39_s39.2",
+        "law19_s19.8",
+        "law27_s27.4",
+        "law18_s18.13"
+      ],
+      "laws_involved": [
+        18,
+        19,
+        27,
+        37,
+        39
+      ]
+    },
+    {
+      "question": "A batter hits a throw from the outfield that deflects off their bat (while they are diving/sliding to make their ground) and races to the boundary for four. The fielding side appeals. How many runs should be awarded?",
+      "expected_ruling": "Under Law 19.8, if a fielder's throw hits the bat or the batter who is in the act of running or diving and the ball then reaches the boundary, the runs awarded are 4 (the boundary allowance), but only the runs already completed plus any penalty runs are scored — the boundary 4 is awarded from the position of the batters at the moment of the throw, not from the original batting crease. The correct award is: any completed runs at the time of the throw plus the 4-run boundary. If no runs had been completed, only 4 runs are awarded to the batting team. Critically, if the batter is not attempting a run (e.g., is standing grounded), the award is different. In the Stokes 2019 World Cup Final incident, 6 runs were awarded but under a strict reading of Law 19.8 only 5 (1 completed run + boundary 4) should have been given; the umpire's award of 6 was an error, though it was not overturned.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "edge_case",
+      "category": "Boundary / Overthrows",
+      "id": "web_005",
+      "source": "scraped",
+      "relevant_chunk_ids_finer": [
+        "law19_s19.8",
+        "law5_s5.1",
+        "law37_s37.5",
+        "law19_s19.7.2",
+        "law41_s41.5.8",
+        "law30_s30.1.2"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law19_s19.8",
+        "law5_s5.1",
+        "law34_s34.4",
+        "law30_s30.1",
+        "law37_s37.4",
+        "law19_s19.7"
+      ],
+      "laws_involved": [
+        5,
+        19,
+        30,
+        34,
+        37,
+        41
+      ]
+    },
+    {
+      "question": "A batter hits the ball and it strikes the non-striker's stumps, dislodging both bails, while the batters are attempting a run. A fielder picks up the ball and pulls a stump from the ground without re-setting the wicket. Is the non-striker run out?",
+      "expected_ruling": "No. Once the wicket has been put down (both bails dislodged), it must be re-set (bails replaced or stumps returned to their original positions) before it can be put down again to effect a dismissal. Simply pulling a stump from the ground when the bails are already off does not constitute 'putting down the wicket' under Law 29. The run-out appeal should be rejected.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "easy",
+      "category": "Run Out / Wicket",
+      "id": "web_006",
+      "source": "scraped",
+      "relevant_chunk_ids_finer": [
+        "law29_s29.1",
+        "law38_s38.2.2",
+        "law39_s39.1.1",
+        "law38_s38.1",
+        "law25_s25.6.4",
+        "law29_s29.2.2"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law29_s29.1",
+        "law38_s38.2",
+        "law39_s39.1",
+        "law38_s38.1",
+        "law38_s38.3",
+        "law39_s39.3"
+      ],
+      "laws_involved": [
+        25,
+        29,
+        38,
+        39
+      ]
+    },
+    {
+      "question": "A bowler at the non-striker's end notices the non-striker leaving their crease before the ball is delivered and runs them out by breaking the wicket. The fielding side appeals. Is this a valid dismissal and under what Law?",
+      "expected_ruling": "Yes, this is a valid dismissal under Law 38 (Run Out), specifically the mode known colloquially as 'Mankading' or more formally as a Run Out at the non-striker's end. The bowler may attempt to run out the non-striker at any time before the ball enters play (i.e., before the delivery stride begins), provided the non-striker has left their ground. If the non-striker is out of their crease, the bowler breaks the wicket and appeals; the umpire gives the non-striker out Run Out. The MCC reclassified this from 'Unfair Play' (Law 41) to Run Out (Law 38) in the 2022 Code, removing any stigma of unfairness.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "hard",
+      "category": "Run Out / Mankading",
+      "id": "web_007",
+      "source": "scraped",
+      "relevant_chunk_ids_finer": [
+        "law38_s38.1",
+        "law2022_s2022.1",
+        "law41_s41.1",
+        "law38_s38.3.1",
+        "law38_s38.3.3",
+        "law25_s25.6.4",
+        "law21_s21.6"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law38_s38.1",
+        "law2022_s2022.1",
+        "law41_s41.1",
+        "law38_s38.3",
+        "law21_s21.6",
+        "law31_s31.1",
+        "law32_s32.1"
+      ],
+      "laws_involved": [
+        21,
+        25,
+        31,
+        32,
+        38,
+        41,
+        2022
+      ]
+    },
+    {
+      "question": "Two batters are running between the wickets. Batter A hits the ball and they cross before a catch is taken and the wicket is put down at Batter A's end. Batter A is out caught. Which batter faces the next delivery?",
+      "expected_ruling": "When a batter is dismissed caught, the new batter (the incoming batter) takes the end vacated by the dismissed batter, regardless of whether the batters had crossed. The surviving batter (Batter B) takes strike at the end they have reached. So if they had crossed when the catch was taken, Batter B is at Batter A's original end (the striker's end), and the new batter comes in to face at that same end — meaning the new batter faces the next ball. If however a boundary is subsequently scored off that delivery (after the catch), the positions are recalculated from where they were at the instant of the catch.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "hard",
+      "category": "Batting Order / Running",
+      "id": "web_008",
+      "source": "scraped",
+      "relevant_chunk_ids_finer": [
+        "law25_s25.1",
+        "law33_s33.1",
+        "law41_s41.5.9",
+        "appendix_a_sA.6.6",
+        "law18_s18.13.3",
+        "law18_s18.13.2",
+        "appendix_a_sA.6.8"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law25_s25.1",
+        "law33_s33.1",
+        "law18_s18.13",
+        "law38_s38.3",
+        "law31_s31.7",
+        "law30_s30.2",
+        "law38_s38.1"
+      ],
+      "laws_involved": [
+        18,
+        25,
+        30,
+        31,
+        33,
+        38,
+        41
+      ]
+    },
+    {
+      "question": "A bowler bowls a no-ball. Off that no-ball, the batter is dismissed caught. Can the batter be given out?",
+      "expected_ruling": "No. A batter cannot be given out Caught off a no-ball (Law 21.15). The only dismissals that can apply off a no-ball are Run Out, Stumped (only off a legitimate delivery — so not off a no-ball), Hit the Ball Twice, Obstructing the Field, and Handled the Ball (now merged into Obstructing the Field). The batter is not out; the no-ball stands and the batting side receives the penalty run.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "easy",
+      "category": "No-Ball / Dismissals",
+      "id": "web_009",
+      "source": "scraped",
+      "relevant_chunk_ids_finer": [
+        "law21_s21.15",
+        "law37_s37.3.3",
+        "law33_s33.4",
+        "law33_s33.1",
+        "law37_s37.3.1",
+        "law18_s18.11.1"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law21_s21.15",
+        "law33_s33.4",
+        "law37_s37.3",
+        "law33_s33.1",
+        "law21_s21.17",
+        "law31_s31.1"
+      ],
+      "laws_involved": [
+        18,
+        21,
+        31,
+        33,
+        37
+      ]
+    },
+    {
+      "question": "After a batter is given out LBW on-field, the batting side wishes to review the decision using DRS. There is a 15-second window in which to call for a review. The on-field umpire has already signalled out and begun walking away. The batter signals for a review at 17 seconds. Should the review be granted?",
+      "expected_ruling": "No. Under ICC DRS playing conditions (which supplement the MCC Laws), a batting side must request a Player Review within 15 seconds of the on-field umpire's decision. If the request is made outside the 15-second window, the review is not granted and the on-field decision stands. The 15-second clock typically begins from the moment the umpire raises the finger. This is an ICC playing condition rather than a standalone MCC Law, but it is binding in matches where DRS is in operation.",
+      "expected_ruling_type": "definitive",
+      "difficulty": "easy",
+      "category": "DRS / Review",
+      "id": "web_010",
+      "source": "scraped",
+      "relevant_chunk_ids_finer": [
+        "law15_s15.1",
+        "law31_s31.8",
+        "law31_s31.7",
+        "law31_s31.1",
+        "law41_s41.16",
+        "law23_s23.3"
+      ],
+      "relevant_chunk_ids_broader": [
+        "law15_s15.1",
+        "law31_s31.8",
+        "law31_s31.7",
+        "law31_s31.1",
+        "law41_s41.16",
+        "law23_s23.3"
+      ],
+      "laws_involved": [
+        15,
+        23,
+        31,
+        41
+      ]
+    }
+  ]
+}

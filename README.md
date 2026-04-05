@@ -226,3 +226,13 @@ to the batting side...
 - **Single question embedding**: embeds the user's question once and reuses the vector across both collections
 - **Separated AI persona**: `prompts/system.md` can be edited without touching code
 - **Centralized config**: all settings in `config.py` — no duplicated values across scripts
+
+## Learnings
+
+### 1. Golden evaluation datasets are hard to build — but worth every hour
+
+Building a golden dataset (our 51-question evaluation set) is one of the most tedious parts of any RAG project. Every question needs a verified correct answer, the right difficulty label, and — most critically — the exact chunk IDs that should be retrieved. There's no shortcut: you have to read the source material, understand the laws, and manually verify that each tagged chunk is truly relevant. It's tempting to skip this step or auto-generate everything, but a sloppy eval set means your metrics are meaningless. Done well, a golden dataset serves two purposes simultaneously: it pushes for a better user experience (by measuring whether the system actually retrieves the right context and gives faithful answers), and it limits company risk (by catching hallucinations, missing context, and wrong rulings before users ever see them). The eval dataset is the quality gate — it's only as good as the manual effort behind it.
+
+### 2. Graph RAG would be a better fit — but not for a learning project
+
+Cricket laws are deeply interconnected. A single scenario (like an overthrow that reaches the boundary after a no-ball) can involve 3-4 laws that reference each other: Law 21 (No Ball), Law 19 (Boundaries), Law 18 (Scoring Runs), and Law 24 (Fielder Absent or Leaving the Field). A traditional vector-similarity RAG retrieves the top-K most similar chunks independently — it has no understanding of how laws link together. Graph RAG, where laws and sub-sections are nodes connected by edges representing cross-references, would naturally capture these relationships and retrieve entire clusters of related rules in one hop. However, building a knowledge graph requires significant data cleaning: extracting every cross-reference, resolving ambiguous citations, handling edge cases in the PDF parsing, and maintaining the graph as laws update. For this learning project, the effort-to-insight ratio didn't justify it — but for a production cricket umpiring tool, Graph RAG would be the clear next step.

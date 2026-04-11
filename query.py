@@ -103,14 +103,17 @@ def build_context(all_chunks):
     return "\n\n---\n\n".join(context_parts)
 
 
-def generate_ruling(anthropic_client, system_prompt, question, context):
+def generate_ruling(anthropic_client, system_prompt, question, context, return_usage=False):
     """Send question + context to Claude and return the ruling."""
     message = anthropic_client.messages.create(
         model=LLM_MODEL,
-        max_tokens=1024,
+        max_tokens=2048,
         system=system_prompt.format(context=context),
         messages=[{"role": "user", "content": question}],
     )
+    if return_usage:
+        usage = {"input_tokens": message.usage.input_tokens, "output_tokens": message.usage.output_tokens}
+        return message.content[0].text, usage
     return message.content[0].text
 
 

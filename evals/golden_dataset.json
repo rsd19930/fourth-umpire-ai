@@ -126,8 +126,7 @@
       "source": "bcci_exam",
       "relevant_chunk_ids_finer": [
         "law19_s19.8",
-        "law18_s18.11.2",
-      ],
+        "law18_s18.11.2"],
       "relevant_chunk_ids_broader": [
         "law19_s19.8",
         "law18_s18.11"

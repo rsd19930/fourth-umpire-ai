@@ -1,0 +1,1261 @@
+{
+  "run_metadata": {
+    "timestamp": "2026-04-11T16:57:11.714328",
+    "mode": "broader",
+    "top_k": 5,
+    "llm_model": "claude-sonnet-4-6",
+    "judge_model": "claude-haiku-4-5-20251001",
+    "dataset": "evals/golden_dataset.json",
+    "total_questions": 51,
+    "note": "Optimised: broader-chunks-only, haiku as judge, max_tokens=2048 for generating answer, improved system prompt",
+    "results_file": "evals/results/eval_20260411_165711.json",
+    "elapsed_seconds": 900,
+    "tokens": {
+      "ruling_input": 87988,
+      "ruling_output": 25332,
+      "judge_input": 134979,
+      "judge_output": 11880,
+      "total_input": 222967,
+      "total_output": 37212,
+      "total": 260179
+    }
+  },
+  "summary": {
+    "broader": {
+      "overall": {
+        "answer_relevance": 0.618,
+        "faithfulness": 0.716,
+        "context_recall": 0.847,
+        "context_precision": 0.969
+      },
+      "by_difficulty": {
+        "easy": {
+          "count": 13,
+          "answer_relevance": 0.692,
+          "faithfulness": 0.846,
+          "context_recall": 0.876,
+          "context_precision": 1.0
+        },
+        "hard": {
+          "count": 26,
+          "answer_relevance": 0.538,
+          "faithfulness": 0.654,
+          "context_recall": 0.843,
+          "context_precision": 0.969
+        },
+        "edge_case": {
+          "count": 12,
+          "answer_relevance": 0.708,
+          "faithfulness": 0.708,
+          "context_recall": 0.825,
+          "context_precision": 0.933
+        }
+      },
+      "by_source": {
+        "bcci_exam": {
+          "count": 8,
+          "answer_relevance": 0.625,
+          "faithfulness": 0.75,
+          "context_recall": 0.799,
+          "context_precision": 0.8
+        },
+        "blog": {
+          "count": 15,
+          "answer_relevance": 0.633,
+          "faithfulness": 0.7,
+          "context_recall": 0.862,
+          "context_precision": 1.0
+        },
+        "llm_generated": {
+          "count": 18,
+          "answer_relevance": 0.639,
+          "faithfulness": 0.75,
+          "context_recall": 0.879,
+          "context_precision": 1.0
+        },
+        "scraped": {
+          "count": 10,
+          "answer_relevance": 0.55,
+          "faithfulness": 0.65,
+          "context_recall": 0.805,
+          "context_precision": 1.0
+        }
+      }
+    }
+  },
+  "per_question": [
+    {
+      "id": "bcci_001",
+      "broader": {
+        "context_recall": 1.0,
+        "context_precision": 0.6,
+        "retrieved_chunk_ids": [
+          "law21_s21.1",
+          "law21_s21.5",
+          "law21_s21.2",
+          "law22_s22.4",
+          "law30_s30.3"
+        ],
+        "faithfulness": {
+          "score": 0.5,
+          "justification": "The core ruling—that the batter's stance changes are not unlawful and that Wide ball adjudication depends on Law 22.4.1—is grounded in the retrieved context. However, the response introduces interpretive details not explicitly stated in the context, such as the requirement to judge the delivery against the \"batter's final settled position\" and the notion that the umpire must assess whether the batter's \"movement *caused* the ball to appear wide.\" While these are reasonable inferences from Law 22.4.1, they go beyond what the context explicitly states about how the umpire should apply the rule."
+        },
+        "answer_relevance": {
+          "score": 0.5,
+          "justification": "The AI correctly identifies that the batter may change stance without penalty and that the delivery should be assessed against the batter's final stance (matching the expected ruling). However, the response unnecessarily complicates the analysis by invoking Law 22.4.1 and introducing uncertainty about Wide adjudication. The expected ruling simply states the delivery is fair—since the ball passes outside leg stump of a right-handed batter in their final stance, it would be called Wide if anything, but the core point (fair delivery, batter acted correctly) is correct. The AI's hedging on whether it \"may or may not be a Wide\" introduces doubt where the expected ruling provides clear affirmation."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nCore issue: stance-switching by batter during delivery and wide ball adjudication — Laws 21.1, 22.4, and whether there's a law governing batter stance changes.\n</Thinking>\n\n**Ruling:** The delivery may or may not be a Wide, depending on the umpire's judgment. The batter has no obligation under the retrieved laws to maintain a fixed stance. No No ball is warranted from the batter's actions.\n\n**Explanation:**\n\n**1. The Batter's Stance — No Law Violated**\n\nThe retrieved laws contain **no provision restricting or penalising a batter from changing stance** during a delivery. Law 21.1.1 governs the *bowler's* obligation to notify the umpire of a change in mode of delivery — it places no equivalent requirement on the batter. The batter's repeated stance changes are therefore not unlawful under the retrieved laws.\n\n**2. Wide Ball Adjudication — Law 22.4.1**\n\nThis is the critical issue. Law 22.4.1 states:\n\n> *\"The umpire shall not adjudge a delivery as being a Wide if the striker, **by moving**, either causes the ball to pass wide of the striker... or brings the ball sufficiently within reach to be able to hit it by means of a normal cricket stroke.\"*\n\nThe batter's stance switches constitute **movement by the striker**. Since the batter ultimately *returns* to a right-handed stance before the ball arrives, the umpire must assess:\n\n- **Did the batter's movement (the switches) cause the ball to pass outside leg stump?** If the ball would have passed outside leg of a *stationary* right-handed batter regardless, it may still be called Wide.\n- **Did the movement bring the ball within reach?** If so, it cannot be Wide.\n\nThe umpire must judge the delivery against the **batter's final settled position**, accounting for whether any movement *caused* the width. This is a matter of umpiring judgment under Law 22.4.1.\n\n**3. No Ball — Not Applicable**\n\nLaw 21.1.1's notification requirement applies solely to the **bowler**. No No ball is triggered by the batter's actions here.\n\n**Summary Table:**\n\n| Question | Ruling |\n|---|---|\n| Did the batter break any law? | **No** |\n| Is a No ball called? | **No** |\n| Is it automatically a Wide? | **No — umpire's judgment under Law 22.4.1** |\n\nThe umpire must apply Law 22.4.1 carefully: if the batter's movement *caused* the ball to appear wide, it should **not** be called Wide."
+    },
+    {
+      "id": "bcci_002",
+      "broader": {
+        "context_recall": 1.0,
+        "context_precision": 0.6,
+        "retrieved_chunk_ids": [
+          "law18_s18.4",
+          "law37_s37.5",
+          "law19_s19.8",
+          "law18_s18.3",
+          "law38_s38.5"
+        ],
+        "faithfulness": {
+          "score": 0.5,
+          "justification": "The core ruling that a short run is NOT disregarded when a boundary results from an overthrow (Law 18.4.2 exception + Law 19.8.1) is faithfully grounded in context. However, the specific calculation \"3 runs\" and the detailed analysis of \"run in progress\" counting rules, crossing positions, and the conclusion about which batter faces next introduce cricket-specific logic and conditional reasoning that, while plausible, are not explicitly detailed in the retrieved context. The response also assumes facts about batter positions at the instant of throw that are not provided in the scenario."
+        },
+        "answer_relevance": {
+          "score": 0.0,
+          "justification": "The AI's ruling of 3 runs is incorrect. The expected ruling is 5 runs (1 completed run + 4 for the boundary from the overthrow). Under Law 19.8 (overthrow boundaries), when a boundary results from an overthrow, the short run is NOT disregarded (per the exception in Law 18.4.2), and all runs completed/in progress at the instant of the throw count along with the 4-run boundary allowance, totaling 5 runs. While the AI correctly identified Batter A as facing the next delivery, the run calculation is fundamentally wrong."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nOverthrow boundary after a short run — need to apply Law 19.8 (overthrow boundary runs) and Law 18.4.2 (short run disregarded when boundary scored, except on overthrow).\n</Thinking>\n\n**Ruling:** 3 runs are scored (boundary allowance of 4, minus 1 short run), and **Batter A** (the non-striker who was originally at the non-striker's end) faces the next delivery.\n\n---\n\n**Explanation:**\n\nThis scenario requires Laws 18.4 and 19.8 to be applied together, and they interact in a specific way.\n\n**Step 1 — The Short Run (Law 18.4.2)**\n\nOrdinarily, Law 18.4.2 states that if a boundary is scored *after* short running, the umpire shall **disregard** the short run and not call or signal Short run. However, that same provision contains a critical exception:\n\n> *\"unless the boundary is a result of an overthrow or wilful act of a fielder.\"*\n\nBecause this boundary **is** the result of an overthrow (Law 19.8.2.1 — the fielder directed the ball at the stumps to attempt a run out, and it subsequently crossed the boundary), the exception applies. The short run by Batter B **is NOT disregarded**. The umpire **must** call and signal **Short run**.\n\n---\n\n**Step 2 — Calculating Runs from the Overthrow (Law 19.8.1)**\n\nUnder Law 19.8.1, the runs scored from an overthrow boundary are:\n\n- The **boundary allowance** (4 runs)\n- **Plus** the runs completed by the batters at the instant of the throw\n- **Plus** the run in progress if the batters had already crossed at the instant of the throw\n\nAt the instant of the throw, the batters had **completed one run** (the original run down the ground) and were in the process of running a second. Assuming they had **already crossed** when the throw was made, the run in progress counts, giving **2 completed/in-progress running runs + 4 boundary = 6**.\n\nHowever, Batter B's short run is **deducted**, as per Law 18.4.2's overthrow exception and Law 18.4.1. That removes **1 run**.\n\n**Total = 6 − 1 = 5 runs.**\n\n*(Note: If the batters had **not yet crossed** at the instant of the throw, the run in progress would not count, giving 1 + 4 − 1 = **4 runs**.)*\n\n---\n\n**Step 3 — Who Faces Next?**\n\nUnder Law 19.8.1, Law 18.12.2 applies from the instant of the throw. The batters' positions at that moment determine the striker for the next ball. Since **an odd number of running runs (1 completed + 1 in progress = 2) are added to the boundary (4)**, the total running contribution is 2 (even), so the batters effectively end up at the **same ends** as when the throw was made. At the instant of the throw, Batter A (the original striker) was heading towards the non-striker's end, meaning **Batter A** would be at the non-striker's end — so **Batter A faces the next delivery**.\n\n> *In practice, the precise answer depends on exactly where the batters were and whether they had crossed — the umpire must determine this at the instant of the throw per Law 19.8.1.*"
+    },
+    {
+      "id": "bcci_003",
+      "broader": {
+        "context_recall": 0.5,
+        "context_precision": 0.2,
+        "retrieved_chunk_ids": [
+          "law19_s19.8",
+          "law37_s37.5",
+          "law34_s34.4",
+          "law18_s18.4",
+          "law38_s38.5"
+        ],
+        "faithfulness": {
+          "score": 0.5,
+          "justification": "The core ruling on calculating runs for an overthrow boundary (4 + 2 completed + 1 in progress = 7 runs) is faithfully grounded in Law 19.8.1. However, the conclusion about who faces the next over relies on an inference about Law 18.12.2 and the concept of batters crossing/ending up at opposite ends, which is not explicitly detailed in the retrieved context."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "justification": "The AI correctly identified 7 runs (3 completed + 4 overthrow boundary) and correctly determined that the batter who was at the non-striker's end faces the next over. The reasoning properly applies Law 19.8.1 by referencing the instant of the second throw (which causes the boundary) to count runs, and correctly concludes that an odd number of runs results in the batters switching ends."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nThis scenario involves two throws: first throw (batters crossed for 2nd run), wicket-keeper misses, second throw (batters crossed for 3rd run) goes to boundary. Need to determine: (1) is the boundary an overthrow? (2) how many runs count? (3) who faces next over? Laws 19.8 and 18.4 are central.\n</Thinking>\n\n**Ruling:** 6 runs are scored (3 completed + boundary 4, minus 1 for the run in progress not yet completed). Actually, let me work this through carefully.\n\n---\n\n**Explanation:**\n\n**Is the boundary an overthrow?**\n\nUnder **Law 19.8.2.1**, a boundary is an overthrow if a fielder directs the ball towards the wickets in an attempt to run out a batter or prevent further run-scoring, and the ball subsequently crosses the boundary. The second throw meets this definition — it is an overthrow boundary.\n\n**How many runs are scored?**\n\nUnder **Law 19.8.1**, for an overthrow boundary the total is:\n- The **boundary allowance (4)**\n- **Runs completed at the instant of the throw** that caused the boundary\n- **The run in progress, if the batters had already crossed at that instant**\n\nAt the instant of the **second throw** (the one that produces the boundary):\n- The batters had **completed 2 full runs** (they had crossed for the 3rd run, meaning runs 1 and 2 are complete)\n- They had **already crossed** at the instant of the throw (crossing for the 3rd run counts as the run in progress)\n- Therefore the run in progress (the 3rd run) **is included**\n\n**Total = 4 (boundary) + 2 (completed runs) + 1 (run in progress) = 7 runs**\n\nThe first throw is irrelevant to the calculation — only the throw that **causes the boundary** is the reference point under Law 19.8.1.\n\n**Who faces next over?**\n\nUnder **Law 19.8.1**, Law **18.12.2** applies as from the instant of the second throw. At that instant, the batters had crossed (mid-pitch, heading toward the end that was their 3rd run destination). Since an **odd number of runs (3)** were scored from the throw, the batters end up at **opposite ends** to where they started the ball. The batter who was on strike is now at the non-striker's end, so the **non-striker (now at the striker's end) faces the first ball of the next over**.\n\n**Summary:**\n| Component | Runs |\n|---|---|\n| Boundary allowance | 4 |\n| Completed runs at instant of throw | 2 |\n| Run in progress (batters had crossed) | 1 |\n| **Total** | **7** |\n\nThe original **non-striker faces** the first ball of the next over."
+    },
+    {
+      "id": "bcci_004",
+      "broader": {
+        "context_recall": 0.8333333333333334,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law24_s24.1",
+          "law2_s2.2",
+          "law1_s1.2",
+          "law42_s42.7",
+          "appendix_a_sA.7"
+        ],
+        "faithfulness": {
+          "score": 1.0,
+          "justification": "The response is fully faithful to the retrieved context. It correctly identifies that Law 24.1.1.1 permits a substitute when a fielder is injured during the match, that Law 24.1.2 allows a substitute to act as wicket-keeper with umpire consent, and that Law 42.7.1 (which would restrict this) applies only when a nominated wicket-keeper has committed a Level 3 or Level 4 offence—a condition not present in this scenario. All claims are directly supported by the provided context."
+        },
+        "answer_relevance": {
+          "score": 0.0,
+          "justification": "The AI response directly contradicts the expected ruling. The expected ruling states a substitute fielder cannot act as wicket-keeper and another nominated player from the XI must assume the role. The AI permits the substitute to act as wicket-keeper with umpire consent, which is the opposite conclusion. The AI's interpretation of Laws 24.1.2 and 24.1.1 as permitting this is incorrect; the relevant law structure does not allow substitutes to fill the wicket-keeper position regardless of circumstances or umpire consent."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nCore issue: Can a substitute act as wicket-keeper when the second nominated wicket-keeper is injured? Laws 24.1.2, 24.1.1, and 42.7.1 are all relevant.\n</Thinking>\n\n**Ruling:** The substitute fielder MAY act as wicket-keeper, subject to umpire consent.\n\n**Explanation:**\n\nThis scenario involves the interaction of three laws:\n\n**Law 24.1.1 — Entitlement to a substitute fielder**\nThe second wicket-keeper has been *severely injured* during the match. This clearly satisfies Law 24.1.1.1, which permits a substitute fielder when \"a fielder has been injured or become ill and that this occurred during the match.\" The fielding captain's request for a substitute is therefore valid in principle.\n\n**Law 24.1.2 — Substitute acting as wicket-keeper**\nUnder Law 24.1.2, a substitute may act as wicket-keeper, but **only with the consent of the umpires**. This is not automatic — it requires the umpires to agree. As umpire, I would grant consent, given that a legitimate nominated player has been severely injured and there is a genuine operational need.\n\n**Law 42.7.1 — The critical restriction**\nLaw 42.7.1 restricts the above *only* in one specific circumstance: where a nominated wicket-keeper has committed a **Level 3 or Level 4 offence** while keeping wicket. In that case, only a nominated player may keep wicket thereafter. There is no suggestion of any such offence in this scenario. Therefore, Law 42.7.1 does **not** apply here and does not block the substitute.\n\n**Key distinction to note:** The *original* nominated keeper dropping catches is irrelevant to this ruling — poor performance is not a disciplinary matter under these Laws.\n\n**Ruling:** The substitute fielder is permitted to act as wicket-keeper, with umpire consent granted under Law 24.1.1.1 and Law 24.1.2."
+    },
+    {
+      "id": "bcci_005",
+      "broader": {
+        "context_recall": 0.8333333333333334,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law25_s25.7",
+          "law39_s39.3",
+          "law38_s38.3",
+          "law17_s17.8",
+          "law32_s32.2"
+        ],
+        "faithfulness": {
+          "score": 0.5,
+          "justification": "The core ruling (non-striker OUT, Run Out under Law 38.3.1 and 38.3.2) is faithful to the context. However, the statement that \"The medical break does not constitute the ball becoming dead for a reason that would negate the dismissal\" and the analysis of whether a 4-minute delay affects the validity of the appeal introduces reasoning not present in the retrieved context, which contains no information about medical breaks, appeal timing windows, or how delays affect dismissal decisions."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "justification": "The AI correctly ruled OUT - Run Out, identifying that the dismissal occurred during the valid window under Law 38.3.1 (before the delivery stride) when the non-striker was out of their crease, and that the appeal made during the medical break is valid as it relates to an incident that occurred before the interruption. The reasoning aligns with the expected ruling's core principle that the appeal is made at the first reasonable opportunity after the incident."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nCore issue: Non-striker runout attempt (Law 38.3) + delayed appeal timing during medical break. Need to determine if the appeal is valid and what the decision should be.\n</Thinking>\n\n**Ruling:** The non-striker is **OUT, Run Out.**\n\n---\n\n**Explanation:**\n\n**Law 38.3 — The Run Out Attempt**\n\nUnder **Law 38.3.1**, if the non-striker is out of their ground at any time from the moment the ball comes into play *until the moment the bowler's arm reaches the highest point of their normal bowling action*, the non-striker is liable to be Run Out. The wicket must be broken by the bowler throwing the ball at the wicket or by the bowler's hand holding the ball.\n\nThe scenario states the non-striker was short of their crease at the time of the attempt, which falls within the valid window under **Law 38.3.1**. The conditions for dismissal are satisfied.\n\n**Law 38.3.2 — Ball Not Delivered**\n\nSince the ball was **not delivered** (the bowler attempted the runout before entering the delivery stride), **Law 38.3.2** governs. It states:\n- If the ball is not delivered and **there is an appeal**, the umpire shall make their decision on the Run Out.\n- The ball shall **not count** as one in the over.\n\n**On the Timing of the Appeal (4-minute delay during medical break):**\n\nThe retrieved laws do not specify a time limit within which an appeal must be made, nor do they address appeals made during medical breaks. The general principle under **Law 38.3.2** is simply that *\"if there is an appeal, the umpire shall make their decision.\"* No restriction on timing or game-state at the point of appeal is stipulated in the retrieved context.\n\nThe medical break does not constitute the ball becoming dead for a reason that would negate the dismissal — the runout attempt itself would have caused the umpire to call Dead ball under **Law 38.3.2** only if there were *no appeal* or a *not out* decision. Since an appeal *is* made, the umpire proceeds to adjudicate.\n\n**Conclusion:**\n\nThe umpire must rule on the appeal. The non-striker was out of their ground during the valid window, the wicket was fairly broken, and an appeal has been made. The correct decision is **OUT, Run Out** under **Law 38.3.1** and **38.3.2**. The delivery does not count as a ball in the over."
+    },
+    {
+      "id": "bcci_006",
+      "broader": {
+        "context_recall": 0.8333333333333334,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law31_s31.8",
+          "law38_s38.3",
+          "law31_s31.1",
+          "law38_s38.1",
+          "law38_s38.2"
+        ],
+        "faithfulness": {
+          "score": 1.0,
+          "justification": "The response is entirely grounded in the retrieved context. It correctly cites Law 31.8 regarding the timing window for withdrawal (\"before the instant when the ball comes into play for the next delivery\"), accurately identifies the requirement for umpire consent, and properly references Law 38.3 as the applicable run-out law. All claims about the procedure and consequences of withdrawal are directly supported by the provided excerpts."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "justification": "The AI response correctly states that the fielding captain may withdraw the appeal before the next ball is bowled, subject to the umpire's agreement. This aligns precisely with Law 31.8 and the expected ruling. The detailed explanation accurately identifies the timing window (before the ball comes into play for the next delivery) and correctly notes that the arrival of a new batter does not preclude withdrawal within that window."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nInteraction between Law 31.8 (withdrawal of appeal) and Law 38.3 (non-striker run out) — specifically the timing window for withdrawal.\n</Thinking>\n\n**Ruling:** Yes, the fielding captain may withdraw the appeal in this scenario.\n\n**Explanation:**\n\n**Law 31.8** governs the withdrawal of appeals. It states that the captain of the fielding side may withdraw an appeal, with the consent of the relevant umpire, and that withdrawal must occur **\"before the instant when the ball comes into play for the next delivery.\"**\n\nThe scenario described — a new batter having arrived at the wicket but no further ball yet bowled — means the next delivery has not yet come into play. Therefore, the timing window for withdrawal under **Law 31.8** remains **open**.\n\nProvided the fielding captain:\n1. Seeks and **obtains the consent** of the umpire within whose jurisdiction the appeal falls (in a non-striker run-out under **Law 38.3**, this would be the bowler's end umpire), and\n2. Does so **before the ball comes into play for the next delivery**,\n\n...the withdrawal is valid. Upon a valid withdrawal, **Law 31.8** further requires the umpire to **revoke the decision and recall the dismissed batter**, meaning the new batter would stand down and the originally dismissed non-striker would return.\n\nThere is no provision in the Laws preventing withdrawal simply because a new batter has already walked out; the sole binding deadline is the moment the next ball comes into play."
+    },
+    {
+      "id": "bcci_007",
+      "broader": {
+        "context_recall": 0.8333333333333334,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law38_s38.3",
+          "law35_s35.2",
+          "law21_s21.4",
+          "law41_s41.16",
+          "law20_s20.4"
+        ],
+        "faithfulness": {
+          "score": 1.0,
+          "justification": "The response comprehensively restates Law 38.3 and its procedural dependencies (Laws 38.3.1, 38.3.2, 38.3.3, and 20.4.2.10) with complete fidelity to the retrieved context. Every rule, condition, and consequence cited is directly supported by the provided legal text with no additions, omissions, or contradictions."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "justification": "The AI response correctly identifies and explains all three essential factors required by Law 38.3: (1) timing of when the non-striker left their ground relative to the bowler's action, (2) whether the wicket was fairly broken, and (3) the requirement for a valid appeal. The response goes beyond the expected ruling by providing comprehensive procedural detail on how these factors interact with delivery status and dead ball protocols, which enhances rather than contradicts the core adjudication requirements."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nMulti-law scenario: Law 38.3 (non-striker leaving ground early) is primary, with Law 20.4.2.10 and 38.3.2/38.3.3 as supplementary provisions governing procedure.\n</Thinking>\n\n**Ruling:** The umpire must consider several distinct sequential factors, all governed primarily by **Law 38.3**.\n\n---\n\n**Explanation:**\n\n### Factor 1 — Was the Non-Striker Out of Their Ground at the Right Moment? *(Law 38.3.1)*\nThe non-striker must have been out of their ground **from the moment the ball comes into play until the moment the bowler's arm reaches the highest point of their normal bowling action in the delivery swing.** If the non-striker only left their ground *after* that highest point, dismissal under this Law is **not possible** (Law 38.3.1.1).\n\n---\n\n### Factor 2 — Was the Wicket Fairly Broken? *(Law 38.3.1)*\nThe wicket must have been broken either by:\n- The **bowler throwing the ball** at the wicket, or\n- The **bowler's hand holding the ball**\n\n...and the non-striker must be **out of their ground at the moment of breaking**, regardless of whether the ball was subsequently delivered.\n\n---\n\n### Factor 3 — Was the Ball Delivered or Not?\n\nThe procedural consequences **differ significantly** depending on this:\n\n**If the ball was NOT delivered** *(Law 38.3.2):*\n- If there is an appeal → umpire rules on the Run Out\n- If **not out** or no appeal → umpire **calls and signals Dead ball**\n- The ball does **not count** as one in the over\n\n**If the ball WAS delivered** *(Law 38.3.3):*\n- If there is an appeal → umpire rules on the Run Out\n- If **not dismissed** → ball remains in play; **Law 21.6** (bowler breaking wicket in delivery) applies\n- If **dismissed** → ball does **not count** as one in the over\n\n---\n\n### Factor 4 — Was There an Appeal?\nUnder both **Laws 38.3.2 and 38.3.3**, the umpire's duty to make a Run Out decision is **triggered by an appeal**. Without one, the umpire moves to the Dead ball procedure rather than adjudicating dismissal.\n\n---\n\n### Key Interaction to Note\nLaw **20.4.2.10** confirms Dead ball is called when the ball is not delivered, *except* when the non-delivery is itself an **attempt to run out the non-striker under Law 38.3** — preserving the legitimacy of the dismissal attempt."
+    },
+    {
+      "id": "bcci_008",
+      "broader": {
+        "context_recall": 0.5555555555555556,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law12_s12.1",
+          "law2_s2.7",
+          "law11_s11.6",
+          "law10_s10.2",
+          "law11_s11.4"
+        ],
+        "faithfulness": {
+          "score": 1.0,
+          "justification": "The response accurately synthesizes all six procedural duties directly from the retrieved context (Laws 2.7–2.8, 10.2–10.3, 11.4, 11.6, and 12.1), with precise citations and no claims that extend beyond the information provided. Each duty is faithfully grounded in the specific regulatory language of the MCC Laws."
+        },
+        "answer_relevance": {
+          "score": 0.5,
+          "justification": "The AI response correctly identifies several key duties (assessing conditions, covering the pitch, monitoring conditions, resuming play) and cites relevant law numbers. However, it diverges from the expected ruling by omitting explicit reference to \"calling and signaling Time\" and \"informing both captains of revised schedule,\" instead focusing on condition assessment and interval adjustments. While procedurally sound and law-compliant, the response does not align precisely with the six specific duties outlined in the expected ruling."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nMulti-day match rain interruption — procedural duties of umpires. Relevant laws: 2.7, 2.8, 10.2, 10.3, 11.4, 11.6, 12.1.\n</Thinking>\n\n**Ruling:** The following six procedural duties are mandated by the MCC Laws as retrieved.\n\n---\n\n**Explanation:**\n\n1. **Immediately Suspend Play** (Law 2.8.2)\nIf either umpire considers conditions dangerous or unreasonable due to rain, the umpires **shall immediately suspend play** — they must not allow it to continue or recommence.\n\n2. **Assess Whether Conditions Are Dangerous or Unreasonable** (Laws 2.7.1–2.7.4)\nThe umpires must jointly evaluate the conditions. Wet grass and a wet ball alone do not automatically warrant suspension; the test is whether conditions pose actual safety risk (Law 2.7.2) or are simply not sensible for play to proceed (Law 2.7.3), including whether the bowler's foothold, fielders' movement, or batters' ability to run/play strokes are compromised (Law 2.7.4).\n\n3. **Monitor Conditions Continuously During the Stoppage** (Law 2.8.3)\nThe umpires are responsible for **making inspections as often as appropriate**, and critically, they must do so **unaccompanied by any players or officials**.\n\n4. **Ensure the Pitch and Run-Ups Are Covered** (Law 10.2)\nOnce play is suspended, umpires must ensure the **whole pitch plus a minimum of 4 ft/1.22 m beyond each end is covered**, and the **bowlers' run-ups are covered where possible** (Laws 10.2.1 & 10.2.2).\n\n5. **Consider Changing the Tea Interval Time if Applicable** (Laws 11.4 & 11.6.3)\nIf the stoppage occurs when 30 minutes or less remains before the agreed tea interval, **the interval shall be taken immediately** (Law 11.6.3), unless the captains agree to forgo it (Law 11.9 referenced therein). More broadly, under Law 11.4, the umpires and both captains may agree to adjust interval times to recover lost playing time.\n\n6. **Call Play on Resumption the Following Day** (Law 12.1)\nOnce conditions are agreed to be no longer dangerous or unreasonable (Law 2.8.3), covers are removed promptly (Law 10.3.2), and the bowler's end umpire **shall call \"Play\"** before the first ball bowled on resumption (Law 12.1)."
+    },
+    {
+      "id": "blog_001",
+      "broader": {
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law37_s37.4",
+          "law30_s30.1",
+          "law33_s33.1",
+          "law33_s33.3",
+          "law21_s21.17"
+        ],
+        "faithfulness": {
+          "score": 1.0,
+          "justification": "The response is entirely faithful to the retrieved context. It correctly applies Law 33.1, which states that the striker is out Caught if the ball touches the striker's bat (without prior fielder contact) and is subsequently held by a fielder as a fair catch. The response accurately notes that the law contains no requirement of intent, and that prior contact with the batter's own pad does not disqualify the catch—all of which follows directly from the text provided."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "justification": "The AI correctly ruled the batter out caught and properly identified that Law 33.1 contains no requirement of intent. The response accurately explains that the pad contact does not invalidate the catch and that the subsequent inadvertent bat contact is sufficient for dismissal, matching the expected ruling completely."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nCore issue: Is the batter out Caught when the ball contacts the bat inadvertently (after hitting the pad) with no attempt to play a shot? Relevant laws: Law 33.1 (Caught) — specifically whether the ball \"touches the striker's bat\" regardless of intent.\n</Thinking>\n\n**Ruling:** OUT — Caught.\n\n**Explanation:**\n\nUnder **Law 33.1**, the striker is out Caught if:\n1. The ball is delivered by the bowler (and is not a No ball),\n2. The ball **touches the striker's bat** — without having previously been in contact with any fielder, and\n3. A fielder subsequently holds it as a fair catch before it touches the ground.\n\nThe law is unambiguous and contains **no requirement of intent**. It does not matter that the batter was deliberately padding the ball away, nor that the contact with the bat was inadvertent. The sole test is whether the ball physically touched the bat prior to being caught. In this scenario, it did.\n\nThe sequence — pad first, then bat — does not disqualify the catch. **Law 33.1** only bars a catch if the ball made prior contact with *a fielder*; prior contact with the batter's own pad is irrelevant to the validity of the catch.\n\nThe fielder then completes the catch in accordance with **Law 33.3** (complete control over ball and movement).\n\nAccordingly, the appeal must be upheld: the batter is **OUT, Caught**."
+    },
+    {
+      "id": "blog_002",
+      "broader": {
+        "context_recall": 0.7142857142857143,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law30_s30.1",
+          "law33_s33.1",
+          "law37_s37.4",
+          "law38_s38.1",
+          "law38_s38.3"
+        ],
+        "faithfulness": {
+          "score": 0.5,
+          "justification": "The core ruling that the batter is NOT OUT Caught (because the ball didn't touch the bat and grounded before being caught) is fully faithful to Law 33.1. However, the claim that deliberately striking a live ball constitutes Obstructing the Field under Law 37.4 is not supported by the retrieved context—Law 37.4 specifically addresses \"returning the ball to a fielder,\" not all deliberate interference with the ball. The response extends beyond what the context explicitly states about what actions violate Law 37.4."
+        },
+        "answer_relevance": {
+          "score": 0.5,
+          "justification": "The AI correctly identifies the ruling as NOT OUT to the Caught appeal and correctly cites Law 33.1 regarding the requirements for a valid catch. However, the response introduces an additional Obstructing the Field dismissal that is not part of the expected answer and may be legally questionable in this context—the expected ruling simply states the batter is not out, without discussing alternative modes of dismissal or potential appeals."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nCore issue: Whether a catch is valid after ball hit upper arm (not bat), grounded, then deliberately hit away by batter. Relevant laws: Law 33.1 (Caught), Law 37.4 (Obstructing the Field).\n</Thinking>\n\n**Ruling:** NOT OUT Caught. However, the batter may be OUT Obstructing the Field.\n\n**Explanation:**\n\n**On the Caught appeal — NOT OUT**\n\nLaw 33.1 requires that for a valid catch, the ball must:\n1. Touch the striker's **bat**, and\n2. Be held by a fielder **before it touches the ground**.\n\nIn this scenario, the ball struck the batter's **upper arm** (not the bat), and it **grounded** before the fielder caught it. Both conditions for a catch are unmet. The appeal for Caught must be **dismissed**.\n\n---\n\n**On Obstructing the Field — Potential Dismissal**\n\nLaw 37.4 states that a batter is out **Obstructing the Field** if, while the ball is in play and without the consent of a fielder, they use the bat or any part of their person to **return the ball to any fielder** — or, by extension, deliberately strike a live ball.\n\nWhen the batter hit the grounded (but still live) ball away with their bat, this constitutes deliberately interfering with the ball in play using the bat. This action falls squarely within Law 37.4.\n\n**Therefore:** The correct dismissal, if appealed, would be **OUT Obstructing the Field** under Law 37.4 — **not Caught**. The umpire should rule Not Out to the Caught appeal, but if the fielding side appeals for Obstructing the Field, that appeal should be upheld.\n\n> **Note:** The fielding team must appeal specifically for Obstructing the Field for that dismissal to be given. The umpire cannot change the mode of dismissal without such an appeal."
+    },
+    {
+      "id": "blog_003",
+      "broader": {
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law21_s21.1",
+          "law21_s21.3",
+          "law21_s21.2",
+          "law17_s17.6",
+          "law41_s41.8"
+        ],
+        "faithfulness": {
+          "score": 0.5,
+          "justification": "The core ruling (NO BALL under Law 21.1.1 for failure to notify a change in mode of delivery) is faithful to the context. However, the response adds interpretive details not explicitly stated in the context, such as the specific claim that \"mode of delivery\" definitively encompasses \"bowling arm\" as distinct from \"over/round the wicket,\" and the prescriptive guidance about what the umpire \"should have\" communicated to the striker. While Law 21.1.1 does govern changes in mode of delivery and mandates a No ball call, the context does not explicitly enumerate bowling arm as a component of \"mode of delivery\" or provide the level of procedural detail the response offers."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "justification": "The AI ruling is correct in substance and cites the appropriate law (Law 21.1.1). It correctly identifies that the bowler failed to notify the umpire of a change in bowling arm (a mode of delivery), which is distinct from the change of side (round the wicket), and correctly rules that this failure results in a No ball and the batter being Not Out. The explanation accurately reflects the expected ruling and provides sound reasoning grounded in the Laws of Cricket."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nThe bowler changed arm without notifying the umpire — Law 21.1.1 governs failure to notify a change in mode of delivery. Need to determine if \"out\" stands or if No ball applies, and whether the batter is dismissed.\n</Thinking>\n\n**Ruling:** NO BALL. The batter is NOT OUT.\n\n**Explanation:**\n\n**Law 21.1.1** is the governing law here. It states:\n\n> *\"It is unfair if the bowler fails to notify the umpire of a change in mode of delivery. In this case the umpire shall call and signal No ball.\"*\n\nThe bowler notified the umpire only of a change in **side** (over to round the wicket), but then bowled with his **right arm** — a change in bowling hand — which was **never communicated to the umpire**. This constitutes a failure to notify a change in mode of delivery.\n\n**Consequences:**\n\n1. **The umpire shall call and signal No ball.** This must be done even retrospectively as soon as the umpire recognises the infringement (the delivery stride having already been entered).\n2. Because the delivery is a No ball, **the batter cannot be dismissed bowled** (or by any other mode of dismissal off a No ball, except run out, hit the ball twice, handled the ball, or obstructing the field — none of which apply here).\n3. The batter is therefore **NOT OUT**, the delivery counts as a No ball (one run added to extras, and it must be re-bowled).\n\n**Note on mode of delivery:** \"Mode of delivery\" under Law 21.1.1 encompasses bowling arm (right or left-handed), as well as over/round the wicket. The bowler correctly informed the umpire of the side change but failed entirely to declare the change of bowling arm. The umpire, having informed the batter of \"round the wicket,\" should also have been informed of the right-arm change so that information could be passed to the striker. The failure to do so makes the delivery unfair and mandates the No ball call."
+    },
+    {
+      "id": "blog_004",
+      "broader": {
+        "context_recall": 0.8333333333333334,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law19_s19.8",
+          "law21_s21.8",
+          "law21_s21.4",
+          "law25_s25.8",
+          "law18_s18.13"
+        ],
+        "faithfulness": {
+          "score": 0.5,
+          "justification": "The core ruling that this is an overthrow boundary under Law 19.8.1 is faithful to the context. However, the claim that \"there is no retrieved law that penalises a batter for instinctively protecting themselves\" and the assertion that an instinctive deflection \"does not constitute an offence\" go beyond the retrieved context, which does not contain the full Law 37 (Obstructing the Field) or address whether a batter's deflection of an overthrow constitutes obstruction. The response makes a judgment call on obstruction without sufficient grounding in the provided laws."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "justification": "The AI correctly identifies this as an overthrow boundary under Law 19.8.2.1, correctly awards four runs, and correctly recognizes that the batter's instinctive self-protective act does not constitute an offense or grounds for dismissal. The reasoning aligns with the expected ruling in all material respects."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nCore issue: Batter deflects an overthrow with the bat to the boundary — involves Law 19.8 (overthrows/boundary), and potentially obstruction, but key question is whether this is a legitimate act or obstruction, and how the boundary runs are counted.\n</Thinking>\n\n**Ruling:** The ball reaches the boundary. The batter's instinctive act is not wilful obstruction. Boundary runs are awarded under Law 19.8.1 as an overthrow boundary.\n\n**Explanation:**\n\n**Step 1 — Is this an overthrow?**\nUnder **Law 19.8.2.1**, a boundary results from an overthrow if a fielder, in an attempt to run out a batter, directs the ball towards the wickets and it subsequently crosses the boundary. That condition is clearly met here — the bowler threw at the striker's wicket and the ball ultimately crossed the boundary.\n\n**Step 2 — Does the batter's instinctive deflection change anything?**\nThe retrieved laws do not contain the obstruction/Obstructing the Field law (Law 37) in full, but **Law 19.8.2.3** is directly relevant here: a *wilful act* of a **fielder** is defined for boundary-scoring purposes — this provision concerns fielders, not batters. There is no retrieved law that penalises a batter for instinctively protecting themselves from a ball thrown at their face. An instinctive, self-protective swat is not a deliberate act of obstruction.\n\n**Step 3 — Runs scored**\nUnder **Law 19.8.1**, the total is:\n- Any penalty runs already awarded, **plus**\n- The **boundary allowance** (4 runs), **plus**\n- Runs completed by the batters **at the instant of the throw**, plus the run in progress if they had already crossed at that instant.\n\n**Law 18.12.2** applies from the instant of the throw to determine which end each batter must return to should the ball not have reached the boundary (academic here, as it did).\n\n**Summary:** This is an overthrow boundary. The batter's instinctive self-protective deflection does not alter the outcome or constitute an offence under the retrieved laws. Award the overthrow boundary (4) plus any runs completed/in progress at the moment of the throw."
+    },
+    {
+      "id": "blog_005",
+      "broader": {
+        "context_recall": 0.7142857142857143,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law21_s21.5",
+          "law22_s22.1",
+          "law22_s22.2",
+          "law38_s38.3",
+          "law22_s22.4"
+        ],
+        "faithfulness": {
+          "score": 1.0,
+          "justification": "The response is entirely faithful to the retrieved context. It correctly applies Law 21.5 to determine that a delivery released five metres short of the popping crease fails to satisfy the front foot condition (Law 21.5.2), resulting in a No ball call. All reasoning is grounded in the specific provisions cited from the context, and no information outside the retrieved laws is introduced."
+        },
+        "answer_relevance": {
+          "score": 0.0,
+          "justification": "The AI's ruling directly contradicts the expected ruling. The expected decision is that the batter is OUT bowled because the ball becomes live as soon as the bowler begins his run-up, and the bowler does not need to reach the crease to deliver legally (provided he doesn't bowl from behind the umpire). The AI incorrectly applies Law 21.5 about foot position at the crease, when the actual law allows delivery before reaching the crease as long as the stated conditions are met—making this a fundamental misinterpretation of cricket law."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nThe issue is whether a ball released before the delivery stride (before reaching the popping crease) constitutes a fair delivery or a No ball, governed by Law 21.5 regarding fair delivery of the feet.\n</Thinking>\n\n**Ruling:** NO BALL. The batter is NOT OUT bowled.\n\n**Explanation:**\n\nLaw 21.5 defines what constitutes a fair delivery in respect of the feet. For a delivery to be fair:\n\n- **Law 21.5.1**: The bowler's **back foot** must land *within and not touching* the return crease on the side of their stated mode of delivery.\n- **Law 21.5.2**: The bowler's **front foot** must land with some part of it behind the popping crease (and on the correct side of the middle-stump line).\n\nIf the bowler released the ball **five metres short of the popping crease**, they were never in a legal delivery stride relative to the crease. Specifically:\n\n1. The **front foot condition** (Law 21.5.2) cannot have been satisfied — no part of the front foot was behind the popping crease at the point of delivery.\n2. It is almost certain the **back foot condition** (Law 21.5.1) was also not satisfied in relation to a valid delivery stride.\n\nThe bowler's end umpire, **not being satisfied** that all three conditions in Law 21.5 were met, **shall call and signal No ball**.\n\nBecause the delivery is a No ball, the batter **cannot be dismissed bowled** (bowled is not one of the methods of dismissal available off a No ball). The batter is entirely correct that it cannot be a fair delivery, though the precise ground is the **foot fault under Law 21.5**, not simply \"not reaching the crease\" as a general concept.\n\nThe delivery counts as a No ball, an extra is awarded, and the over ball does not count."
+    },
+    {
+      "id": "blog_006",
+      "broader": {
+        "context_recall": 0.7142857142857143,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law31_s31.7",
+          "law29_s29.1",
+          "law21_s21.6",
+          "law35_s35.2",
+          "law39_s39.1"
+        ],
+        "faithfulness": {
+          "score": 0.5,
+          "justification": "The response correctly identifies Law 29.1's definition of a broken wicket and uses it to reason about the scenario, which is faithful to the context. However, the response makes a definitive ruling (\"NOT OUT\") and claims the ball \"must break the wicket\" for a Bowled dismissal — facts that are not present in the retrieved context, which does not include Law 32 (Bowled) or specify the conditions for that dismissal. The logical reasoning is sound but extends beyond what the context explicitly supports."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "justification": "The AI correctly ruled that the batter is not out bowled, identifying the core principle that the bails were not dislodged by the ball itself and that dead ball should have been called when the wicketkeeper accidentally dislodged them. While the AI's reasoning was somewhat cautious due to not having Law 32 explicitly retrieved, it arrived at the correct conclusion through sound application of Law 29.1 (wicket broken) and proper understanding of when a valid dismissal for bowled can occur."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nCore issue: Can a batter be bowled when the wicket is already broken (bails already off) before the ball hits the stumps? Relevant laws: Law 29.1 (wicket is broken), and implicitly how \"fairly breaking the wicket\" applies to Bowled (Law 32, not retrieved). However, Law 29.1 defines when a wicket IS broken, which is directly relevant.\n</Thinking>\n\n**Ruling:** No Definitive Ruling Possible — the retrieved laws do not explicitly cover the dismissal of \"Bowled\" (Law 32 is not in the retrieved Context).\n\n**Explanation:**\n\nHowever, the retrieved laws provide strong guidance via **Law 29.1**, which defines when a wicket is considered broken:\n\n> *\"The wicket is broken when at least one bail is completely removed from the top of the stumps, or one or more stumps is removed from the ground.\"* — **Law 29.1**\n\nThis is the foundational principle governing all dismissals that require the wicket to be \"fairly broken.\" Since the bails were already dislodged **before** the delivery was bowled, the wicket was **already in a broken state** at the time the ball struck the stumps. A wicket that is already broken cannot be broken again by the ball.\n\n**Logical guidance based on retrieved laws:**\n- For the batter to be dismissed Bowled, the ball must break the wicket. Since the wicket was already broken (per **Law 29.1**), there is no valid \"breaking of the wicket\" by the ball to constitute a dismissal.\n- The correct procedure, though not retrieved here, would ordinarily require the fielding side or umpires to have **re-set the wicket** (replaced the bails) before a valid breaking could occur.\n- Notably, no Dead ball was called for the wicketkeeper's accidental dislodgement, meaning the situation was not corrected prior to the delivery.\n\n**Guidance: The batter is most likely NOT OUT.** The appeal for Bowled should be declined because the wicket was not broken *by the ball* — it was already broken when the ball arrived. The umpire should dismiss the appeal."
+    },
+    {
+      "id": "blog_007",
+      "broader": {
+        "context_recall": 0.625,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law38_s38.2",
+          "law29_s29.5",
+          "law39_s39.1",
+          "law32_s32.1",
+          "law29_s29.1"
+        ],
+        "faithfulness": {
+          "score": 0.5,
+          "justification": "The core ruling (NOT OUT) and the citation of Law 29.1 and 29.5.1 are grounded in the context. However, the AI's interpretation that \"a stump that is merely struck but neither dislodged nor tilted does not satisfy\" the requirement introduces the specific condition of \"tilted\" which does not appear in the retrieved context. Law 29.1 only specifies that a stump must be \"removed from the ground,\" and the context does not explicitly address whether striking without removal constitutes a broken wicket under no-bails conditions, leaving the AI's inference partially beyond the strict retrieval."
+        },
+        "answer_relevance": {
+          "score": 0.0,
+          "justification": "The AI ruling is incorrect and contradicts the expected ruling. According to Laws 20.4.2.4 and 29.4.1, when bails are dispensed with due to weather conditions, the ball striking the stumps is sufficient for a wicket to be broken—physical dislodgement or tilting is not required. The umpire's satisfaction that the ball has struck the stumps constitutes a broken wicket in bails-dispensed matches. The batter is OUT, not NOT OUT."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nCore issue: Whether a wicket is \"broken\" under bails-dispensed conditions when the ball hits the stump but does not dislodge or tilt it. Relevant laws: Law 29.5 (Dispensing with bails) and Law 29.1 (The wicket is broken).\n</Thinking>\n\n**Ruling:** NOT OUT.\n\n**Explanation:**\n\nUnder normal conditions, Law 29.1 defines a broken wicket as one where \"at least one bail is completely removed from the top of the stumps, **or** one or more stumps is removed from the ground.\" Since bails are dispensed with here, the standard bail-removal criterion cannot be met.\n\nLaw 29.5.1 governs the no-bails scenario and states that the wicket is broken fairly if **\"the umpire concerned is satisfied that the wicket has been struck\"** by the ball (among other agents). Crucially, Law 29.5 gives the umpire the **discretionary authority** to decide whether the wicket has been broken — it does not simply declare that any contact with the stumps constitutes a broken wicket.\n\nHowever, this discretion must still be exercised within the framework of Law 29.1, which requires physical dislodgement (a bail fully removed or a stump removed from the ground). Since the bails are absent, the only remaining criterion is **a stump being removed from the ground**. A stump that is merely struck but **neither dislodged nor tilted** does not satisfy this requirement.\n\nTherefore, the umpire cannot be satisfied that the wicket has been *broken* — only that it has been *struck*. The two are not the same. The batter is **NOT OUT Bowled**.\n\n> **Cited Laws:** Law 29.1, Law 29.5, Law 29.5.1, Law 32.1.1"
+    },
+    {
+      "id": "blog_008",
+      "broader": {
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law38_s38.2",
+          "law38_s38.1",
+          "law39_s39.1",
+          "law39_s39.3",
+          "law30_s30.1"
+        ],
+        "faithfulness": {
+          "score": 1.0,
+          "justification": "The AI response is entirely faithful to the retrieved context. It correctly identifies that Law 38.1 requires the ball to rebound off a \"fielder's person\" (not the batter's person), accurately distinguishes the batter from a fielder, and properly applies Law 38.2.1.2 as additional protective provision. All legal references and interpretations are directly supported by the provided laws."
+        },
+        "answer_relevance": {
+          "score": 0.0,
+          "justification": "The AI's ruling is directly contradicted by the expected ruling. The expected ruling clearly states the batter IS OUT run out, as a ball in play hitting the batter does not create a dead ball situation and the wicket is fairly broken when the batter is out of ground. The AI incorrectly interprets Law 38.1 to require the ball to deflect off a fielder (not the batter) to constitute a valid run out, which contradicts both the expected ruling and the actual law, which does not restrict run out dismissals to only those routes."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nCore issue: Whether a ball deflecting off a batter's person counts as \"rebounding off a fielder's person\" under Law 38.1, and whether the batter is protected under Law 38.2. The batter is not a fielder, so need to check if 38.1 covers this deflection route.\n</Thinking>\n\n**Ruling:** NOT OUT\n\n**Explanation:**\n\nLaw 38.1 states that a batter is out Run out if the wicket is fairly broken \"by either the action of a fielder **or the ball rebounding off a fielder's person**.\"\n\nThe critical word here is **fielder**. The batter is not a fielder. The ball deflected off the **batter's** person onto the stumps — this route of dismissal is not covered by Law 38.1, which only recognises a deflection off a **fielder's** person as a valid means of breaking the wicket for a Run out.\n\nSince the ball did not reach the stumps:\n- By a direct throw from a fielder, nor\n- By rebounding off a **fielder's** person,\n\nthe wicket has not been \"fairly broken\" by the action of a fielder within the meaning of **Law 38.1**. The deflection via the batter's foot is not a recognised route under the law.\n\nAdditionally, **Law 38.2.1.2** provides further protection, noting a batter is **not out Run out** if the ball has not made contact with a fielder before the wicket is fairly broken — though here the primary issue is that the deflection off the batter does not satisfy Law 38.1's requirements in the first place.\n\n**The appeal should be turned down. NOT OUT.**"
+    },
+    {
+      "id": "blog_009",
+      "broader": {
+        "context_recall": 0.8333333333333334,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law31_s31.5",
+          "law31_s31.7",
+          "law31_s31.8",
+          "law31_s31.6",
+          "law33_s33.5"
+        ],
+        "faithfulness": {
+          "score": 1.0,
+          "justification": "The response accurately grounds the ruling in Laws 31.5 and 31.6, correctly identifying that the bowler's end umpire has jurisdiction over caught appeals and that consultation between umpires on points of fact is explicitly permitted. Every claim about the lawful process and the requirement that doubt results in Not Out is directly supported by the retrieved context."
+        },
+        "answer_relevance": {
+          "score": 0.0,
+          "justification": "The AI response is directly contradictory to the expected ruling. The expected ruling clearly states that the bowler's end umpire is the sole judge on whether the ball touched the bat, and that consultation may only occur on whether the ball was caught cleanly—not on bat contact. The AI incorrectly validates the reversal by misapplying Law 31.6, when the correct application of cricket law is that the original Not Out decision must stand and cannot be changed through consultation on this point."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nCore issue: Can consultation between umpires lead to a reversal of a Not Out decision on a caught appeal? Relevant laws: 31.5, 31.6.\n</Thinking>\n\n**Ruling:** Yes, this is correct procedure.\n\n**Explanation:**\n\nTwo laws interact here:\n\n**Law 31.5** establishes jurisdiction: all caught behind appeals fall under the **bowler's end umpire's** jurisdiction. The striker's end umpire has no independent authority to answer or overturn a caught appeal.\n\n**Law 31.6** governs consultation: *\"If an umpire is doubtful about any point that the other umpire may have been in a better position to see, they shall consult the latter on this point of fact and shall then give the decision.\"*\n\nThe process described is entirely lawful. The striker's end umpire — being closer to the bat — was in a better position to hear bat-on-ball contact. They correctly signalled their observation to the bowler's end umpire. The bowler's end umpire, taking that input into account as a **point of fact**, then revised their assessment and gave the decision.\n\nCritically, **the decision remains that of the bowler's end umpire** (the one with jurisdiction), informed by the factual input from their colleague. The striker's end umpire did not *give* the decision — they provided evidence. This is precisely the mechanism Law 31.6 exists for.\n\nHad doubt still remained after consultation, Law 31.6 requires the decision to be **Not Out**."
+    },
+    {
+      "id": "blog_010",
+      "broader": {
+        "context_recall": 0.8333333333333334,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law30_s30.2",
+          "law38_s38.3",
+          "law38_s38.2",
+          "law39_s39.1",
+          "law36_s36.1"
+        ],
+        "faithfulness": {
+          "score": 0.5,
+          "justification": "The AI's core reasoning about ground ownership under Law 30.2.4 is faithful to the context—correctly identifying that the striker's end belongs to Non-striker B. However, the response contains a self-correction mid-analysis (\"⚠️ Correction\") that introduces confusion, and the final conclusion that \"Non-striker B is OUT Run Out\" is not explicitly supported by the retrieved context, which establishes *whose* ground belongs where but does not clearly state what happens when a batter is not in their assigned ground when the wicket is broken at that end."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "justification": "The AI response correctly identifies that Non-striker B is out run out. The reasoning properly applies Law 30.2 to establish that Striker A's ground is the non-striker's end (since A grounded bat there first), which means the striker's end belongs to Non-striker B by Law 30.2.4. The conclusion correctly applies Law 38.4: since the wicket is broken at the striker's end (Non-striker B's ground) and B is not there, B is run out. The final ruling matches the expected ruling in substance."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nCore issue: Which batter's ground is the striker's end when both batters are at the non-striker's end? Apply Law 30.2 to determine ground ownership, then Law 38.4 to determine who is out.\n</Thinking>\n\n**Ruling:** Striker A is OUT Run Out.\n\n**Explanation:**\n\n**Step 1 — Establish ground ownership under Law 30.2**\n\nWhen Striker A arrives at the non-striker's end first and grounds their bat there, that end belongs to Striker A (Law 30.2.1: *\"If only one batter is within a ground, it is their ground and will remain so even if that batter is later joined there by the other batter.\"*)\n\nTherefore, the non-striker's end belongs to **Striker A**.\n\n**Step 2 — Determine who owns the striker's end**\n\nUnder Law 30.2.4: *\"If a ground belongs to one batter then… the other ground belongs to the other batter, irrespective of the other batter's position.\"*\n\nSince the non-striker's end belongs to Striker A, the **striker's end belongs to Non-striker B** — regardless of the fact that B is physically at the non-striker's end.\n\n**Step 3 — Determine who is out (Law 38.4)**\n\nLaw 38.4 states: *\"The batter out in the circumstances of 38.1 is the one whose ground is at the end where the wicket is fairly broken.\"*\n\nThe wicket is broken at the **striker's end**, which is Non-striker B's ground. Therefore, it is **Non-striker B** who is out… \n\n⚠️ **Correction — re-applying the logic:**\n\nThe striker's end's ground belongs to **Non-striker B**. The wicket is broken at the striker's end. Per Law 38.4, the batter out is the one **whose ground** is at the end broken — meaning the batter who has *failed to make their ground* there. Since the striker's end belongs to B, and B is not in it, **Non-striker B is OUT Run Out**.\n\nHowever, **Striker A** has been dismissed from their own ground (the non-striker's end) only if they fail to be in it — but Striker A *is* in it. Therefore:\n\n**Final Ruling: Non-striker B is OUT Run Out.**\n\nThe striker's end is Non-striker B's ground (Law 30.2.4). B is not in it when the wicket is broken. Per Law 38.4, B is the batter dismissed."
+    },
+    {
+      "id": "blog_011",
+      "broader": {
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law16_s16.6",
+          "law16_s16.1",
+          "law39_s39.4",
+          "law33_s33.1",
+          "law33_s33.4"
+        ],
+        "faithfulness": {
+          "score": 1.0,
+          "justification": "The AI response is entirely faithful to the retrieved context. It correctly applies Law 16.6.2 and Law 33.4, which explicitly state that runs completed before a catch are not counted toward winning, and accurately concludes the batting side cannot win in this scenario. Every claim is directly supported by the provided laws."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "justification": "The AI correctly ruled that the batting side does not win, citing Law 16.6.2 accurately and explaining that runs completed before the completion of a catch do not count toward the winning total. The response properly identifies that the match result depends on the scores without that run (a tie or loss for the batting side), matching the expected ruling in substance and legal citation."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nCore issue: Do runs completed before a catch count when they equal the winning runs? Law 16.6.2 and Law 33.4 are directly applicable.\n</Thinking>\n\n**Ruling:** The batting side does **NOT** win. The match result depends on the scores at that point — most likely a **TIE** (or a win to the fielding side), not a win to the batting side.\n\n**Explanation:**\n\nTwo laws interact here, and they are unambiguous:\n\n**Law 33.4 (No runs to be scored)** states that if the striker is dismissed Caught, *runs completed by the batters before the completion of the catch shall not be scored.* This means the single the batters ran does not count.\n\n**Law 16.6.2 (Winning hit or extras)** reinforces this directly and specifically: *\"The side batting last will have scored enough runs to win only if its total of runs is sufficient **without including** any runs completed by the batters before the completion of a catch… from which the striker could be dismissed.\"*\n\nApplying these laws to your scenario:\n\n- The batting side needed **1 run to win**.\n- The batters completed that 1 run **before** the catch was completed.\n- The striker **is** dismissed Caught — so Law 16.6.2 applies.\n- Those completed runs **cannot be counted** toward the winning total.\n- The batting side therefore has **not scored enough runs to win**.\n\nSince this is the last wicket and the batting side has not exceeded the opposition's total, the match is **not won by the batting side**. The innings is complete, the scores are level (they still needed 1 run and didn't get it), resulting in a **Tie** under Law 16 — or, if the scores are not level, a **win to the fielding side**.\n\n**In short:** The catch takes precedence. The run does not count. The batting side does not win."
+    },
+    {
+      "id": "blog_012",
+      "broader": {
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law39_s39.2",
+          "law39_s39.1",
+          "law38_s38.2",
+          "law33_s33.1",
+          "law25_s25.8"
+        ],
+        "faithfulness": {
+          "score": 1.0,
+          "justification": "The AI response is entirely faithful to the retrieved context. It correctly applies Law 39.2 to establish that a wicket-keeper's cap qualifies as \"equipment,\" making the deflection legally equivalent to the wicket-keeper breaking the wicket, and accurately cites Law 39.1.1 to confirm all conditions for a Stumped dismissal are met. No information is introduced beyond what is explicitly stated in the provided laws."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "justification": "The AI response correctly rules OUT (STUMPED) and accurately applies Law 39.2, correctly identifying that a cap is part of the wicket-keeper's equipment and does not invalidate the stumping, unlike a helmet which would. The reasoning aligns precisely with the expected ruling and the relevant Laws of Cricket."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nCore issue: Can a batter be stumped when the ball deflects off the wicket-keeper's cap onto the stumps? Relevant laws: 39.1 (Out Stumped) and 39.2 (Ball rebounding from wicket-keeper's person/equipment).\n</Thinking>\n\n**Ruling:** OUT — STUMPED\n\n**Explanation:**\n\nThe batter's claim is incorrect. Law 39.2 directly and explicitly governs this scenario:\n\n> *\"If the wicket is broken by the ball, it shall be regarded as having been broken by the wicket-keeper if the ball rebounds on to the stumps from **any part of the wicket-keeper's person or equipment**.\"*\n\nA cap worn by the wicket-keeper constitutes **part of the wicket-keeper's person or equipment**. Therefore, the ball deflecting off the keeper's cap and onto the stumps is legally treated as the wicket-keeper breaking the wicket. The cap rebound does **not** constitute \"intervention of another fielder\" under Law 39.1.1 — the wicket-keeper is the sole agent here.\n\nAll conditions of **Law 39.1.1** are satisfied:\n- The ball was delivered and **not called No ball**\n- The striker was **out of their ground**\n- The striker had **not attempted a run**\n- The wicket was **fairly broken by the wicket-keeper** (via the cap rebound, per Law 39.2) **without the intervention of another fielder**\n\nThe correct decision is **OUT — STUMPED**."
+    },
+    {
+      "id": "blog_013",
+      "broader": {
+        "context_recall": 0.8333333333333334,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law18_s18.3",
+          "law30_s30.2",
+          "law30_s30.1",
+          "appendix_a_sA.13",
+          "law18_s18.4"
+        ],
+        "faithfulness": {
+          "score": 0.5,
+          "justification": "The core ruling (SHORT RUN, run shall not be scored) is faithful to the context and correctly applies Law 30.1.1 and 18.3.1. However, the claim that Law 18.3.2's exception applies \"only to the striker at the start of the first run\" and \"does not apply to the non-striker completing a run at the other end\" introduces a logical inference not explicitly stated in the retrieved context—the context does not directly address whether this exception applies or does not apply to a non-striker at the completing end."
+        },
+        "answer_relevance": {
+          "score": 0.0,
+          "justification": "The AI's ruling directly contradicts the expected ruling. The expected ruling states it is NOT a short run because there was no deliberate attempt to run short, and emphasizes the fielding team could have effected a run out instead. The AI incorrectly calls it a short run, misapplying Law 30.1.1 (which establishes the requirement to ground behind the crease for safety/run-out purposes) as the basis for a short run call, when the correct interpretation under Law 18.3 requires either deliberate running short or failure to ground while *turning for a further run* — neither of which applies here."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nCore issue: whether a non-striker who completes a run but stops in front of the popping crease (without grounding bat/body behind it) has made a short run — Law 18.3 and Law 30.1.\n</Thinking>\n\n**Ruling:** SHORT RUN. The run shall not be scored.\n\n**Explanation:**\n\nThe central question is whether the batter completed their ground at the striker's end (where they are now arriving). Law 30.1.1 is unambiguous:\n\n> *\"A batter shall be considered to be out of their ground unless some part of that batter's person or bat is grounded **behind** the popping crease at that end.\"* — **Law 30.1.1**\n\nBy standing **in front of** the popping crease without grounding any part of their person or bat behind it, the batter has failed to make good their ground at the completing end.\n\nUnder **Law 18.3.1**, *\"a run is short if a batter fails to make good their ground in turning for a further run.\"* While this wording specifically mentions \"turning for a further run,\" the requirement to ground behind the crease is absolute under Law 30.1.1 for the run to be properly completed. The batter has simply not made good their ground.\n\nThe relevant note under **Law 18.3.2** provides a limited exception — that a **striker** setting off from in front of the popping crease for the *first* run may do so without penalty. This exception applies only to the **striker** at the **start** of the first run. It does **not** apply to the non-striker completing a run at the other end.\n\nAccordingly, the on-field umpire should, once the ball is dead, **call and signal \"Short run\"** per **Law 18.4.1**, and that run shall not be scored."
+    },
+    {
+      "id": "blog_014",
+      "broader": {
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law36_s36.1",
+          "law36_s36.3",
+          "law30_s30.3",
+          "law30_s30.1",
+          "law22_s22.1"
+        ],
+        "faithfulness": {
+          "score": 0.5,
+          "justification": "The core ruling correctly cites Law 36.3 to establish that \"off side of wicket\" is determined by the batting position \"at the moment the ball comes into play,\" which is faithful to the context. However, the response introduces interpretive reasoning about how this law applies to mid-delivery stance switches (e.g., \"by switching to a left-handed stance mid-delivery, the batter cannot retrospectively redefine...\") that goes beyond what the retrieved context explicitly states; the context does not address stance-switching scenarios or their interaction with LBW rules."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "justification": "The AI response correctly identifies that the batter's original right-handed stance (the position when the ball came into play) determines whether the ball pitched outside leg stump for LBW purposes under Law 36.3. The ruling correctly concludes OUT, LBW, because relative to the original right-handed stance, the ball did not pitch outside leg stump, and all other LBW conditions are satisfied. The response accurately cites the relevant laws and explains why the batter's claim is invalid."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nLBW scenario where batter switched stance mid-delivery; key issue is whether \"off side of wicket\" is determined by original or switched stance — Law 36.1.2, 36.1.4, and 36.3.\n</Thinking>\n\n**Ruling:** OUT — LBW appeal upheld.\n\n**Explanation:**\n\nThe critical law here is **Law 36.3**, which states:\n\n> *\"The off side of the striker's wicket shall be determined by the striker's **batting position at the moment the ball comes into play** for that delivery.\"*\n\nThe batter's original position when the ball came into play was **right-handed**. At that moment, the off side is to the right of the stumps, and the leg side is to the left. The ball pitched on the **leg side of the left-handed stance** — but that same delivery pitched on the **off side relative to the right-handed stance** (i.e., the stance at the moment the ball came into play).\n\nNow applying all five conditions of **Law 36.1**:\n\n- **36.1.1** — Valid delivery (no No ball indicated).\n- **36.1.2** — The ball pitched on the off side of the striker's wicket *as determined by the original right-handed stance*, or between wicket and wicket. This condition is **satisfied** (pitching outside leg stump in a left-handed sense means it pitched on the off side or between the wickets in right-handed terms).\n- **36.1.3** — The ball struck the pad without touching the bat first. **Satisfied.**\n- **36.1.4** — The point of impact was in front of the stumps (between wicket and wicket). **Satisfied.** Since the batter made no genuine attempt to play the ball with the bat (swept and missed), the wider \"outside off stump\" provision also applies.\n- **36.1.5** — The ball would have hit the wicket. Assuming the umpire is satisfied of this. **Satisfied.**\n\n**The batter's claim is incorrect.** The \"outside leg stump\" protection under Law 36.1.2 is anchored to the batting position **when the ball came into play** (Law 36.3), not the switched stance at the moment of impact. By switching to a left-handed stance mid-delivery, the batter cannot retrospectively redefine what constitutes \"leg stump\" for the purposes of the LBW law.\n\n**Decision: OUT LBW.**"
+    },
+    {
+      "id": "blog_015",
+      "broader": {
+        "context_recall": 0.8333333333333334,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law22_s22.7",
+          "law39_s39.4",
+          "law35_s35.3",
+          "law23_s23.1",
+          "law19_s19.7"
+        ],
+        "faithfulness": {
+          "score": 0.5,
+          "justification": "The core ruling (5 runs total: 1 Wide penalty + 4 boundary runs, all scored as Wides) is faithful to Laws 22.7 and 19.7.2. However, the response introduces a scenario detail (\"Wide ball hitting stumps at bowler's end (no bails dislodged) and deflecting to boundary\") and makes an explicit claim about stumping not being possible that are not present in the retrieved context. The context does not address what happens when a Wide deflects off the stumps to the boundary, nor does it explain why \"no bails were dislodged\" prevents a dismissal — these are factual additions not grounded in the provided laws."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "justification": "The AI response correctly identifies that 5 runs are scored (1 wide + 4 boundary), matches the expected ruling exactly in substance, and provides accurate supporting law references (Law 19.7.2 and Law 22.7) to justify why the boundary allowance is awarded despite the ball hitting the stumps without dislodging bails."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nWide ball hitting stumps at bowler's end (no bails dislodged) and deflecting to boundary — need to determine runs scored under Law 22.7 and Law 19.7.\n</Thinking>\n\n**Ruling:** 5 runs total — 1 Wide penalty + 4 boundary runs, all scored as Wides.\n\n**Explanation:**\n\nTwo laws interact here:\n\n**Law 19.7.2** governs the boundary. Since the ball was not struck by the bat, any ball grounded beyond the boundary scores a **Boundary 4**. The ball deflecting off the stumps to the boundary qualifies — it was not struck by the bat, so a 4-run boundary allowance is awarded.\n\n**Law 22.7** governs how Wide runs are scored. It states that all runs completed by the batters or a **boundary allowance**, together with the **1-run Wide penalty**, shall be scored as Wide balls. Therefore:\n\n- 1 run (Wide penalty)\n- 4 runs (boundary allowance under Law 19.7.2)\n\n**Total = 5 runs, all scored as Wides, all debited against the bowler.**\n\nNote: Since no bails were dislodged, there is no wicket event (no stumping or other dismissal) to consider, and the delivery does not count as a valid ball in the over (Law 22.8)."
+    },
+    {
+      "id": "llm_001",
+      "broader": {
+        "context_recall": 0.7142857142857143,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law37_s37.5",
+          "law19_s19.8",
+          "law19_s19.7",
+          "law18_s18.1",
+          "law18_s18.9"
+        ],
+        "faithfulness": {
+          "score": 0.0,
+          "justification": "The response references \"Law 28.3 — Protective Helmets Belonging to the Fielding Side\" and claims it awards 5 Penalty Runs when a ball strikes a fielding side's helmet left on the ground. However, Law 28.3 is not present in the retrieved context. The response invents legal provisions and their consequences that cannot be verified against the provided materials, making it fundamentally unfaithful to the retrieved context."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "justification": "The AI response correctly identifies that 9 runs are awarded to the batting side (5 penalty runs for the helmet contact plus 4 boundary runs), accurately cites the relevant law (Law 28.3 for the helmet penalty and Law 19.7.2 for the boundary), and properly explains that these awards are independent and cumulative under Law 19.7.5. The attribution of penalty runs as extras and boundary runs to the striker is also correct."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nCore issue: Ball strikes a fielding side's helmet left on the ground near boundary, then crosses boundary. Relevant laws: Law 19.7 (boundaries), Law 28.3 (protective helmets belonging to fielding side), Law 18.9 (runs scored when ball becomes dead), Law 18.6 (penalty runs).\n</Thinking>\n\n**Ruling:** The batting side scores **9 runs** — 5 Penalty Runs for the ball striking the fielding side's helmet, plus a Boundary 4.\n\n---\n\n**Explanation:**\n\nThis scenario involves two overlapping provisions:\n\n**1. Law 28.3 — Protective Helmets Belonging to the Fielding Side**\nWhen the ball strikes a fielding side's helmet that has been left on the field by the fielding captain, **5 Penalty Runs are awarded to the batting side**. This is the direct consequence of a fielding side's helmet being improperly left on the field of play.\n\n**2. Law 19.7.2 — Boundary 4**\nThe ball was struck by the bat, grounded within the field of play, and subsequently crossed the boundary. This meets the criteria for a **Boundary 4** under Law 19.7.2, regardless of the helmet contact en route.\n\n**3. Law 19.7.5 — Interaction Between Penalties and Boundary**\nLaw 19.7.5 is explicit: *\"The scoring of Penalty runs by either side is not affected by the scoring of a boundary.\"* The two awards are therefore **independent and cumulative**.\n\n**4. Law 18.9 — Attribution**\nUnder Law 18.9, the 5 Penalty Runs are awarded to the batting side as penalty runs (not credited to the striker's individual total). The Boundary 4 is credited as runs to the striker in the normal manner.\n\n**Summary:**\n| Award | Runs | Attributed To |\n|---|---|---|\n| Penalty Runs (helmet) | 5 | Batting side (extras) |\n| Boundary 4 | 4 | Striker |\n| **Total** | **9** | |"
+    },
+    {
+      "id": "llm_002",
+      "broader": {
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law24_s24.2",
+          "law25_s25.4",
+          "law24_s24.1",
+          "law24_s24.4",
+          "law25_s25.8"
+        ],
+        "faithfulness": {
+          "score": 0.5,
+          "justification": "The core ruling that the fielder cannot immediately bowl and must serve Penalty time is faithfully grounded in Laws 24.2.5 and 24.3.2. However, the response introduces a requirement that \"the fielder left without informing the umpire of the reason\" — this detail is not present in the retrieved context, which only establishes that the umpire must be informed of any absence, not that the fielder's failure to self-report affects the ruling."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "justification": "The AI correctly ruled that the fielder cannot immediately bowl upon return and must serve a 25-minute Penalty time before being permitted to bowl. The response accurately applies Law 24.2 and correctly notes that illness does not exempt from Penalty time under Law 24.3.2, matching the expected ruling in substance."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nFielder absent due to illness, returns after 25 minutes — penalty time rules under Law 24.2 and exception under Law 24.3.2.\n</Thinking>\n\n**Ruling:** NO — the fielder cannot immediately bowl upon return, and the illness absence will accrue Penalty time.\n\n**Explanation:**\n\nTwo laws interact here:\n\n**1. Permission to Return (Law 24.2.2.2)**\nThe fielder left without informing the umpire of the reason. Under Law 24.2.2.2, a fielder who leaves the field **shall not return during a session of play without the consent of the umpire**. The umpire shall give consent as soon as practicable. So the fielder must first obtain the umpire's consent before coming back on.\n\n**2. Illness Does NOT Exempt from Penalty Time (Law 24.3.2)**\nLaw 24.3 outlines when a nominated player's absence will **not** incur Penalty time. Under Law **24.3.2**, absences for \"wholly acceptable reasons\" are exempt — but this section **explicitly states that illness or internal injury shall NOT be included** as wholly acceptable reasons. Furthermore, Law **24.3.1** only exempts absences caused by an **external blow** sustained during the match.\n\nSince illness does not qualify under either exemption, the **25 minutes of playing time off the field is added as Penalty time** (Law 24.2.5).\n\n**3. Bowling Restriction (Law 24.2.2.3 & 24.2.5)**\nThe fielder **shall not bowl until all Penalty time has been served**. Having been absent for 25 minutes, he must return to the field and remain on it for a further **25 minutes of playing time** before he is eligible to bowl.\n\n**Summary:**\n- ✅ He may field (with umpire's consent to return)\n- ❌ He cannot bowl immediately\n- ⏱️ He must serve **25 minutes** of Penalty time on the field before bowling is permitted"
+    },
+    {
+      "id": "llm_003",
+      "broader": {
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law36_s36.1",
+          "law39_s39.1",
+          "law39_s39.3",
+          "law21_s21.8",
+          "law38_s38.2"
+        ],
+        "faithfulness": {
+          "score": 1.0,
+          "justification": "The AI response is entirely grounded in the retrieved context. It correctly cites Law 36.1.2's requirement that the ball pitch in line between wickets or on the off side, accurately applies this to the hypothetical scenario, and properly explains why the failure to meet this condition prevents an LBW dismissal regardless of other factors. The explanation of Law 36.1.4's \"no genuine attempt\" exception and its limitation to point of impact (not pitch location) is also faithfully derived from the context provided."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "justification": "The AI response correctly ruled NOT OUT and accurately cited Law 36.1.2 as the controlling provision, establishing that a ball pitching outside leg stump creates an absolute bar to LBW dismissal regardless of other factors. The response also appropriately clarified that the \"no genuine attempt\" exception in Law 36.1.4 applies only to point of impact, not pitch location, reinforcing the absolute nature of the pitch requirement."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nLBW dismissal conditions under Law 36.1 — specifically Law 36.1.2 regarding where the ball pitches, and Law 36.1.4 regarding point of impact, and the interaction between pitch location and \"no genuine attempt to play the ball.\"\n</Thinking>\n\n**Ruling:** NOT OUT\n\n**Explanation:**\n\nUnder **Law 36.1**, all five conditions must be satisfied simultaneously for an LBW dismissal. The scenario fails at **Law 36.1.2**.\n\n**Law 36.1.2** requires that the ball *\"first lands in line between wicket and wicket or on the off side of the striker's wicket.\"*\n\nThe ball landed **outside the line of leg stump**. This condition is therefore **not met**, and the inquiry ends here — the batter **cannot** be out LBW regardless of any other circumstances.\n\n---\n\n**Regarding the \"no genuine attempt\" provision:**\n\nIt is worth noting that **Law 36.1.4** contains an extended point-of-impact condition when the striker makes *no genuine attempt to play the ball* — impact outside off stump becomes permissible in that case. However, this exception applies **only to the point of impact** (Law 36.1.4). There is **no equivalent exception in Law 36.1.2** for where the ball pitches. The pitch location requirement is absolute and cannot be overridden by a lack of genuine attempt to play.\n\nSince **Law 36.1.2** is not satisfied, the batter is **NOT OUT LBW**."
+    },
+    {
+      "id": "llm_004",
+      "broader": {
+        "context_recall": 0.8333333333333334,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law33_s33.1",
+          "law33_s33.2",
+          "law19_s19.5",
+          "law19_s19.4",
+          "law21_s21.8"
+        ],
+        "faithfulness": {
+          "score": 1.0,
+          "justification": "The response is entirely faithful to the retrieved context. It correctly applies Law 33.2.1 (fair catch conditions), Law 19.4.2 (ball grounded beyond boundary when fielder becomes grounded beyond boundary while in contact with ball before completing catch), and accurately concludes that the catch is unfair and a boundary is scored. All reasoning is directly supported by the provided Laws."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "justification": "The AI ruling is correct in all material respects. It correctly identifies that the striker is NOT OUT and that a boundary is awarded instead, properly citing Law 33.2.1 and Law 19.4.2 as the governing provisions. The explanation accurately addresses the key principle that a catch is only fair if the fielder has no part of their person grounded beyond the boundary while completing the catch, which is violated in this scenario."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nFielder completes catch but slides over boundary rope while holding ball — Laws 33.2.1, 19.4.2, and 19.5 are all directly relevant.\n</Thinking>\n\n**Ruling:** NOT OUT. The striker is **not** out Caught. A boundary is scored instead.\n\n**Explanation:**\n\nThis scenario is governed by the interaction of **Law 33.2.1** and **Law 19.4.2**.\n\n**Law 33.2.1** states that a catch is only fair if, at any time, *neither* the ball *nor* any fielder in contact with the ball is grounded beyond the boundary **before the catch is completed.**\n\n**Law 19.4.2** is directly on point here: it states that the ball is to be regarded as grounded beyond the boundary if *\"a fielder, after catching the ball within the boundary, becomes grounded beyond the boundary while in contact with the ball, **before completing the catch**.\"*\n\nThe critical question is when the catch is **completed**. A catch is not completed merely by the ball being held — the fielder must remain in full control and comply with all conditions of **Law 33.2.1** throughout. By sliding over the boundary rope **while still in contact with the ball**, the fielder becomes grounded beyond the boundary before the catch is completed. This renders the catch **unfair** under Law 33.2.1.\n\nThe consequence is:\n- The striker is **NOT OUT**.\n- **4 boundary runs** are awarded to the batting side, as the ball is treated as having been grounded beyond the boundary."
+    },
+    {
+      "id": "llm_005",
+      "broader": {
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law16_s16.6",
+          "law19_s19.7",
+          "law18_s18.1",
+          "law38_s38.5",
+          "law35_s35.3"
+        ],
+        "faithfulness": {
+          "score": 0.5,
+          "justification": "The core ruling that 4 runs are awarded (the boundary allowance being greater than 3 completed/in-progress runs) is faithfully grounded in Law 19.7.3. However, the final statement about the result being \"a win by [number of wickets still to fall]\" is not supported by the context — the retrieved Law 16.7 excerpt does not clarify whether the batting side actually won or lost, as that depends on whether 4 runs were sufficient to meet or exceed the target, which is not specified in the scenario."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "justification": "The AI correctly identifies that under Law 19.7.3, the boundary allowance of 4 runs is awarded (not the 2 completed runs), and correctly applies Law 16.6.3 to confirm the batting side wins the match by exceeding the 3-run target. The ruling matches the expected answer in substance and cites the appropriate laws."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nBoundary 4 vs completed runs comparison under Law 19.7.3, and winning hit under Law 16.6.3.\n</Thinking>\n\n**Ruling:** The batting side scores 4 runs (the boundary allowance). They win the match.\n\n**Explanation:**\n\n**Law 19.7.3** governs this scenario directly. When a boundary is scored, the batting side is awarded whichever is the **greater** of:\n- **19.7.3.1** — the boundary allowance (4 runs), OR\n- **19.7.3.2** — the runs completed by the batters together with the run in progress at the instant the boundary is scored (2 completed runs, plus the run in progress = 3 runs).\n\nSince 4 > 3, the **boundary allowance of 4 runs** is awarded.\n\n**Law 16.6.3** further confirms that if a boundary is scored before the batters have completed sufficient runs to win, the **whole of the boundary allowance** (4 runs) is credited to the side's total and to the striker's score.\n\n**Result:** The batting side needed 3 runs to win and receives 4 from the boundary. Under **Law 16.7**, the result is stated as a **win by the batting side**. Since they were bowled out (last ball of the match implies the innings concludes), the result would be stated as a **win by [number of wickets still to fall]**, having reached and exceeded the target."
+    },
+    {
+      "id": "llm_006",
+      "broader": {
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law14_s14.1",
+          "law15_s15.2",
+          "law16_s16.9",
+          "law37_s37.5",
+          "law41_s41.16"
+        ],
+        "faithfulness": {
+          "score": 1.0,
+          "justification": "The response is entirely faithful to the retrieved context. It correctly cites Law 14.1.1, accurately states that only the side batting first can enforce the follow-on, and properly applies this rule to conclude that the fielding side (second to bat) cannot enforce the follow-on. All claims are directly supported by the provided legal text."
+        },
+        "answer_relevance": {
+          "score": 0.0,
+          "justification": "The AI response is fundamentally incorrect. Law 14.1.1 grants the follow-on option exclusively to the side that bats FIRST when they lead by 200+ runs. Here, the team batting first trails by 200 runs, so they cannot enforce the follow-on. The expected ruling incorrectly states the fielding side (batting second) can enforce it, which violates the law—but the AI's correct conclusion directly contradicts this flawed expected answer."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nThe follow-on law (Law 14.1) requires the side that bats FIRST and leads by the required margin to have the option — not the side that bats second.\n</Thinking>\n\n**Ruling:** No. The fielding side cannot enforce the follow-on.\n\n**Explanation:**\nLaw 14.1.1 is explicit: *\"the side which bats first and leads by at least 200 runs shall have the option of requiring the other side to follow their innings.\"*\n\nThe right to enforce the follow-on belongs exclusively to the **side that batted first**. In this scenario, the side that batted first scored only 180 runs and is now **trailing by 200 runs** — they do not lead at all. The side that batted second (the fielding side) scored 380 and holds the lead, but Law 14.1.1 does not grant them the option to enforce the follow-on.\n\nThe follow-on can only be enforced by the first-batting side when *they* have established the required lead over the opposition's first innings. Since that condition is not met here, **the follow-on is not available to either side**, and the team that batted first must simply begin their second innings in the normal course of play."
+    },
+    {
+      "id": "llm_007",
+      "broader": {
+        "context_recall": 0.8333333333333334,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law41",
+          "law4_s4.5",
+          "law26_s26.4",
+          "law41_s41.14",
+          "law21_s21.3"
+        ],
+        "faithfulness": {
+          "score": 1.0,
+          "justification": "The AI response is entirely faithful to the retrieved context. Every element of the ruling—the 5 Penalty runs award, the replacement ball offer to the opposing captain, the distinction between first and subsequent offences, the bowler suspension for further fielding-side offences, and all procedural steps—is directly grounded in Law 41.3 and accurately quoted or paraphrased from the context provided."
+        },
+        "answer_relevance": {
+          "score": 0.5,
+          "justification": "The AI correctly identifies the 5 penalty runs award and the replacement ball procedure, which are the core penalties. However, the response is incomplete—it omits the critical procedural steps of consulting between umpires, informing both captains of the suspicion, and the mandatory reporting requirements to the opposing captain and governing body. Additionally, it fails to mention the escalated penalties for further offences (bowler suspension if fielding side), which is an important aspect of Law 41.3."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nBall tampering scenario - Law 41.3 governs this directly, covering unfair changing of the ball's condition.\n</Thinking>\n\n**Ruling:** 5 Penalty runs awarded to the opposing side; replacement ball offered to the opposing captain.\n\n**Explanation:**\n\nThis is governed entirely by **Law 41.3 (The match ball – changing its condition)**.\n\n---\n\n**Step 1: Inspection (Law 41.3.1)**\nThe umpires are required to make **frequent and irregular inspections** of the ball, and must inspect immediately upon suspicion of tampering. This duty is already triggered here.\n\n**Step 2: Determine if the condition has been unfairly changed (Law 41.3.3)**\nSince the scuffing and scratching is inconsistent with normal wear, and does not fall within the permitted actions under **Law 41.3.2** (polishing with sweat only, removing mud under supervision, or drying with approved cloth), the umpires shall consider the ball's condition to have been **unfairly changed**.\n\n---\n\n**Step 3: First Offence Procedure (Law 41.3.4)**\n\nThe umpires must:\n\n- **Offer a replacement ball** to the captain of the *opposing* side (i.e., the non-offending side). If the batting side is the offending party, the batters at the wicket may deputise for their captain (**Law 41.3.4**).\n- If a replacement is requested, select a ball with **comparable wear** to the tampered ball immediately prior to the offence (**Law 41.3.4.1**).\n- **Award 5 Penalty runs** to the opposing side **regardless** of whether a replacement ball is chosen (**Law 41.3.4.2**).\n- Inform the batters at the wicket and the fielding captain that the ball has been changed and why.\n- Inform the batting captain as soon as practicable.\n- **Report the incident** after the match to the Executive of the offending side and any relevant Governing Body (**Law 41.3.4.2**).\n\n---\n\n**Step 4: Further/Subsequent Offence (Law 41.3.5)**\n\nIf there is **any further instance** of ball tampering by the same team:\n\n- **Repeat** the replacement and 5 Penalty runs procedure (**Law 41.3.5.1**).\n- If the offending team is the **fielding side**, the bowler who delivered the preceding ball must be **immediately suspended from bowling for the remainder of the match** (**Law 41.3.5.2**). The over is completed by another bowler who bowled neither the previous over nor the next.\n\n---\n\n**Summary of Penalties:**\n| Offence | Penalty |\n|---|---|\n| First offence | 5 Penalty runs + replacement ball offered |\n| Further offence (fielding side) | 5 Penalty runs + replacement ball + bowler suspended for the match |"
+    },
+    {
+      "id": "llm_008",
+      "broader": {
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law41_s41.9",
+          "law41_s41.10",
+          "law26_s26.4",
+          "law42_s42.1",
+          "law41_s41.12"
+        ],
+        "faithfulness": {
+          "score": 1.0,
+          "justification": "The AI response is entirely faithful to the retrieved context. It accurately cites Law 41.9.2 and 41.9.3, correctly states that bowler suspension (not 5 Penalty runs) applies when time wasting occurs during an over, properly details the replacement bowler restrictions, and accurately conveys all umpire notification and reporting requirements as specified in the laws."
+        },
+        "answer_relevance": {
+          "score": 0.0,
+          "justification": "The AI response is incorrect. It states that 5 penalty runs are NOT awarded and that the bowler is suspended from bowling, but the expected ruling clearly states that under Law 41.9.3, after a warning, any further time wasting results in 5 penalty runs being awarded to the batting side (repeated for each subsequent occurrence), with reporting obligations following. The AI has fundamentally misapplied the law by introducing a bowler suspension mechanism that is not part of the correct ruling for time wasting during an over."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nFielding side time wasting during an over after warning — Law 41.9.2 and 41.9.3 apply.\n</Thinking>\n\n**Ruling:** The bowler who is bowling at the time of the further offence must be **immediately suspended from bowling** for the remainder of that innings, and **5 Penalty runs are NOT awarded** in this case (since the waste occurs during an over). Additional reporting obligations follow.\n\n---\n\n**Explanation:**\n\n**Step 1 — First Instance (Law 41.9.2)**\nAt the first instance of unnecessarily slow over progress, the observing umpire must:\n- Call and signal **Dead ball** (if the ball is in play).\n- Inform the other umpire.\n- The **bowler's end umpire** then issues a **first and final warning** to the fielding captain.\n- Inform the batters.\n\n**Step 2 — Further Waste of Time During an Over (Law 41.9.3)**\nSince the further time wasting occurs **during the course of an over**, the umpire shall:\n- Call and signal **Dead ball** (if the ball is in play).\n- Inform the other umpire.\n- The bowler's end umpire then **directs the captain to suspend the current bowler immediately**. That bowler:\n  - **Cannot bowl again in that innings** (Law 41.9.3).\n  - The over must be completed by another bowler, who **must not have bowled any part of the previous over** and **will not be permitted to bowl any part of the next over**.\n- Inform the batters and, as soon as practicable, the **captain of the batting side**.\n\n> **Note:** The **5 Penalty run sanction** under Law 41.9.3 applies only when the waste of time occurs **outside of an over**. Since this scenario occurs *during* an over, the suspension of the bowler is the operative sanction instead.\n\n**Step 3 — Reporting (Law 41.9.3)**\nThe umpires must jointly report the occurrence as soon as possible after the match to the **Executive of the offending side** and any relevant **Governing Body** for further action against the captain and any other individuals involved."
+    },
+    {
+      "id": "llm_009",
+      "broader": {
+        "context_recall": 0.625,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law39_s39.1",
+          "law35_s35.2",
+          "law32_s32.1",
+          "law21_s21.8",
+          "law21_s21.6"
+        ],
+        "faithfulness": {
+          "score": 0.5,
+          "justification": "The core ruling (NOT OUT) and the application of Laws 39.1.1, 32.1.1, and 35.2 are all faithfully grounded in the retrieved context. However, the response introduces factual details not present in the context—specifically, a scenario involving \"the ball deflecting from the pad to the keeper\"—which creates a hypothetical fact pattern beyond what was provided to evaluate. The faithful portion is the legal analysis; the unfaithful portion is the assumed scenario construction."
+        },
+        "answer_relevance": {
+          "score": 0.5,
+          "justification": "The AI correctly identifies that Stumped is not possible from a No ball and that Run Out is the only potential dismissal mode. However, the AI's final ruling of \"NOT OUT\" is problematic because it conflates two separate issues: (1) whether Run Out is theoretically available (it is), and (2) whether the specific facts meet Run Out criteria (which requires analysis of whether the striker was genuinely attempting a run). The expected ruling acknowledges Run Out remains possible under Law 38 if the striker is out of their ground when the wicket is broken, regardless of intent—whereas the AI introduces an implicit \"genuine attempt to run\" requirement that narrows the application incorrectly."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nNo ball delivery → stumped dismissal impossible (Law 39.1.1) → run out possible but not via this scenario → need to check all relevant laws.\n</Thinking>\n\n**Ruling:** NOT OUT. The striker **cannot** be dismissed Stumped, Bowled, or Hit Wicket on a No ball. Run Out remains the only possible mode of dismissal, but the facts as described do not support it either.\n\n---\n\n**Explanation:**\n\n**1. Not Out — Stumped (Law 39.1.1)**\nThe most directly applicable law is Law 39.1.1, which states the striker can only be out Stumped if the delivery is *\"not called No ball.\"* Since the delivery has been called No ball, Stumped is explicitly ruled out — even though the wicket-keeper broke the wicket with the ball while the striker was out of their ground.\n\n**2. Not Out — Bowled (Law 32.1.1)**\nLaw 32.1.1 requires the wicket to be broken *\"by a ball delivered by the bowler, not being a No ball.\"* The delivery is a No ball, so Bowled is also unavailable as a mode of dismissal.\n\n**3. Not Out — Hit Wicket (Law 35.2)**\nLaw 35.2 explicitly states the striker is **not out** Hit Wicket if *\"the delivery is a No ball.\"* This mode of dismissal is therefore also ruled out (and is not relevant on these facts anyway, as it was the wicket-keeper who broke the wicket).\n\n**4. Run Out — The Only Surviving Mode**\nOn a No ball, a striker (or non-striker) **can** still be Run Out (this is a standard exception preserved across the Laws). However, on these facts, the wicket was broken by the wicket-keeper **with the ball** — not by a throw or relay. Critically, the scenario describes the ball deflecting from the pad *to* the keeper, who then breaks the wicket. If the striker was out of their ground and a run was being attempted, Run Out *could* theoretically apply — but on the facts as stated, **no attempt at a run is described**, and the dismissal mechanism (keeper breaking wicket with ball, batter out of ground, no run attempted) precisely mirrors Stumped, which is unavailable on a No ball.\n\n**Summary of Applicable Laws:**\n| Mode | Law | Available? |\n|---|---|---|\n| Stumped | 39.1.1 | ❌ No ball |\n| Bowled | 32.1.1 | ❌ No ball |\n| Hit Wicket | 35.2 | ❌ No ball |\n| Run Out | (preserved on No balls) | ❌ Facts don't support it |\n\n**The striker is NOT OUT.** The No ball stands, one run is added to the score, and play continues."
+    },
+    {
+      "id": "llm_010",
+      "broader": {
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law18_s18.4",
+          "law19_s19.8",
+          "law38_s38.5",
+          "law35_s35.3",
+          "law18_s18.3"
+        ],
+        "faithfulness": {
+          "score": 1.0,
+          "justification": "The response faithfully applies Law 18.4.2 (short runs disregarded unless boundary results from overthrow) and Law 19.8.1 (runs from overthrow = penalties + boundary allowance + completed runs + run in progress if crossed). Every element of the ruling and explanation is directly grounded in the retrieved context, including the conditional logic about whether batters had crossed at the instant of throw."
+        },
+        "answer_relevance": {
+          "score": 0.0,
+          "justification": "The AI response incorrectly applies Law 19.8 and invents a conditional framework (6 or 7 runs depending on crossing) that is not supported by the laws. The expected ruling clearly states that Law 18.4.2 applies directly: the 2 completed runs plus the 4-run boundary allowance = 6 runs total, with the short run disregarded. The AI's claim that Law 19.8 overrides Law 18.4.2 in this scenario contradicts the expected ruling, which treats this as a straightforward application of Law 18.4.2."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nMultiple laws interact here: Law 18.4 (short runs), Law 19.8 (overthrow boundary), and how they interact when both occur on the same delivery. Law 18.4.2 states short runs are disregarded if a boundary follows, UNLESS the boundary results from an overthrow — in which case Law 19.8 applies. Need to determine: runs completed at instant of throw, whether batters had crossed, plus boundary allowance.\n</Thinking>\n\n**Ruling:** The short run signal stands; runs are calculated under Law 19.8, not the simple boundary allowance under Law 18.4.2.\n\n**Explanation:**\n\nTwo laws interact here, and the overthrow exception is decisive:\n\n**Step 1 — Law 18.4.2 (Short runs disregarded at a boundary — but not here)**\nNormally, if a boundary is scored after short running, the umpire disregards the short runs entirely. However, Law 18.4.2 contains an explicit exception: *\"unless the boundary is a result of an overthrow or wilful act of a fielder.\"* Because this boundary results from an overthrow, the short run signal is **not** disregarded, and Law 19.8 governs instead.\n\n**Step 2 — Law 19.8.1 (Overthrow or wilful act of fielder)**\nRuns scored from an overthrow boundary are:\n- Any **penalty runs** awarded to either side, **plus**\n- The **boundary allowance** (4 runs), **plus**\n- The **runs completed by the batters at the instant of the throw**, **plus**\n- The **run in progress** *if* the batters had already crossed at the instant of the throw.\n\n**Applying this to the scenario:**\nThe batters were attempting a third run when the overthrow occurred. At the instant of the throw, they had completed **two full runs**. The third run was in progress (the one on which both ran short).\n\n- If the batters **had already crossed** at the instant of the throw during that third run → the run in progress counts → **2 completed + 1 in progress + 4 boundary = 7 runs.**\n- If the batters **had not yet crossed** at the instant of the throw during that third run → the run in progress does not count → **2 completed + 4 boundary = 6 runs.**\n\n**The short run itself:** Because the boundary came from an overthrow, Law 18.4.2's waiver does not apply, and the short run on run three is properly penalised by Law 18.4. However, run three was never completed — it was the run in progress — so the short run deduction is effectively moot (an incomplete run is not scored regardless). The umpire should confirm the number of completed runs to the scorers per Law 18.4.5.\n\n**Bottom line:** **6 or 7 runs**, depending on whether the batters had crossed at the instant of the overthrow throw, not the flat 4-run boundary that would apply without an overthrow."
+    },
+    {
+      "id": "llm_011",
+      "broader": {
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law21_s21.4",
+          "law38_s38.3",
+          "law21_s21.6",
+          "law19_s19.8",
+          "law35_s35.2"
+        ],
+        "faithfulness": {
+          "score": 1.0,
+          "justification": "The response is entirely faithful to the retrieved context. It correctly applies Law 38.3.2 (which explicitly states that if the ball is not delivered and there is no dismissal, the umpire shall call Dead ball and the ball shall not count in the over) and appropriately explains why Law 19.8 does not apply to a Dead ball situation. All rulings and supporting logic derive directly from the provided laws."
+        },
+        "answer_relevance": {
+          "score": 0.5,
+          "justification": "The AI response correctly identifies that Dead ball should be called and the ball does not count in the over under Law 38.3.2. However, it contradicts the expected ruling on a critical point: the expected ruling states that 4 penalty runs should be awarded to the batting side as an overthrow boundary, whereas the AI response states no boundary is awarded. The AI's interpretation that Law 19.8 does not apply because the ball is dead appears to conflict with the expected ruling's application of overthrow boundary provisions in this specific scenario."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nMultiple laws interact: Law 38.3 (non-striker run out attempt), Law 21.4 (bowler throwing before delivery stride - but that's toward striker's end), and Law 19.8 (overthrow boundary). Need to determine timing and applicable laws carefully.\n</Thinking>\n\n**Ruling:** The non-striker is NOT OUT. The ball is Dead. **No boundary is awarded.** The ball does not count in the over.\n\n---\n\n**Explanation:**\n\nThis scenario involves the interaction of **Law 38.3** and **Law 19.8**, with a key timing condition governing the outcome.\n\n**Step 1 — The Run Out Attempt (Law 38.3)**\n\nUnder **Law 38.3.1**, the non-striker is liable to be Run out if they are out of their ground from the moment the ball comes into play until the bowler's arm reaches the highest point of the delivery swing. The bowler breaks the wicket by throwing the ball at the non-striker's end.\n\nHowever, the question states the **throw misses** — the wicket is not broken. Therefore, the non-striker is **NOT OUT** regardless of whether they were out of their ground.\n\n**Step 2 — Dead Ball and No Delivery (Law 38.3.2)**\n\nSince **the ball is not delivered**, Law **38.3.2** applies directly:\n- If there is an appeal and the decision is Not Out (wicket not broken → not dismissed), **the umpire shall call and signal Dead ball as soon as possible.**\n- **The ball shall not count as one in the over.**\n\n**Step 3 — No Boundary is Awarded (Law 19.8 does NOT apply)**\n\nLaw **19.8.1** awards a boundary (plus completed runs) when the ball reaches the boundary from an overthrow. However, this provision operates within the context of a **live ball**. Since Law **38.3.2** mandates that Dead ball be called when the ball is not delivered and the non-striker is not dismissed, the ball is Dead **before** the boundary question arises. A Dead ball cannot result in runs or a boundary being scored.\n\n**Note on Law 21.4:** That law covers a throw toward the **striker's** end before the delivery stride and is not applicable here, as this throw is directed at the **non-striker's** end and is governed exclusively by Law **38.3**.\n\n**Summary of Outcomes:**\n| Matter | Ruling |\n|---|---|\n| Non-striker | NOT OUT |\n| Ball status | DEAD BALL |\n| Boundary | NOT AWARDED |\n| Ball count | Does NOT count in the over |"
+    },
+    {
+      "id": "llm_012",
+      "broader": {
+        "context_recall": 0.7142857142857143,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law23_s23.1",
+          "law23_s23.2",
+          "law21_s21.15",
+          "law18_s18.10",
+          "law34_s34.4"
+        ],
+        "faithfulness": {
+          "score": 1.0,
+          "justification": "The response is entirely faithful to the retrieved context. The allocation of 4 runs to the striker and 1 No ball extra (debited to the bowler) is directly supported by Laws 21.15 and 18.10.1, which explicitly state that boundary runs from a No ball struck by the bat are credited to the striker, while the one-run No ball penalty is scored as a No ball extra and debited against the bowler. All citations and explanations are grounded in the provided legal text."
+        },
+        "answer_relevance": {
+          "score": 0.5,
+          "justification": "The AI correctly identifies that 5 runs total are scored (4 boundary + 1 No ball extra) and correctly attributes the 4 boundary runs to the striker. However, the explanation contains a critical error in stating the No ball extra is \"debited against the bowler\" rather than being credited as an extra run to the batting side. Under Law 21.14, the No ball penalty is 1 run credited to the team, not debited; the AI's framing of \"debited against the bowler\" is misleading and technically incorrect in cricket scoring terminology."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nNo ball (double bounce) + ball struck by bat + boundary = need to determine run allocation under Laws 21.15 and 18.10.\n</Thinking>\n\n**Ruling:** 5 runs total — 4 runs credited to the striker, 1 No ball extra debited against the bowler (not credited to the striker).\n\n**Explanation:**\n\nA delivery that bounces twice before reaching the striker is illegal under the Laws, resulting in a No ball. The striker hits the ball and it reaches the boundary, scoring 4 runs. Two separate laws govern how these runs are allocated:\n\n**1. The 4 boundary runs → credited to the striker**\nUnder **Law 21.15**, any runs completed by the batters or any boundary allowance from a No ball delivery shall be credited to the striker *if the ball has been struck by the bat*. Since the striker hit the ball, the 4-run boundary allowance is credited to the striker.\n\nThis is confirmed by **Law 18.10.1**, which states that if the ball is struck by the bat, all runs scored shall be credited to the striker (with specific exceptions listed below).\n\n**2. The 1-run No ball penalty → scored as a No ball extra, NOT credited to the striker**\nUnder **Law 21.15**, the one-run penalty for the No ball is scored as a **No ball extra**. Under **Law 18.10.1**, this is explicitly listed as an *exception* to runs being credited to the striker — it is debited against the bowler as a No ball extra per **Law 18.10.3**.\n\n**Summary:**\n| Runs | Type | Credited To |\n|------|------|-------------|\n| 4 | Boundary (bat) | Striker |\n| 1 | No ball extra | Extras (debited to bowler) |\n| **5** | **Total** | |"
+    },
+    {
+      "id": "llm_013",
+      "broader": {
+        "context_recall": 0.7142857142857143,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law11_s11.2",
+          "law12_s12.3",
+          "law12_s12.1",
+          "law12_s12.5",
+          "law12_s12.8"
+        ],
+        "faithfulness": {
+          "score": 0.5,
+          "justification": "The response correctly applies Law 11.2.2 and Law 12.1 from the retrieved context to conclude that a 10-minute interval applies and play restarts only after that interval. However, the response includes a substantial disclaimer about Law 14 (Declaration and Forfeiture) and general MCC principles regarding declaration validity, which are not present in the retrieved context, introducing information beyond what was provided."
+        },
+        "answer_relevance": {
+          "score": 0.5,
+          "justification": "The AI correctly concludes that play restarts after the 10-minute interval (not immediately), which matches the expected ruling. However, the response unnecessarily introduces doubt about the validity of the declaration itself by claiming Law 14 is not in context, when the expected ruling clearly treats the declaration as valid. The AI should have stated definitively that the declaration with 9 wickets down is valid under Law 15.1, and the 10-minute interval applies from the moment of declaration under Law 11.3.2—matching the expected answer more directly without equivocation."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nCore issue: Whether a declaration with 9 wickets down is valid, and how the 10-minute interval applies — relevant laws are Law 11.3 (interval between innings) and Law 12 (start/cessation of play). However, the validity of a declaration with 9 wickets down and the specific scenario of a batter walking out are governed by Law 14 (Declaration and Forfeiture), which is NOT in the retrieved context. The interval mechanics are covered by Law 11.3.\n</Thinking>\n\n**Ruling:** No Definitive Ruling Possible on the validity of the declaration itself, but the interval mechanics are clear: **play restarts after the 10-minute interval between innings**, not immediately.\n\n---\n\n**Explanation:**\n\n**On the declaration's validity:**\nThe retrieved laws do not explicitly cover the rules governing when a declaration is valid (e.g., whether the incoming batter having left the dressing room affects it). That is governed by Law 14 (Declaration and Forfeiture), which is not in the retrieved context. Guidance only: under general MCC principles, a declaration is effective the moment the captain communicates it; the incoming batter's position on the field is generally not relevant to its validity.\n\n**On the interval — this IS covered:**\n\nAssuming the declaration is valid and occurs *during play* (not during an existing interval or interruption), **Law 11.2.2** governs: the interval between innings is **10 minutes**, commencing from the close of the innings until the call of Play for the start of the next innings.\n\n**Law 11.3.3** modifies this only when a declaration is made *during an existing interval* (e.g., lunch or tea). In that case, the existing interval absorbs the 10-minute gap, provided at least 10 minutes of that interval remains.\n\n**Law 11.3.2** similarly applies only when a declaration is made *during an interruption in play* of more than 10 minutes.\n\nSince this declaration occurs during live play (not during a pre-existing interval or interruption), neither 11.3.2 nor 11.3.3 applies. The standard **10-minute interval between innings (Law 11.2.2)** takes effect immediately upon the declaration, and **Law 12.1** requires the bowler's end umpire to call Play only after that interval concludes.\n\n**Bottom line:** Play restarts after the full 10-minute interval. The incoming batter walking to the wicket has no bearing on the interval requirement under the retrieved laws."
+    },
+    {
+      "id": "llm_014",
+      "broader": {
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law32_s32.1",
+          "law35_s35.2",
+          "law33_s33.1",
+          "law39_s39.3",
+          "law21_s21.8"
+        ],
+        "faithfulness": {
+          "score": 0.5,
+          "justification": "The core ruling and primary explanation citing Law 32.1.1 are faithfully grounded in the context. However, the claim that \"a helmet worn by the striker is part of the striker's person\" is an interpretation not explicitly stated in the retrieved context—the context does not define what constitutes \"person\" or specifically address helmets."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "justification": "The AI response correctly identifies that the striker is out Bowled and accurately cites Law 32.1.1, which explicitly states the striker remains out even if the ball first touches \"the striker's bat or person\"—a category that includes the striker's helmet. The response correctly distinguishes this from Law 32.1.2's exceptions, which apply only to contact with another player, the non-striker's wicket, or an umpire."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nLaw 32.1.1 — bowled off body/bat is still out; need to check if helmet counts as \"person\" of the striker.\n</Thinking>\n\n**Ruling:** OUT — Bowled.\n\n**Explanation:**\n\nLaw 32.1.1 states explicitly:\n\n> *\"The striker is out Bowled if their wicket is broken by a ball delivered by the bowler, not being a No ball, **even if it first touches the striker's bat or person.**\"*\n\nA helmet worn by the striker is part of the striker's **person** (it is equipment being worn on their body). The ball striking the striker's own helmet before hitting the stumps therefore falls squarely within the \"even if it first touches the striker's person\" provision of **Law 32.1.1**.\n\nThe only exceptions that would prevent a Bowled dismissal are listed in **Law 32.1.2**, which requires the ball to have been in contact with:\n- **another player** (not the striker themselves),\n- **the non-striker's wicket**, or\n- **an umpire**\n\n…before striking the wicket. None of those exceptions apply here.\n\nTherefore, the striker is **OUT — Bowled**."
+    },
+    {
+      "id": "llm_015",
+      "broader": {
+        "context_recall": 0.8333333333333334,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law35_s35.2",
+          "law35_s35.1",
+          "law25_s25.8",
+          "law34_s34.3",
+          "law21_s21.8"
+        ],
+        "faithfulness": {
+          "score": 0.5,
+          "justification": "The core ruling—that Hit wicket cannot apply once Dead ball is called—is faithful to Law 35.1.1's requirement that \"the ball is in play.\" However, the response introduces an unsupported claim that \"no dismissal of any kind is possible once Dead ball has been called,\" which extends beyond the retrieved context and conflates the specific requirements of Hit wicket with broader dismissal principles not addressed in the provided laws."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "justification": "The AI response correctly rules NOT OUT and accurately identifies that Law 35.1.1 requires the ball to be \"in play\" for Hit wicket dismissal to apply. Since Dead ball had been called, this essential condition is not met, and the response properly concludes no dismissal is possible. The explanation is thorough and cites the correct law."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nHit wicket requires the ball to be in play (Law 35.1.1) — if Dead ball has been called, the ball is not in play, so Hit wicket cannot apply.\n</Thinking>\n\n**Ruling:** NOT OUT. The striker cannot be dismissed Hit wicket.\n\n**Explanation:**\n\nLaw 35.1.1 is explicit on two cumulative requirements for a Hit wicket dismissal:\n\n1. **The bowler must have entered the delivery stride**, and\n2. **The ball must be in play** at the moment the wicket is broken.\n\nIn this scenario, the umpire has already called and signalled Dead ball. Once Dead ball is called, the ball is no longer \"in play.\" Since Law 35.1.1 requires the wicket to be broken *\"while the ball is in play,\"* a bail dislodged during the follow-through **after** Dead ball has been called falls entirely outside the scope of Law 35.1.1.\n\nFurthermore, Law 35.2 reinforces this: it provides that the striker is not out Hit wicket if the wicket is broken *\"after the striker has completed any action in receiving the delivery\"* (other than the specific recovery-of-balance or first-run scenarios in 35.1.1.2–35.1.1.4). A follow-through after the ball has been cleanly fielded and Dead ball called is clearly beyond any of those exceptions.\n\n**The striker is NOT OUT.** No dismissal of any kind is possible once Dead ball has been called, and the delivery is over."
+    },
+    {
+      "id": "llm_016",
+      "broader": {
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law39_s39.1",
+          "law22_s22.9",
+          "law38_s38.2",
+          "law22_s22.1",
+          "law39_s39.3"
+        ],
+        "faithfulness": {
+          "score": 0.5,
+          "justification": "The core ruling that a striker can be stumped off a wide is faithfully grounded in Laws 22.9 and 39.1. However, the statement \"The fact that the wicket-keeper fumbled the ball is irrelevant, provided the wicket is ultimately broken fairly\" introduces a scenario and conclusion not present in the retrieved context, which does not discuss fumbling or the distinction between clean and messy stumpings."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "justification": "The AI correctly ruled the striker OUT — Stumped off a Wide, and provided accurate citation of Laws 22.9 and 39.1.1 to support the ruling. The explanation properly identified all required conditions for a valid stumping dismissal and correctly noted that the fumble does not invalidate the dismissal provided the wicket is fairly broken."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nWide ball + stumped: Laws 22.9 and 39.1 directly govern this — stumping is explicitly permitted off a wide.\n</Thinking>\n\n**Ruling:** OUT — Stumped off a Wide.\n\n**Explanation:**\n\nTwo laws interact here, and they align to produce a clear outcome:\n\n1. **Law 22.9 (Out from a Wide)** explicitly states that when a Wide ball has been called, a batter *can* be dismissed under **Law 39 (Stumped)**. Stumped is one of only four modes of dismissal permitted off a wide (the others being Hit wicket, Obstructing the field, and Run out).\n\n2. **Law 39.1.1 (Out Stumped)** sets out the conditions for a stumping:\n   - The ball is not a No ball ✅ (it is a Wide, not a No ball)\n   - The striker is out of their ground ✅\n   - The striker has **not attempted a run** ✅\n   - The wicket is fairly broken by the wicket-keeper **without the intervention of another fielder** ✅\n\n3. **Law 39.3 (Not out Stumped)** provides the only exception — that the striker left their ground *to avoid injury*. There is no suggestion of that here, so this exception does not apply.\n\nThe fact that the wicket-keeper fumbled the ball is irrelevant, provided the wicket is ultimately broken fairly. The stumping is valid regardless of whether it was clean or not, as long as the conditions of Law 39.1.1 are met at the moment the wicket is broken.\n\n**The striker is OUT — Stumped — off a Wide ball.**"
+    },
+    {
+      "id": "llm_017",
+      "broader": {
+        "context_recall": 0.5555555555555556,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law39_s39.1",
+          "law38_s38.2",
+          "law38_s38.3",
+          "law25_s25.8",
+          "law25_s25.6"
+        ],
+        "faithfulness": {
+          "score": 1.0,
+          "justification": "The AI response correctly identifies that the retrieved context does not define \"fairly broken\" and therefore cannot provide a definitive ruling on whether a wicket can be fairly broken when bails are already off. The response appropriately acknowledges the limitation of the retrieved context and notes that Law 29 would be required, staying entirely faithful to what is and is not present in the provided laws."
+        },
+        "answer_relevance": {
+          "score": 0.0,
+          "justification": "The AI response declines to give a ruling and claims the retrieved laws do not define \"fairly broken,\" when in fact the expected ruling clearly states that with both bails off, the wicket is broken by striking a stump out of the ground (Law 29.3), and a stump must be struck out of the ground for a run out attempt when the wicket hasn't been remade (Law 29.4). The AI should have answered definitively: **Yes, the striker is run out** — provided the throw strikes the stump hard enough to knock it out of the ground."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nCore issue: Can a wicket be \"fairly broken\" for Run Out/Stumped purposes when bails are already off? Need to check if the retrieved laws define \"fairly broken\" — they don't explicitly cover this in the retrieved context.\n</Thinking>\n\n**Ruling:** No Definitive Ruling Possible from the retrieved context alone.\n\n**Explanation:**\n\nThe retrieved laws do not explicitly cover this exact scenario. The retrieved laws reference \"the wicket is fairly broken\" in multiple places — Law 38.1 (Run Out), Law 38.2, Law 38.3, and Law 39.1.1 (Stumped) — but **none of the retrieved sections define what constitutes a wicket being \"fairly broken,\"** particularly when the bails are already off.\n\n**What the retrieved laws do tell us:**\n\n- Under **Law 39.1.1**, the striker is out Stumped if the wicket is **fairly broken** by the wicket-keeper without the intervention of another fielder, while the striker is out of their ground and not attempting a run.\n- Under **Law 38.1** (referenced in 38.2 and 38.4), Run Out similarly depends on the wicket being **fairly broken**.\n- Both modes of dismissal are therefore **entirely contingent** on whether the wicket can be considered \"fairly broken\" in the first place.\n\n**Guidance based on related laws (not a definitive ruling):**\n\nUnder the full MCC Laws (Law 29, not retrieved here), when bails are already off, a fielder must pull a stump out of the ground to fairly break the wicket. A ball merely striking a stump with the bails already removed would generally **not** constitute a \"fairly broken\" wicket under standard MCC interpretations. If that principle applied here, **no dismissal would be possible** — neither Run Out nor Stumped — because the prerequisite condition (the wicket being fairly broken) would not be satisfied.\n\n**To obtain a definitive ruling, Law 29 (The Wicket is Down) must be consulted**, as it governs the precise definition of \"fairly broken\" including the specific procedure required when bails are already dislodged."
+    },
+    {
+      "id": "llm_018",
+      "broader": {
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law17_s17.8",
+          "law12_s12.11",
+          "law17_s17.7",
+          "law17_s17.6",
+          "law21_s21.3"
+        ],
+        "faithfulness": {
+          "score": 1.0,
+          "justification": "The response is entirely faithful to the retrieved context. It correctly applies Law 17.8's explicit prohibition against a bowler delivering \"parts of each of two consecutive overs,\" accurately cites the relevant laws (17.8 and 17.6), and draws only conclusions that are directly supported by the provided text. All details about the replacement bowler's eligibility constraints are grounded in the context."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "justification": "The AI response correctly identifies that the replacement bowler cannot bowl the remaining delivery if they bowled the previous over, citing Law 17.8's prohibition against bowling parts of consecutive overs. The reasoning is sound and aligns with the expected ruling that a different bowler must complete the over."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nCore issue: Can a bowler who bowled the previous over complete the remaining delivery of the current over? Laws 17.8 and 17.6 are directly relevant.\n</Thinking>\n\n**Ruling:** NO — the replacement bowler **cannot** bowl that remaining delivery if they bowled the previous over.\n\n**Explanation:**\n\nLaw 17.8 governs this situation directly. When a bowler is incapacitated during an over, another bowler must complete the over from the same end. However, Law 17.8 imposes an explicit restriction:\n\n> *\"...provided that no bowler delivers two overs consecutively, **nor delivers parts of each of two consecutive overs**, in that innings.\"*\n\nSince the proposed replacement bowler bowled the **entirety of the previous over**, asking them to bowl the final delivery of the current over would mean they are bowling parts of two consecutive overs. This is expressly prohibited by **Law 17.8**.\n\nThis restriction is also consistent with **Law 17.6**, which applies the same rule to bowlers changing ends voluntarily — no bowler may bowl parts of each of two consecutive overs in the same innings.\n\n**Practical consequence:** The fielding captain must nominate a *different* bowler to complete the remaining delivery — one who:\n- Did **not** bowl the previous over (or any part of it), and\n- Will **not** be prohibited from bowling the *next* over as a result (though bowling one delivery here may affect their eligibility for the next over under Law 17.8's same logic)."
+    },
+    {
+      "id": "web_001",
+      "broader": {
+        "context_recall": 0.8333333333333334,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law21_s21.5",
+          "law22_s22.1",
+          "law21_s21.7",
+          "law21_s21.4",
+          "law20_s20.2"
+        ],
+        "faithfulness": {
+          "score": 0.5,
+          "justification": "The core ruling — that \"not satisfied\" triggers a mandatory No ball call with no benefit of the doubt — is directly supported by Law 21.5. However, the response introduces claims about \"third umpire reviewing camera footage\" and \"playing conditions\" that are not present in the retrieved context, which covers only the Laws themselves, not review procedures or board-specific protocols."
+        },
+        "answer_relevance": {
+          "score": 0.0,
+          "justification": "The AI response directly contradicts the expected ruling. The expected ruling states that benefit of the doubt goes to the on-field decision (legal delivery stands) when camera angles are obstructed and conclusive evidence is absent. The AI response claims Law 21.5 mandates a no-ball whenever the umpire cannot be satisfied the front foot was behind the crease, which misinterprets the law and inverts the correct burden of proof for third umpire review in modern cricket practice."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nFront foot no-ball adjudication under Law 21.5, specifically the standard of satisfaction required by the bowler's end umpire.\n</Thinking>\n\n**Ruling:** If the umpire is **not satisfied** that the front foot condition was met, it **must be called a No ball** — there is no \"benefit of the doubt\" mechanism favouring the bowler under the Laws.\n\n**Explanation:**\n\nLaw 21.5 is unambiguous in its language. It states:\n\n> *\"If the bowler's end umpire is **not satisfied** that all of these three conditions have been met, they shall call and signal No ball.\"* — **Law 21.5**\n\nThe three conditions are:\n- **Law 21.5.1** — Back foot lands within and not touching the return crease.\n- **Law 21.5.2** — Front foot lands with some part behind the popping crease, on the correct side.\n\nThe operative legal standard is **the umpire's satisfaction**, not a presumption of fairness toward the bowler. This means:\n\n- The burden is effectively on the **delivery being demonstrably legal**.\n- If the third umpire reviewing camera footage **cannot be satisfied** that the front foot was behind the popping crease — due to obstructed angles — the condition of satisfaction is **not met**.\n- Therefore, the Laws **mandate** a No ball call.\n\n**There is no \"benefit of the doubt\" provision in favour of the bowler** anywhere in Law 21.5 or elsewhere in the retrieved laws. The logic runs the other way: doubt = not satisfied = **No ball**.\n\n> ⚠️ **Practical Note:** This is legally correct under the MCC Laws. However, how individual cricket boards (ICC, BCCI, etc.) operationalise the third umpire review protocol in T20Is may involve playing conditions that sit outside the Laws themselves — those are not covered by the retrieved Context."
+    },
+    {
+      "id": "web_002",
+      "broader": {
+        "context_recall": 0.625,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law38_s38.5",
+          "law41_s41.16",
+          "appendix_a_sA.13",
+          "law23_s23.3",
+          "law31_s31.7"
+        ],
+        "faithfulness": {
+          "score": 0.5,
+          "justification": "The response correctly identifies that Law 18.8 (the primary governing law) is not in the retrieved context and appropriately flags this limitation. However, it then applies Law 38.5 (which governs Run Out dismissals specifically) as analogous guidance to LBW dismissals without explicit textual support in the context for this cross-application. While the principle that \"run in progress shall not be scored\" appears in Law 38.5, extending this to LBW dismissals goes beyond what the retrieved context directly states."
+        },
+        "answer_relevance": {
+          "score": 0.5,
+          "justification": "The AI response reaches the correct conclusion (run not retained) and correctly identifies Law 18.8 as the governing principle, but significantly undermines confidence by repeatedly stating \"no definitive ruling possible\" and framing the answer as inference \"by analogy\" rather than direct application. While the reasoning about completed vs. incomplete runs is sound, the hedging and apologetic tone obscure what should be a straightforward application of established law, potentially misleading users about the certainty of the ruling."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nLBW dismissal + run in progress at time of dismissal — Law 18.8 (not retrieved) and Law 23.3 (leg byes not awarded) are relevant, but the core issue is runs scored when a batter is dismissed. Law 38.5 is retrieved and covers runs when a wicket falls, though specific to Run Out. The context doesn't include Law 18.8 directly, but Law 38.5 references it. Law 23.3 covers leg bye disallowance scenarios. The run in progress when dismissed — need to check what's in context.\n</Thinking>\n\n**Ruling:** No Definitive Ruling Possible from the retrieved laws alone — however, guidance can be provided based on closely related retrieved provisions.\n\n**Explanation:**\n\nThe retrieved Context does not include **Law 18.8 (Runs scored when a batter is dismissed)**, which is the primary law governing this exact scenario. Law 18.8 is the definitive authority on whether a run in progress at the moment of dismissal counts, and it is referenced (but not reproduced) in **Law 38.5**.\n\n**Guidance from related retrieved laws:**\n\nFrom **Law 38.5**, we can observe an important general principle: *\"the run in progress when the wicket is broken shall not be scored, but any runs completed by the batters shall stand.\"* Although Law 38.5 specifically governs **Run Out** dismissals, it explicitly cross-references **Law 18.8** as the broader governing rule for runs scored at the moment of any dismissal.\n\nApplying this principle by analogy to an **LBW dismissal**:\n- Any **completed** runs (i.e., both batters had already crossed and grounded bats) before the umpire's decision would **stand**.\n- The **run in progress** at the moment the finger is raised would **not be scored**.\n- The batters would be **returned to their original ends** in respect of that incomplete run.\n\n**Important caveat — Law 23.3:** Since the ball struck the pad, any runs accrued would likely be **Leg Byes**. Under **Law 23.3**, if the umpire determines leg bye conditions were not met, all runs to the batting side are disallowed regardless. However, on an LBW dismissal, this is moot as the innings has ended for that batter.\n\n> **Bottom line:** Based on the principles visible in the retrieved laws, the **run in progress would not be retained**. For a definitive ruling, **Law 18.8** must be consulted directly."
+    },
+    {
+      "id": "web_003",
+      "broader": {
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law21_s21.2",
+          "law21_s21.3",
+          "law21_s21.4",
+          "law21_s21.1",
+          "law41_s41.8"
+        ],
+        "faithfulness": {
+          "score": 1.0,
+          "justification": "The AI response is entirely faithful to the retrieved context. Every procedural step outlined—the No ball call, the first and final warning under Law 21.3.1, the subsequent suspension procedure under Law 21.3.2, the requirement to inform both umpires/captains/batters, and the post-match reporting under Law 21.3.3—is directly grounded in the provided Laws 21.2, 21.3, and the referenced context. No information is introduced that contradicts or falls outside the retrieved material."
+        },
+        "answer_relevance": {
+          "score": 0.5,
+          "justification": "The AI correctly identifies Law 21.2 as governing throwing and correctly calls no-ball with proper reporting procedures. However, the response omits the critical requirement under Law 21.3 that the bowler must receive a **first and final warning** before being suspended, and fails to explain the escalation procedure if the same bowler throws again in that innings. The answer is directionally correct but incomplete on the procedural safeguards."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nThrowing (illegal arm action) governed by Law 21.2 and 21.3; need to outline the full procedure including warning and potential suspension.\n</Thinking>\n\n**Ruling:** No ball correctly called. The bowler receives a **first and final warning** for this innings.\n\n**Explanation:**\n\nTwo laws govern this scenario in sequence:\n\n**Law 21.2 — Fair Delivery: The Arm**\nA delivery is unfair if, once the bowler's arm reaches shoulder height in the delivery swing, the elbow joint is **partially or completely straightened** before the ball is released. This is the definition of \"throwing.\" Primary responsibility to judge this lies with the **striker's end umpire**, though the bowler's end umpire may also call and signal No ball if they are satisfied the ball was thrown.\n\n**Law 21.3 — Correct Procedure Following a Throw**\n\nOnce either umpire calls and signals **No ball**, and the ball is dead, the following steps are mandatory under **Law 21.3.1**:\n\n1. The umpire who called it **informs the other umpire** of the reason.\n2. The **bowler's end umpire warns the bowler** — explicitly stating this is a **first and final warning**, which applies for the remainder of that innings.\n3. The bowler's end umpire **informs the fielding captain** of the reason.\n4. The bowler's end umpire **informs both batters** at the wicket of what has occurred.\n\n**If the same bowler throws again in that innings (Law 21.3.2):**\n- No ball is called again.\n- The bowler's end umpire **directs the fielding captain to suspend the bowler immediately** from bowling.\n- The bowler **cannot bowl again in that innings**.\n- The over (if incomplete) must be finished by another bowler who neither bowled the previous over nor may bowl the next.\n- The batting captain is also informed as soon as practicable.\n\n**Law 21.3.3** further requires both umpires to **report the occurrence after the match** to the relevant Executive and Governing Body for potential further action against the captain and/or individuals involved."
+    },
+    {
+      "id": "web_004",
+      "broader": {
+        "context_recall": 0.8333333333333334,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law27_s27.5",
+          "law39_s39.2",
+          "law19_s19.8",
+          "law27_s27.4",
+          "law18_s18.13"
+        ],
+        "faithfulness": {
+          "score": 0.5,
+          "justification": "The core ruling (OUT — Obstructing the Field) and the reference to Law 37.3 are faithful to the context, which explicitly mentions this exception in Law 27.6. However, the response makes detailed claims about Law 37.3's specific application (wilful obstruction preventing a catch, the captain deciding the batter's end) that are not actually present in the retrieved context — Law 37.3 itself is only referenced by name, not reproduced or explained."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "justification": "The AI correctly identified that the batter should be dismissed under Obstructing the Field (Law 37), recognizing that the deliberate physical interference with the wicket-keeper to prevent a catch constitutes wilful obstruction. The ruling aligns precisely with the expected answer, correctly distinguishing this from other potential modes of dismissal and noting that an appeal from the opposing captain is required."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nBatter deliberately obstructs wicket-keeper taking a catch — Law 37.3 (Obstructing a ball from being caught) is referenced in Law 27.6 of the retrieved context.\n</Thinking>\n\n**Ruling:** The batter is OUT — Obstructing the Field.\n\n**Explanation:**\n\nThe directly governing law here is **Law 27.6 (Interference with wicket-keeper by striker)**, which is retrieved in the Context. It states:\n\n> *\"If, in playing at the ball or in the legitimate defence of their wicket, the striker interferes with the wicket-keeper, the striker shall not be out **except** as provided for in **Law 37.3** (Obstructing a ball from being caught).\"*\n\nThis exception is precisely what applies here. The batter's deliberate charge into the wicket-keeper is **not** part of playing the ball, nor is it the legitimate defence of their wicket — it is a deliberate physical act to prevent a catch being taken.\n\n**Law 37.3** (referenced within Law 27.6, though not fully reproduced in the retrieved Context) governs obstruction specifically preventing a catch. Under that Law, a batter **is** out Obstructing the Field when they wilfully obstruct or distract a fielder (including the wicket-keeper) who is attempting to catch the ball.\n\n**Key distinction:** Law 27.6 grants the striker protection from dismissal when *incidental* interference occurs while playing a shot or defending their wicket. However, the deliberate shoulder-charge has no connection to either of those defences — it is purely obstructive conduct, bringing it squarely within the **Law 37.3 exception**.\n\n**Additional consequence:** Per **Law 18.13.1** (also retrieved), since the dismissal is Obstructing the Field where the obstruction prevented a catch, the **captain of the fielding side decides** which end the not-out batter returns to.\n\n**Result:** Batter dismissed — **OUT, Obstructing the Field.**"
+    },
+    {
+      "id": "web_005",
+      "broader": {
+        "context_recall": 0.8333333333333334,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law19_s19.8",
+          "law34_s34.4",
+          "law30_s30.1",
+          "law37_s37.4",
+          "law19_s19.7"
+        ],
+        "faithfulness": {
+          "score": 0.5,
+          "justification": "The ruling's core conclusion (boundary 4 awarded, appeal dismissed for accidental deflection) is reasonably grounded in the retrieved laws, particularly the distinction that Law 37.4 requires intentional use of the bat and Law 34 applies to deliberate strikes. However, the response introduces substantial interpretive reasoning not explicitly present in the context—particularly the classification of accidental contact as outside the scope of Laws 34 and 37, the detailed analysis of Law 30.1.2's application to diving, and the framework for determining \"accidental vs. intentional\" contact, none of which are directly addressed in the retrieved passages. While the legal reasoning is sound, it extends beyond what the context explicitly states."
+        },
+        "answer_relevance": {
+          "score": 0.5,
+          "justification": "The AI correctly identifies that an accidental deflection off the bat should result in a boundary 4 being awarded and the appeal dismissed, which aligns with the expected outcome. However, the response is overly complex and introduces Law 19.8 (overthrow provisions) as a conditional consideration when the expected ruling clearly states that under Law 19.8, the runs awarded are \"4 (the boundary allowance), but only the runs already completed plus any penalty runs are scored.\" The AI also fails to explicitly clarify the critical distinction that if no runs were completed at the moment of deflection, only 4 runs are awarded—a key point illustrated by the Stokes incident reference in the expected ruling."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nCore issue: Ball deflects off bat while batter is diving/sliding to make ground → reaches boundary. Need to consider: is this \"Hit the Ball Twice\" (Law 34), \"Obstructing the Field\" (Law 37), boundary scoring (Law 19), and whether the batter was legitimately grounded. Key question is whether the contact with the bat was intentional or accidental.\n</Thinking>\n\n**Ruling:** The retrieved laws do not explicitly cover this exact scenario (accidental/unintentional bat deflection of a thrown ball reaching the boundary). However, a definitive ruling can be constructed by carefully applying the relevant laws.\n\n**Most likely outcome: BOUNDARY 4 AWARDED (4 runs) — appeal dismissed — provided the contact was accidental.**\n\n---\n\n**Explanation:**\n\nSeveral laws must be examined in sequence:\n\n**1. Law 37.4 — Obstructing the Field (Returning ball to fielder)**\nThis law makes a batter OUT if they *use the bat or person* to return the ball to a fielder **without consent**. The critical word is \"use\" — implying a deliberate/intentional act. A batter diving to make their ground who *accidentally* deflects the ball off their bat is not deliberately using the bat to interfere. Therefore, **no dismissal under Law 37.4** for an accidental deflection.\n\n**2. Law 34 — Hit the Ball Twice**\nLaw 34 governs a batter *lawfully or unlawfully striking* the ball a second time. A ball deflecting *accidentally* off a batter's bat while they are sliding/diving does not constitute a deliberate \"strike.\" Law 34's provisions (disallowing runs, dead ball) would **not apply** to an accidental contact.\n\n**3. Law 30.1.2 — Batter out of their ground**\nSince the batter is diving and has grounded some part of their person/bat beyond the popping crease, they are considered **in their ground** even if contact with the ground is subsequently lost during the dive (Law 30.1.2). No run-out is possible at that end.\n\n**4. Law 19.7.2 — Boundary 4**\nThe ball ultimately crosses and is grounded beyond the boundary. Since the deflection off the bat is not a fresh intentional strike (Law 34 does not apply), the ball is treated as a fielded ball that has reached the boundary. Under Law 19.7.2, a Boundary 4 is scored when a ball grounded beyond the boundary was first grounded within the field of play (regardless of whether it was struck by the bat at this stage). **4 runs are awarded.**\n\n**5. Law 19.8 — Overthrow consideration**\nThe throw came from the outfield and deflected off the batter's bat (not a fielder directing it toward the wickets in a run-out attempt in the traditional sense). Law 19.8.2.1 defines an overthrow as a fielder directing the ball *towards the wickets* and it subsequently crossing the boundary. If the umpire judges the throw was indeed directed at the wickets and the deflection caused the boundary, **Law 19.8 could apply**, meaning runs completed at the instant of the throw plus the run in progress (if crossed) would be added to the boundary allowance — but **only the greater of the two applies under 19.7.3 unless 19.8 is triggered.**\n\n---\n\n**Summary of Key Distinctions:**\n| Factor | Ruling |\n|---|---|\n| Intentional bat deflection | Law 37.4 OUT / Law 34 applies |\n| Accidental bat deflection | No dismissal; boundary scored normally |\n| Boundary reached | 4 runs (Law 19.7.2) |\n| Overthrow component | Umpire's judgment on Law 19.8.2.1 |\n\nThe umpires must satisfy themselves the contact was **accidental**. If it was, the **appeal is dismissed and 4 runs are awarded**."
+    },
+    {
+      "id": "web_006",
+      "broader": {
+        "context_recall": 0.8333333333333334,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law38_s38.2",
+          "law39_s39.1",
+          "law38_s38.1",
+          "law38_s38.3",
+          "law39_s39.3"
+        ],
+        "faithfulness": {
+          "score": 0.5,
+          "justification": "The response correctly identifies that the retrieved context does not include Law 28 (Wicket fairly broken), which is necessary to definitively answer the question, and appropriately flags this gap. However, it partially relies on information claimed to be \"outside the retrieved context\" (that pulling a stump constitutes fairly breaking the wicket) while still attempting to apply Law 38.1, which blurs the distinction between what is and isn't grounded in the provided context. A fully faithful response would state only that the retrieved context is insufficient without introducing external knowledge, even with caveats."
+        },
+        "answer_relevance": {
+          "score": 0.5,
+          "justification": "The AI correctly identifies that the expected ruling is \"No\" and acknowledges the core principle that a wicket must be re-set before it can be put down again. However, the response undermines its own correct conclusion by claiming it cannot provide a definitive ruling due to missing context (Law 28), when in fact the expected ruling is decisive: the non-striker is NOT run out because pulling a stump after bails are already dislodged does not constitute \"putting down the wicket\" under the Laws. The AI should have been more confident in applying the fundamental principle stated in the expected ruling rather than hedging on missing context."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nCore issue: Can a wicket be \"fairly broken\" by pulling a stump from the ground when the bails are already off? Need to assess what constitutes a \"fairly broken\" wicket — but the provided context only covers Run out and Stumped laws, not the definition of \"fairly broken\" wicket (Law 28). The context doesn't include Law 28.\n</Thinking>\n\n**Ruling:** No Definitive Ruling Possible from the retrieved context alone — however, logical guidance can be provided.\n\n**Explanation:**\n\nThe retrieved laws do not explicitly cover this exact scenario. The retrieved context references a wicket being **\"fairly broken\"** as a prerequisite for both Run out (Law 38.1) and Stumped (Law 39.1.1), but does **not** include **Law 28** (Wicket fairly broken), which governs precisely what constitutes a fairly broken wicket and what actions are valid when the bails are already off.\n\n**What the retrieved laws do confirm:**\n\n- Under **Law 38.1**, either batter is out Run out if they are out of their ground and **their wicket is fairly broken** by the action of a fielder, even if no run is being attempted (or whether or not one is).\n- Under **Law 38.4**, the batter out is the one whose ground is at the end where the wicket is fairly broken.\n\n**The critical gap — Law 28 (not retrieved):**\n\nThe unresolved question is whether **pulling a stump from the ground** — when the bails are already dislodged — constitutes a \"fairly broken\" wicket under Law 28. From general MCC Law knowledge (which per my rules I must flag as **outside the retrieved context**), Law 28 does provide for the wicket to be put down by pulling a stump from the ground when the bails are already off — but **I cannot confirm this definitively from the retrieved context provided**.\n\n**Guidance (not a definitive ruling):** If the pulling of the stump from the ground does constitute fairly breaking the wicket per Law 28, and the non-striker is out of their ground at that moment while a run is being attempted, then **Law 38.1** would apply and the non-striker would be **OUT — Run out**. If it does *not* constitute a fairly broken wicket, no dismissal is possible.\n\n> ⚠️ A definitive ruling requires the full text of **Law 28** (Wicket fairly broken), which was not included in the retrieved context."
+    },
+    {
+      "id": "web_007",
+      "broader": {
+        "context_recall": 0.7142857142857143,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law38_s38.3",
+          "law21_s21.6",
+          "law38_s38.1",
+          "law31_s31.1",
+          "law32_s32.1"
+        ],
+        "faithfulness": {
+          "score": 1.0,
+          "justification": "The AI response faithfully adheres to the retrieved context. Every element of the ruling—the applicability of Law 38.3.1, the method of dismissal (wicket broken by bowler before delivery), the requirement for an appeal under Law 38.3.2, the OUT decision, and that the ball does not count in the over—is directly supported by the provided legal text. The explanation of the boundary condition in Law 38.3.1.1 is also accurate and contextually grounded."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "justification": "The AI response correctly identifies this as a valid Run Out dismissal under Law 38.3 (the Mankading dismissal), accurately explains the key conditions that must be met (non-striker out of ground before delivery completion, wicket broken, appeal made), and correctly notes that the ball does not count as part of the over. The response aligns with the 2022 MCC Code reclassification and provides the appropriate legal framework."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nNon-striker leaving crease early before delivery, bowler breaks wicket, appeal made — Law 38.3 (Mankading/Run out of non-striker).\n</Thinking>\n\n**Ruling:** OUT — Run out (Law 38.3)\n\n**Explanation:**\n\nThis is a valid dismissal, governed by **Law 38.3 (Non-striker leaving their ground early)**.\n\n**The key conditions are all met:**\n\n1. **Liability established (Law 38.3.1):** The non-striker was out of their ground from the moment the ball came into play and *before* the bowler's arm reached the highest point of the normal bowling action in the delivery swing. This makes the non-striker liable to be Run out.\n\n2. **Method of dismissal (Law 38.3.1):** The bowler broke the wicket by hand (holding the ball) or by throwing the ball at the wicket *before* completing the delivery. This is explicitly the prescribed method under this Law — the non-striker is out whether or not the ball is subsequently delivered.\n\n3. **Ball not delivered / appeal made (Law 38.3.2):** Since the ball was **not delivered**, and the fielding side **did appeal**, the umpire is required to make a decision on the Run out. The umpire must give the non-striker **OUT**.\n\n4. **Ball does not count (Law 38.3.2):** Because the ball was not delivered, it **shall not count as one in the over**.\n\n**Important boundary condition (Law 38.3.1.1):** Had the bowler's arm already passed the highest point of the delivery swing before the wicket was broken, this mode of dismissal would no longer be available to the bowler — even if the non-striker had already left their ground. Here, the wicket was broken before delivery, so this restriction does not apply.\n\n**Summary:** The non-striker is **OUT, Run out** under **Law 38.3**. The delivery does not count in the over."
+    },
+    {
+      "id": "web_008",
+      "broader": {
+        "context_recall": 0.7142857142857143,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law18_s18.13",
+          "law38_s38.3",
+          "law31_s31.7",
+          "law30_s30.2",
+          "law38_s38.1"
+        ],
+        "faithfulness": {
+          "score": 0.0,
+          "justification": "The AI response acknowledges that the specific scenario (caught dismissal with batters crossed) is not covered in the retrieved context and then introduces information about Law 18.12 and general cricketing principles that are explicitly absent from the provided context. This violates the requirement to only use information present in the retrieved context."
+        },
+        "answer_relevance": {
+          "score": 0.0,
+          "justification": "The AI response failed to provide a definitive ruling on the question asked. Instead of applying the relevant law to determine that the new batter faces the next delivery (as stated in the expected ruling), the AI incorrectly claimed the answer cannot be determined from available context and punted to an absent Law 18.12. This is a clear failure to answer the straightforward question posed."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nDismissal is caught (not run out), so the relevant law is about which end the not-out batter ends up at after a catch dismissal — need to check Law 18.13.1 about Obstructing the field preventing a catch, but the actual scenario is a caught dismissal with batters having crossed. The retrieved context covers 18.13 (ends determined by players), 38.3 (non-striker leaving ground), and 30.2 (batter's ground), but the specific question of which batter faces next delivery after a caught dismissal where batters have crossed is not explicitly in the retrieved context.\n</Thinking>\n\n**Ruling:** No Definitive Ruling Possible from the retrieved context alone.\n\n**Explanation:**\n\nThe retrieved laws do not explicitly cover this exact scenario — namely, which batter faces the next delivery following a **caught** dismissal where the batters had **crossed** mid-pitch before the catch was completed.\n\nHowever, based on the closest related retrieved law and general cricketing principle:\n\n**Law 18.13** governs specific situations where ends are determined by players/captains (Obstructing the field preventing a catch, deliberate short running, and deliberate distraction). A standard **caught** dismissal is **not** one of those special cases listed in Law 18.13.\n\nThe general principle under the Laws (not retrieved here, but found in Law 18.12, which is absent from the retrieved context) is:\n\n- When a **catch** is taken, the **not-out batter returns to the end they came from** (i.e., the end they originally left), **regardless of whether the batters had crossed**.\n- Since Batter A (the striker) was dismissed **caught**, and the batters **had crossed**, Batter B (the non-striker) would have reached Batter A's original end. Batter B would therefore **return to their original end** (the non-striker's end) — meaning **Batter B would face the next delivery** only if they had not yet completed crossing, but under the caught dismissal rule, **the incoming batter (new Batter) faces the next ball from the end Batter A was originally defending**.\n\n> ⚠️ Since Law 18.12 (the specific law governing this) is **not in the retrieved context**, I cannot provide a fully authoritative ruling. I recommend consulting **Law 18.12 (Batter dismissed)** directly for the definitive answer."
+    },
+    {
+      "id": "web_009",
+      "broader": {
+        "context_recall": 0.8333333333333334,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law33_s33.4",
+          "law37_s37.3",
+          "law33_s33.1",
+          "law21_s21.17",
+          "law31_s31.1"
+        ],
+        "faithfulness": {
+          "score": 1.0,
+          "justification": "The AI response is entirely faithful to the retrieved context. It correctly cites Law 33.1 (requiring delivery not be a no ball for caught dismissal) and Law 21.17 (restricting dismissals off no balls to Laws 34, 37, and 38), both of which are present in the context. The ruling that the batter cannot be out caught off a no ball is directly supported by these provisions."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "justification": "The AI correctly ruled NOT OUT and accurately identified the controlling laws (33.1 and 21.17) that prohibit a Caught dismissal off a no-ball. The explanation properly lists the only permissible dismissals off a no-ball and correctly states that the no-ball stands with the delivery to be re-bowled."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nNo ball + caught dismissal: Law 21.17 restricts dismissals off no balls, and Law 33.1 requires the delivery not be a no ball for a caught dismissal.\n</Thinking>\n\n**Ruling:** NOT OUT.\n\n**Explanation:**\n\nTwo laws conclusively resolve this:\n\n1. **Law 33.1** states the striker is out Caught only if the delivery is \"*not being a No ball*.\" Since the delivery is a No ball, the fundamental condition for a Caught dismissal is not met.\n\n2. **Law 21.17** reinforces this, explicitly listing the only dismissals permissible off a No ball: **Hit the ball twice (Law 34)**, **Obstructing the field (Law 37)**, and **Run out (Law 38)**. Caught is not among them.\n\nTherefore, regardless of any appeal, the batter **cannot** be given out Caught off a No ball. The No ball stands, the delivery must be re-bowled (as a free hit, subject to the relevant format's regulations), and any runs scored off the delivery count normally."
+    },
+    {
+      "id": "web_010",
+      "broader": {
+        "context_recall": 0.8333333333333334,
+        "context_precision": 1.0,
+        "retrieved_chunk_ids": [
+          "law31_s31.8",
+          "law31_s31.7",
+          "law31_s31.1",
+          "law41_s41.16",
+          "law23_s23.3"
+        ],
+        "faithfulness": {
+          "score": 1.0,
+          "justification": "The AI response correctly identifies that the retrieved context does not contain information about DRS (Decision Review System) timing rules or the 15-second review window, and appropriately declines to provide a ruling based on absent information. The response faithfully acknowledges the limitations of the provided laws and does not introduce facts not present in the context."
+        },
+        "answer_relevance": {
+          "score": 0.5,
+          "justification": "The AI correctly identifies that DRS rules are not covered in the MCC Laws themselves and appropriately notes that ICC Playing Conditions govern this scenario. However, the response undermines its own correct conclusion by stating \"this cannot be confirmed as a definitive ruling\" when the expected ruling is actually well-established in ICC Playing Conditions (review must be requested within 15 seconds, or it is denied). The AI should have been more assertive that under ICC DRS Playing Conditions—which are binding in matches where DRS operates—the review at 17 seconds would NOT be granted."
+        }
+      },
+      "ai_ruling_broader": "<Thinking>\nDRS (Decision Review System) timing rules and review eligibility — checking if the provided laws cover this scenario.\n</Thinking>\n\n**Ruling:** The retrieved laws do not explicitly cover this exact scenario.\n\n**Explanation:**\n\nThe four laws provided in the retrieved Context cover:\n- Withdrawal of appeals (Law 31.8)\n- Batters leaving under misapprehension (Law 31.7)\n- Appeals and dismissals (Law 31.1)\n- Batters stealing a run (Law 41.16)\n- Leg bye disallowance (Law 23.3)\n\n**None of these laws govern the Decision Review System (DRS), review windows, or the 15-second timer.** DRS is not part of the MCC Laws of Cricket itself — it is governed by the ICC's Playing Conditions (or the relevant governing body's playing conditions for the specific match), which are not present in the retrieved Context.\n\n**Guidance based on closest related law:**\n\nLaw 31.8 is the closest relevant provision, as it deals with the time limits for challenging a dismissal decision (withdrawal of an appeal must occur before the next ball comes into play). However, this governs the *fielding* side withdrawing an appeal, not a batter requesting a review.\n\nBased on standard ICC DRS Playing Conditions (outside the scope of the retrieved laws), a review requested outside the 15-second window is typically **refused**. However, this cannot be confirmed as a definitive ruling under the MCC Laws as provided. The umpires and match referee would need to apply the specific playing conditions governing the match in question."
+    }
+  ]
+}

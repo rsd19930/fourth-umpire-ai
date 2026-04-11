@@ -236,3 +236,46 @@ Building a golden dataset (our 51-question evaluation set) is one of the most te
 ### 2. Graph RAG would be a better fit — but not for a learning project
 
 Cricket laws are deeply interconnected. A single scenario (like an overthrow that reaches the boundary after a no-ball) can involve 3-4 laws that reference each other: Law 21 (No Ball), Law 19 (Boundaries), Law 18 (Scoring Runs), and Law 24 (Fielder Absent or Leaving the Field). A traditional vector-similarity RAG retrieves the top-K most similar chunks independently — it has no understanding of how laws link together. Graph RAG, where laws and sub-sections are nodes connected by edges representing cross-references, would naturally capture these relationships and retrieve entire clusters of related rules in one hop. However, building a knowledge graph requires significant data cleaning: extracting every cross-reference, resolving ambiguous citations, handling edge cases in the PDF parsing, and maintaining the graph as laws update. For this learning project, the effort-to-insight ratio didn't justify it — but for a production cricket umpiring tool, Graph RAG would be the clear next step.
+
+
+## Eval Runs
+
+### Eval Run — 2026-04-11
+
+**Finer Chunks (717):**
+
+| | Answer Relevance | Faithfulness | Context Recall | Context Precision |
+|---|---|---|---|---|
+| **Overall** | 0.56 | 0.78 | 0.81 | 0.97 |
+| Easy (13) | 0.65 | 0.81 | 0.85 | 1.00 |
+| Hard (26) | 0.52 | 0.81 | 0.78 | 0.96 |
+| Edge Case (12) | 0.54 | 0.67 | 0.84 | 0.95 |
+
+**Broader Chunks (279):**
+
+| | Answer Relevance | Faithfulness | Context Recall | Context Precision |
+|---|---|---|---|---|
+| **Overall** | 0.62 | 0.84 | 0.85 | 0.97 |
+| Easy (13) | 0.77 | 0.96 | 0.88 | 1.00 |
+| Hard (26) | 0.52 | 0.77 | 0.84 | 0.97 |
+| Edge Case (12) | 0.67 | 0.88 | 0.82 | 0.93 |
+
+**Config:** TOP_K=5, model=claude-sonnet-4-6, judge=claude-sonnet-4-6
+**What changed:** Baseline run with default settings
+**Results file:** `evals/results/eval_20260411_134614.json`
+
+### Eval Run — 2026-04-11
+
+**Broader Chunks (279):**
+
+| | Answer Relevance | Faithfulness | Context Recall | Context Precision |
+|---|---|---|---|---|
+| **Overall** | 0.62 | 0.72 | 0.85 | 0.97 |
+| Easy (13) | 0.69 | 0.85 | 0.88 | 1.00 |
+| Hard (26) | 0.54 | 0.65 | 0.84 | 0.97 |
+| Edge Case (12) | 0.71 | 0.71 | 0.82 | 0.93 |
+
+**Config:** TOP_K=5, model=claude-sonnet-4-6, judge=claude-haiku-4-5-20251001
+**Runtime:** 15m 0s | **Tokens:** 223.0K input + 37.2K output
+**What changed:** Optimised: broader-chunks-only, haiku as judge, max_tokens=2048 for generating answer, improved system prompt
+**Results file:** `evals/results/eval_20260411_165711.json`

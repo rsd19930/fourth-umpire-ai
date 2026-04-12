@@ -238,6 +238,11 @@ Building a golden dataset (our 51-question evaluation set) is one of the most te
 Cricket laws are deeply interconnected. A single scenario (like an overthrow that reaches the boundary after a no-ball) can involve 3-4 laws that reference each other: Law 21 (No Ball), Law 19 (Boundaries), Law 18 (Scoring Runs), and Law 24 (Fielder Absent or Leaving the Field). A traditional vector-similarity RAG retrieves the top-K most similar chunks independently — it has no understanding of how laws link together. Graph RAG, where laws and sub-sections are nodes connected by edges representing cross-references, would naturally capture these relationships and retrieve entire clusters of related rules in one hop. However, building a knowledge graph requires significant data cleaning: extracting every cross-reference, resolving ambiguous citations, handling edge cases in the PDF parsing, and maintaining the graph as laws update. For this learning project, the effort-to-insight ratio didn't justify it — but for a production cricket umpiring tool, Graph RAG would be the clear next step.
 
 
+### 3. Rerankers improve faithfulness but can hurt answer accuracy — semantic relevance ≠ reasoning relevance
+
+Adding a cross-encoder reranker (Voyage rerank-2.5-lite, fetch 10 → keep 5) improved faithfulness from 0.70 to 0.81 but left answer relevance flat at 0.70. Digging into the per-question results revealed why: 7 questions improved and 6 regressed, almost perfectly cancelling out. The reranker surfaces chunks that are more semantically similar to the question, so Claude stays grounded in the provided context (higher faithfulness). But in every regression, the reranker demoted a chunk that was critical for multi-law reasoning — not because it was semantically distant, but because another chunk "looked" more relevant to the cross-encoder. For example, a question about caught-behind appeals lost the umpire consultation law (Law 31.7) because the reranker preferred other Law 31 sections that mentioned "caught" more directly. The lesson: for domains with interconnected rules where answering correctly requires combining multiple laws, a reranker alone isn't enough. You need retrieval that understands structural relationships between documents (like Graph RAG), not just pairwise semantic similarity.
+
+
 ## Eval Runs
 
 ### Eval Run — 2026-04-11

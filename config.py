@@ -12,9 +12,12 @@ PROMPTS_DIR = os.path.join(os.path.dirname(__file__), "prompts")
 # Models
 EMBEDDING_MODEL = "voyage-4-lite"
 LLM_MODEL = "claude-sonnet-4-6"
+EXPANSION_MODEL = "claude-haiku-4-5-20251001"
 
 # RAG settings
-TOP_K = 5
+RETRIEVAL_K = 10    # Fetch from ChromaDB (wider net)
+RERANK_K = 5        # Keep after reranking (focused context)
+RERANK_MODEL = "rerank-2.5-lite"
 
 # Voyage AI rate limits (free tier)
 BATCH_SIZE = 20

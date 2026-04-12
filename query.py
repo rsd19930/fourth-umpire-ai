@@ -19,8 +19,10 @@ from anthropic import Anthropic
 
 from config import (
     CHROMA_PATH, COLLECTIONS, EMBEDDING_MODEL, LLM_MODEL,
-    TOP_K, PROMPTS_DIR, DEFAULT_QUESTION,
+    RETRIEVAL_K, RERANK_K, RERANK_MODEL, PROMPTS_DIR, DEFAULT_QUESTION,
 )
+from tools import TOOL_DEFINITIONS, execute_tool
+from query_expansion import expand_query
 
 load_dotenv(override=True)
 
@@ -48,11 +50,11 @@ def embed_question(voyage_client, question):
     return result.embeddings[0]
 
 
-def retrieve(collection, query_embedding):
-    """Query ChromaDB for top K results using a pre-computed embedding."""
+def retrieve(collection, query_embedding, n_results=RETRIEVAL_K):
+    """Query ChromaDB for top results using a pre-computed embedding."""
     results = collection.query(
         query_embeddings=[query_embedding],
-        n_results=TOP_K,
+        n_results=n_results,
         include=["documents", "metadatas", "distances"],
     )
 
@@ -69,6 +71,16 @@ def retrieve(collection, query_embedding):
             "section_title": meta.get("section_title", ""),
         })
     return chunks
+
+
+def rerank_chunks(voyage_client, question, chunks, top_n=RERANK_K):
+    """Rerank retrieved chunks using Voyage rerank model. Returns top_n best matches."""
+    if not chunks or len(chunks) <= top_n:
+        return chunks
+    documents = [c["text"] for c in chunks]
+    result = voyage_client.rerank(question, documents, model=RERANK_MODEL, top_k=top_n)
+    reranked = [chunks[r.index] for r in result.results]
+    return reranked
 
 
 def format_chunk_label(chunk):
@@ -103,18 +115,115 @@ def build_context(all_chunks):
     return "\n\n---\n\n".join(context_parts)
 
 
-def generate_ruling(anthropic_client, system_prompt, question, context, return_usage=False):
-    """Send question + context to Claude and return the ruling."""
-    message = anthropic_client.messages.create(
+MAX_TOOL_ITERATIONS = 10
+
+
+def _extract_text(response):
+    """Safely extract text from a Claude response, handling empty/missing content."""
+    if not response.content:
+        return ""
+    text_parts = [block.text for block in response.content if hasattr(block, "text")]
+    return "\n".join(text_parts)
+
+
+def _return_ruling(text, total_input_tokens, total_output_tokens, return_usage):
+    """Helper to return ruling text with optional usage tracking."""
+    if return_usage:
+        return text, {"input_tokens": total_input_tokens, "output_tokens": total_output_tokens}
+    return text
+
+
+def _call_without_tools(anthropic_client, system, messages, verbose=False):
+    """Fallback: call Claude without tools when the tools+context combination causes issues."""
+    if verbose:
+        print("  [Retrying without tools]")
+    response = anthropic_client.messages.create(
         model=LLM_MODEL,
         max_tokens=2048,
-        system=system_prompt.format(context=context),
-        messages=[{"role": "user", "content": question}],
+        system=system,
+        messages=[messages[0]],  # Only send original user message
     )
-    if return_usage:
-        usage = {"input_tokens": message.usage.input_tokens, "output_tokens": message.usage.output_tokens}
-        return message.content[0].text, usage
-    return message.content[0].text
+    return response
+
+
+def generate_ruling(anthropic_client, system_prompt, question, context, return_usage=False, verbose=False):
+    """Send question + context to Claude, handling tool calls in an agentic loop."""
+    messages = [{"role": "user", "content": question}]
+    system = system_prompt.format(context=context)
+
+    # Accumulate tokens across loop iterations
+    total_input_tokens = 0
+    total_output_tokens = 0
+    last_response = None
+    empty_content_retries = 0
+
+    for _ in range(MAX_TOOL_ITERATIONS):
+        response = anthropic_client.messages.create(
+            model=LLM_MODEL,
+            max_tokens=2048,
+            system=system,
+            messages=messages,
+            tools=TOOL_DEFINITIONS,
+        )
+        last_response = response
+
+        total_input_tokens += response.usage.input_tokens
+        total_output_tokens += response.usage.output_tokens
+
+        # Guard: empty content with tool_use stop_reason is a known API edge case.
+        # Retry once without tools — this reliably produces a valid response.
+        if response.stop_reason == "tool_use" and not response.content:
+            empty_content_retries += 1
+            if verbose:
+                print(f"  [Empty content with tool_use stop_reason — retry #{empty_content_retries}]")
+            if empty_content_retries <= 1:
+                fallback = _call_without_tools(anthropic_client, system, messages, verbose)
+                total_input_tokens += fallback.usage.input_tokens
+                total_output_tokens += fallback.usage.output_tokens
+                return _return_ruling(
+                    _extract_text(fallback),
+                    total_input_tokens, total_output_tokens, return_usage,
+                )
+            # If retry also fails, return empty
+            return _return_ruling("", total_input_tokens, total_output_tokens, return_usage)
+
+        # If Claude wants to use tools, execute them and continue the loop
+        if response.stop_reason == "tool_use":
+            # Execute each tool call and build tool_result messages
+            tool_results = []
+            for block in response.content:
+                if block.type == "tool_use":
+                    result = execute_tool(block.name, block.input)
+                    if verbose:
+                        print(f"  [Tool: {block.name}({block.input})]  →  {result}")
+                    tool_results.append({
+                        "type": "tool_result",
+                        "tool_use_id": block.id,
+                        "content": result,
+                    })
+
+            # Guard: content blocks exist but none are tool_use — treat as done
+            if not tool_results:
+                return _return_ruling(
+                    _extract_text(response),
+                    total_input_tokens, total_output_tokens, return_usage,
+                )
+
+            # Add Claude's response and tool results to messages, then loop
+            messages.append({"role": "assistant", "content": response.content})
+            messages.append({"role": "user", "content": tool_results})
+            continue
+
+        # Any other stop_reason (end_turn, max_tokens, stop_sequence, etc.)
+        # → extract text and return
+        return _return_ruling(
+            _extract_text(response),
+            total_input_tokens, total_output_tokens, return_usage,
+        )
+
+    # Safety: if we hit max iterations, return whatever text we have
+    ruling_text = _extract_text(last_response) if last_response else "Error: max tool iterations reached."
+    return _return_ruling(ruling_text, total_input_tokens, total_output_tokens, return_usage)
 
 
 def print_divider(title):
@@ -130,7 +239,7 @@ def main():
         mode = "both"
 
     system_prompt = load_system_prompt()
-    voyage_client = voyageai.Client(api_key=os.getenv("VOYAGE_API_KEY"))
+    voyage_client = voyageai.Client(api_key=os.getenv("VOYAGE_API_KEY"), max_retries=3)
     chroma_client = chromadb.PersistentClient(path=CHROMA_PATH)
     anthropic_client = Anthropic()
     collections = get_collections(chroma_client, mode)
@@ -138,7 +247,7 @@ def main():
     print("=" * 55)
     print("  FOURTH UMPIRE AI")
     print("  Ask any cricket rules question. Type 'quit' to exit.")
-    print(f"  Mode: {mode} | Top {TOP_K} results per collection")
+    print(f"  Mode: {mode} | Retrieve {RETRIEVAL_K} → Rerank to {RERANK_K}")
     print("=" * 55)
 
     while True:
@@ -153,20 +262,30 @@ def main():
         print_divider("Question")
         print(f"  {question}")
 
-        query_embedding = embed_question(voyage_client, question)
+        # Expand query for better retrieval (formal MCC terminology)
+        expanded_query, _ = expand_query(anthropic_client, question, verbose=True)
+        query_embedding = embed_question(voyage_client, expanded_query)
 
         all_chunks = []
         for label, collection in collections:
             chunks = retrieve(collection, query_embedding)
-            all_chunks.extend(chunks)
 
-            print_divider(f"Retrieved Rules ({label})")
+            print_divider(f"Retrieved Rules ({label}) — {len(chunks)} candidates")
             for i, chunk in enumerate(chunks, 1):
                 print(f"  {i}. {format_chunk_label(chunk)}")
 
+            # Rerank to keep best chunks
+            chunks = rerank_chunks(voyage_client, question, chunks)
+
+            print_divider(f"After Reranking ({label}) — top {len(chunks)}")
+            for i, chunk in enumerate(chunks, 1):
+                print(f"  {i}. {format_chunk_label(chunk)}")
+
+            all_chunks.extend(chunks)
+
         context = build_context(all_chunks)
         print_divider("Fourth Umpire's Ruling")
-        ruling = generate_ruling(anthropic_client, system_prompt, question, context)
+        ruling = generate_ruling(anthropic_client, system_prompt, question, context, verbose=True)
         print(f"\n{ruling}")
         print("\n" + "─" * 55)
 

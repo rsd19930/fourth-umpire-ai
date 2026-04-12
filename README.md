@@ -279,3 +279,35 @@ Cricket laws are deeply interconnected. A single scenario (like an overthrow tha
 **Runtime:** 15m 0s | **Tokens:** 223.0K input + 37.2K output
 **What changed:** Optimised: broader-chunks-only, haiku as judge, max_tokens=2048 for generating answer, improved system prompt
 **Results file:** `evals/results/eval_20260411_165711.json`
+
+### Eval Run — 2026-04-12
+
+**Broader Chunks (279):**
+
+| | Answer Relevance | Faithfulness | Context Recall | Context Precision |
+|---|---|---|---|---|
+| **Overall** | 0.70 | 0.70 | 0.66 | 0.75 |
+| Easy (13) | 0.69 | 0.85 | 0.70 | 0.80 |
+| Hard (26) | 0.71 | 0.69 | 0.64 | 0.74 |
+| Edge Case (12) | 0.67 | 0.54 | 0.64 | 0.72 |
+
+**Config:** TOP_K=5, model=claude-sonnet-4-6, judge=claude-haiku-4-5-20251001
+**Runtime:** 24m 26s | **Tokens:** 435.3K input + 74.6K output
+**What changed:** Query expansion with Haiku as pre-processor + tool calling
+**Results file:** `evals/results/eval_20260412_110958.json`
+
+### Eval Run — 2026-04-12
+
+**Broader Chunks (279):**
+
+| | Answer Relevance | Faithfulness | Context Recall | Context Precision |
+|---|---|---|---|---|
+| **Overall** | 0.70 | 0.81 | 0.55 | 0.63 |
+| Easy (13) | 0.69 | 0.85 | 0.58 | 0.66 |
+| Hard (26) | 0.71 | 0.77 | 0.56 | 0.64 |
+| Edge Case (12) | 0.67 | 0.88 | 0.51 | 0.57 |
+
+**Config:** Retrieve 10 → Rerank to 5 (rerank-2.5-lite), model=claude-sonnet-4-6, judge=claude-haiku-4-5-20251001
+**Runtime:** 46m 13s | **Tokens:** 426.3K input + 64.4K output
+**What changed:** Added reranker (rerank-2.5-lite, fetch 10 → keep 5), fixed empty-content retry, improved tool call prompt
+**Results file:** `evals/results/eval_20260412_215120.json`

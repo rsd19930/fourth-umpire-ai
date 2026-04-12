@@ -30,12 +30,14 @@ from anthropic import Anthropic
 
 from config import (
     CHROMA_PATH, COLLECTIONS, EMBEDDING_MODEL, LLM_MODEL,
-    TOP_K, BATCH_SIZE, WAIT_SECONDS,
+    EXPANSION_MODEL, RETRIEVAL_K, RERANK_K, RERANK_MODEL,
+    BATCH_SIZE, WAIT_SECONDS,
 )
 from query import (
     load_system_prompt, get_collections, retrieve,
-    build_context, generate_ruling,
+    rerank_chunks, build_context, generate_ruling,
 )
+from query_expansion import batch_expand_questions
 
 load_dotenv(override=True)
 
@@ -311,7 +313,7 @@ def append_to_readme(summary, run_config, collections_used):
                 )
 
     block += (
-        f"\n**Config:** TOP_K={run_config['top_k']}, "
+        f"\n**Config:** Retrieve {run_config['retrieval_k']} → Rerank to {run_config['rerank_k']} ({run_config['rerank_model']}), "
         f"model={run_config['llm_model']}, "
         f"judge={run_config['judge_model']}\n"
     )
@@ -363,7 +365,7 @@ def main():
     print("=" * 55)
 
     anthropic_client = Anthropic()
-    voyage_client = voyageai.Client(api_key=os.getenv("VOYAGE_API_KEY"))
+    voyage_client = voyageai.Client(api_key=os.getenv("VOYAGE_API_KEY"), max_retries=3)
     chroma_client = chromadb.PersistentClient(path=CHROMA_PATH)
     system_prompt = load_system_prompt()
 
@@ -374,7 +376,7 @@ def main():
         dataset = json.load(f)
     questions = dataset["questions"]
 
-    print(f"  Mode: {'+'.join(collections_to_eval)} | TOP_K: {TOP_K} | Questions: {len(questions)}")
+    print(f"  Mode: {'+'.join(collections_to_eval)} | Retrieve {RETRIEVAL_K} → Rerank to {RERANK_K} | Questions: {len(questions)}")
     print(f"  Note: {args.note}")
 
     # Get collection objects
@@ -382,51 +384,81 @@ def main():
     for key in collections_to_eval:
         chroma_collections[key] = chroma_client.get_collection(COLLECTIONS[key]["name"])
 
-    # ── Step 1: Embed all questions ──
-    print(f"\n── Step 1: Embedding Questions {'─' * 30}")
-    embeddings = batch_embed_questions(voyage_client, questions)
+    start_time = time.time()
 
-    # ── Step 2: Retrieve chunks ──
-    print(f"\n── Step 2: Retrieving Chunks {'─' * 30}")
+    # ── Step 1: Expand questions (formal MCC terminology) ──
+    print(f"\n── Step 1: Expanding Questions {'─' * 30}")
+    expanded_texts, expansion_usage = batch_expand_questions(anthropic_client, questions)
+
+    # ── Step 2: Embed expanded questions ──
+    print(f"\n── Step 2: Embedding Questions {'─' * 30}")
+    expanded_question_dicts = [{"question": text} for text in expanded_texts]
+    embeddings = batch_embed_questions(voyage_client, expanded_question_dicts)
+
+    # ── Step 3: Retrieve & Rerank chunks ──
+    # Rerank API has same rate limits as embeddings (3 RPM free tier)
+    # Process in batches of BATCH_SIZE with WAIT_SECONDS delays
+    print(f"\n── Step 3: Retrieving & Reranking Chunks {'─' * 20}")
     retrieval_results = {}
     for key in collections_to_eval:
         retrieval_results[key] = []
         for i, (q, emb) in enumerate(zip(questions, embeddings)):
+            # Retrieve wider pool (local ChromaDB — no rate limit)
             chunks = retrieve(chroma_collections[key], emb)
+            # Rerank to keep best chunks (Voyage API — rate limited)
+            try:
+                chunks = rerank_chunks(voyage_client, q["question"], chunks)
+            except Exception as e:
+                # On rate limit or other error, keep original top-K without reranking
+                print(f"    Rerank failed for {q['id']}, using top chunks: {e}")
+                chunks = chunks[:RERANK_K]
             retrieval_results[key].append({
                 "chunks": chunks,
                 "retrieved_ids": [c["id"] for c in chunks],
                 "context": build_context(chunks),
             })
-        print(f"  {key}: retrieved for {len(questions)}/{len(questions)} questions")
+
+            done = i + 1
+            if done % BATCH_SIZE == 0 or done == len(questions):
+                print(f"  {key}: retrieved & reranked {done}/{len(questions)} questions")
+            # Rate limit: pause after every rerank call (3 RPM limit → 25s gap = ~2.4 RPM)
+            if done < len(questions):
+                time.sleep(WAIT_SECONDS)
+        print(f"  {key}: done")
 
     # ── Token tracking ──
     token_counts = {
+        "expansion_input": expansion_usage["input_tokens"],
+        "expansion_output": expansion_usage["output_tokens"],
         "ruling_input": 0, "ruling_output": 0,
         "judge_input": 0, "judge_output": 0,
     }
-    start_time = time.time()
 
-    # ── Step 3: Generate rulings ──
-    print(f"\n── Step 3: Generating Rulings {'─' * 30}")
+    # ── Step 4: Generate rulings ──
+    print(f"\n── Step 4: Generating Rulings {'─' * 30}")
     rulings = {}
     for key in collections_to_eval:
         rulings[key] = []
         for i, q in enumerate(questions):
             context = retrieval_results[key][i]["context"]
-            ruling, usage = generate_ruling(anthropic_client, system_prompt, q["question"], context, return_usage=True)
+            try:
+                ruling, usage = generate_ruling(anthropic_client, system_prompt, q["question"], context, return_usage=True)
+            except Exception as e:
+                print(f"    ERROR generating ruling for {q['id']}: {e}")
+                ruling = f"Error: {e}"
+                usage = {"input_tokens": 0, "output_tokens": 0}
             rulings[key].append(ruling)
             token_counts["ruling_input"] += usage["input_tokens"]
             token_counts["ruling_output"] += usage["output_tokens"]
             print(f"  [{key}] Ruling {i + 1}/{len(questions)} ({q['id']})")
             time.sleep(1)
 
-    # ── Step 4: Context Recall & Precision ──
-    print(f"\n── Step 4: Context Recall & Precision {'─' * 20}")
+    # ── Step 5: Context Recall & Precision ──
+    print(f"\n── Step 5: Context Recall & Precision {'─' * 20}")
     # Initialize per-question results
     per_question = []
     for i, q in enumerate(questions):
-        result = {"id": q["id"]}
+        result = {"id": q["id"], "expanded_question": expanded_texts[i]}
         for key in collections_to_eval:
             relevant_ids = q.get(f"relevant_chunk_ids_{key}", [])
             retrieved_ids = retrieval_results[key][i]["retrieved_ids"]
@@ -439,8 +471,8 @@ def main():
         per_question.append(result)
     print("  Computed for all collections (instant)")
 
-    # ── Step 5: Judge Faithfulness ──
-    print(f"\n── Step 5: Judging Faithfulness {'─' * 25}")
+    # ── Step 6: Judge Faithfulness ──
+    print(f"\n── Step 6: Judging Faithfulness {'─' * 25}")
     for key in collections_to_eval:
         for i, q in enumerate(questions):
             context = retrieval_results[key][i]["context"]
@@ -453,8 +485,8 @@ def main():
             print(f"  [{key}] Judged {i + 1}/{len(questions)} ({q['id']}): {result['score']}")
             time.sleep(1)
 
-    # ── Step 6: Judge Answer Relevance ──
-    print(f"\n── Step 6: Judging Answer Relevance {'─' * 20}")
+    # ── Step 7: Judge Answer Relevance ──
+    print(f"\n── Step 7: Judging Answer Relevance {'─' * 20}")
     for key in collections_to_eval:
         for i, q in enumerate(questions):
             response = rulings[key][i]
@@ -480,21 +512,26 @@ def main():
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     results_file = os.path.join(RESULTS_DIR, f"eval_{timestamp}.json")
 
-    total_input = token_counts["ruling_input"] + token_counts["judge_input"]
-    total_output = token_counts["ruling_output"] + token_counts["judge_output"]
+    total_input = token_counts["expansion_input"] + token_counts["ruling_input"] + token_counts["judge_input"]
+    total_output = token_counts["expansion_output"] + token_counts["ruling_output"] + token_counts["judge_output"]
 
     run_config = {
         "timestamp": datetime.now().isoformat(),
         "mode": "+".join(collections_to_eval),
-        "top_k": TOP_K,
+        "retrieval_k": RETRIEVAL_K,
+        "rerank_k": RERANK_K,
+        "rerank_model": RERANK_MODEL,
         "llm_model": LLM_MODEL,
         "judge_model": JUDGE_MODEL,
+        "expansion_model": EXPANSION_MODEL,
         "dataset": args.dataset,
         "total_questions": len(questions),
         "note": args.note,
         "results_file": results_file,
         "elapsed_seconds": elapsed_seconds,
         "tokens": {
+            "expansion_input": token_counts["expansion_input"],
+            "expansion_output": token_counts["expansion_output"],
             "ruling_input": token_counts["ruling_input"],
             "ruling_output": token_counts["ruling_output"],
             "judge_input": token_counts["judge_input"],

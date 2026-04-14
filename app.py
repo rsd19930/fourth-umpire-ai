@@ -102,7 +102,7 @@ def log_feedback(msg_id, question, ruling, chunks, score):
         sheet.append_row([
             datetime.now().isoformat(),
             question,
-            ruling[:500],
+            ruling[:50000],
             chunk_ids,
             feedback_value,
         ])

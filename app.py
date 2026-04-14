@@ -82,7 +82,10 @@ def get_gsheet():
     """Connect to Google Sheets for feedback logging."""
     creds = Credentials.from_service_account_info(
         st.secrets["gcp_service_account"],
-        scopes=["https://www.googleapis.com/auth/spreadsheets"],
+        scopes=[
+            "https://www.googleapis.com/auth/spreadsheets",
+            "https://www.googleapis.com/auth/drive",
+        ],
     )
     client = gspread.authorize(creds)
     return client.open("Fourth Umpire AI - RAG Feedback").sheet1
@@ -104,8 +107,8 @@ def log_feedback(msg_id, question, ruling, chunks, score):
             feedback_value,
         ])
         return
-    except Exception:
-        pass  # Fall through to local file
+    except Exception as e:
+        print(f"[FEEDBACK ERROR] Google Sheets failed: {e}")  # Visible in Streamlit Cloud logs
 
     # Local fallback
     os.makedirs(os.path.dirname(FEEDBACK_LOG), exist_ok=True)

@@ -83,6 +83,25 @@ def rerank_chunks(voyage_client, question, chunks, top_n=RERANK_K):
     return reranked
 
 
+def hybrid_retrieve(voyage_client, question, chunks, cosine_k=RERANK_K, rerank_k=RERANK_K):
+    """Union of cosine top-K and reranked top-K, deduplicated by chunk ID.
+
+    Ensures neither cosine similarity nor the reranker can veto a chunk
+    the other method ranked highly. Returns 5-10 unique chunks.
+    """
+    cosine_top = chunks[:cosine_k]
+    reranked_top = rerank_chunks(voyage_client, question, chunks, top_n=rerank_k)
+
+    # Union, preserving order: cosine first, then reranked additions
+    seen = set()
+    result = []
+    for c in cosine_top + reranked_top:
+        if c["id"] not in seen:
+            seen.add(c["id"])
+            result.append(c)
+    return result
+
+
 def format_chunk_label(chunk):
     """Format a chunk's law/section info for display."""
     law_num = chunk["law_number"]
@@ -226,6 +245,71 @@ def generate_ruling(anthropic_client, system_prompt, question, context, return_u
     return _return_ruling(ruling_text, total_input_tokens, total_output_tokens, return_usage)
 
 
+def generate_ruling_stream(anthropic_client, system_prompt, question, context):
+    """Stream a ruling token-by-token, handling tool calls in an agentic loop.
+
+    Yields text chunks (str) as they arrive from Claude.
+    Tool calls are executed between loop iterations — the user sees
+    a status message like "[Using calculator(...)]" yielded inline.
+
+    Designed for Streamlit's st.write_stream().
+    The existing generate_ruling() stays for CLI and eval use.
+    """
+    messages = [{"role": "user", "content": question}]
+    system = system_prompt.format(context=context)
+    empty_content_retries = 0
+
+    for _ in range(MAX_TOOL_ITERATIONS):
+        with anthropic_client.messages.stream(
+            model=LLM_MODEL,
+            max_tokens=2048,
+            system=system,
+            messages=messages,
+            tools=TOOL_DEFINITIONS,
+        ) as stream:
+            # Stream text tokens to caller
+            for event in stream:
+                if (event.type == "content_block_delta"
+                        and event.delta.type == "text_delta"):
+                    yield event.delta.text
+
+            # Get the complete response for tool handling
+            response = stream.get_final_message()
+
+        # Empty content edge case — fall back to non-streaming without tools
+        if response.stop_reason == "tool_use" and not response.content:
+            empty_content_retries += 1
+            if empty_content_retries <= 1:
+                fallback = _call_without_tools(anthropic_client, system, messages)
+                yield _extract_text(fallback)
+                return
+            return
+
+        # If Claude wants to use tools, execute them and continue
+        if response.stop_reason == "tool_use":
+            tool_results = []
+            for block in response.content:
+                if block.type == "tool_use":
+                    result = execute_tool(block.name, block.input)
+                    # Yield a visible status so user knows a tool was called
+                    yield f"\n\n*Using {block.name}({block.input}) → {result}*\n\n"
+                    tool_results.append({
+                        "type": "tool_result",
+                        "tool_use_id": block.id,
+                        "content": result,
+                    })
+
+            if not tool_results:
+                return
+
+            messages.append({"role": "assistant", "content": response.content})
+            messages.append({"role": "user", "content": tool_results})
+            continue
+
+        # end_turn or any other stop_reason — we're done
+        return
+
+
 def print_divider(title):
     print(f"\n── {title} {'─' * max(1, 50 - len(title))}")
 
@@ -274,10 +358,10 @@ def main():
             for i, chunk in enumerate(chunks, 1):
                 print(f"  {i}. {format_chunk_label(chunk)}")
 
-            # Rerank to keep best chunks
-            chunks = rerank_chunks(voyage_client, question, chunks)
+            # Hybrid retrieve: union of cosine top-5 + reranked top-5
+            chunks = hybrid_retrieve(voyage_client, question, chunks)
 
-            print_divider(f"After Reranking ({label}) — top {len(chunks)}")
+            print_divider(f"After Hybrid Retrieval ({label}) — {len(chunks)} unique")
             for i, chunk in enumerate(chunks, 1):
                 print(f"  {i}. {format_chunk_label(chunk)}")
 

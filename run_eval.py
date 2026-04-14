@@ -35,7 +35,7 @@ from config import (
 )
 from query import (
     load_system_prompt, get_collections, retrieve,
-    rerank_chunks, build_context, generate_ruling,
+    rerank_chunks, hybrid_retrieve, build_context, generate_ruling,
 )
 from query_expansion import batch_expand_questions
 
@@ -405,12 +405,12 @@ def main():
         for i, (q, emb) in enumerate(zip(questions, embeddings)):
             # Retrieve wider pool (local ChromaDB — no rate limit)
             chunks = retrieve(chroma_collections[key], emb)
-            # Rerank to keep best chunks (Voyage API — rate limited)
+            # Hybrid retrieve: union of cosine top-5 + reranked top-5 (Voyage API — rate limited)
             try:
-                chunks = rerank_chunks(voyage_client, q["question"], chunks)
+                chunks = hybrid_retrieve(voyage_client, q["question"], chunks)
             except Exception as e:
                 # On rate limit or other error, keep original top-K without reranking
-                print(f"    Rerank failed for {q['id']}, using top chunks: {e}")
+                print(f"    Hybrid retrieve failed for {q['id']}, using cosine top chunks: {e}")
                 chunks = chunks[:RERANK_K]
             retrieval_results[key].append({
                 "chunks": chunks,

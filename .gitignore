@@ -16,5 +16,11 @@ __pycache__/
 # Large files
 *.pdf
 
-# Database
-chroma_storage/
+# Feedback logs (ephemeral on cloud)
+feedback/
+
+# Streamlit secrets (local — production secrets go in Streamlit Cloud dashboard)
+.streamlit/secrets.toml
+
+# Google Cloud service account key (NEVER commit)
+fourth-umpire-ai-5ce83cb16e7c.json

@@ -17,6 +17,8 @@ from config import EXPANSION_MODEL
 EXPANSION_PROMPT = """You are a Cricket Terminology Translator. Rewrite the following cricket question using formal MCC Laws of Cricket terminology.
 
 Rules:
+- FIRST CHECK: If the question is NOT about cricket rules, laws, match situations, or cricket calculations, respond with exactly: [OFF_TOPIC]
+- This includes: general knowledge questions, requests to write code, toxic/offensive content, and anything unrelated to cricket
 - Replace casual/colloquial cricket language with official MCC Laws vocabulary (e.g., "batter" → "striker", "swats the ball" → "struck the ball a second time", "bowler chucks" → "bowler with a suspected illegal bowling action")
 - Do NOT add legal conclusions, assumptions about which laws apply, or extra context
 - Do NOT change the meaning or add information that is not in the original question
@@ -45,6 +47,13 @@ def expand_query(anthropic_client, question, verbose=False):
         # Validate response has text content
         if response.content and hasattr(response.content[0], "text"):
             expanded_text = response.content[0].text.strip()
+            # Check for off-topic rejection
+            if expanded_text == "[OFF_TOPIC]":
+                usage = {
+                    "input_tokens": response.usage.input_tokens,
+                    "output_tokens": response.usage.output_tokens,
+                }
+                return "[OFF_TOPIC]", usage
         else:
             # Fallback to original if response is empty or unexpected
             expanded_text = question

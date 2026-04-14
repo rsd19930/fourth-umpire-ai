@@ -2,6 +2,8 @@
 
 AI-powered cricket umpiring assistant that uses RAG (Retrieval-Augmented Generation) over the latest MCC Laws of Cricket to help answer complex umpiring decisions with accuracy and rule references.
 
+**Try it live:** [fourth-umpire-ai.streamlit.app](https://fourth-umpire-ai.streamlit.app/)
+
 ## System Architecture
 
 ```
@@ -73,22 +75,37 @@ AI-powered cricket umpiring assistant that uses RAG (Retrieval-Augmented Generat
 
   ┌──────────────┐
   │  User asks   │     ┌──────────────────────────────────────┐
-  │  a cricket   │────▶│            query.py                   │
+  │  a cricket   │────▶│      query_expansion.py               │
   │  question    │     │                                       │
-  └──────────────┘     │  1. Embed question ONCE via Voyage AI │
-                       │     (reuses same vector for both      │
-                       │      collections — saves API calls)   │
+  └──────────────┘     │  1. Rewrite question using formal     │
+                       │     MCC Laws terminology (Haiku)      │
                        │                                       │
-                       │  2. Retrieve top 5 chunks from each   │
-                       │     collection via cosine similarity  │
+                       │  2. Off-topic check: non-cricket      │
+                       │     questions rejected ([OFF_TOPIC])  │
+                       └──────────────┬───────────────────────┘
+                                      │
+                                      ▼
+                       ┌──────────────────────────────────────┐
+                       │            query.py                   │
                        │                                       │
-                       │  3. Deduplicate chunks across         │
-                       │     collections (by chunk ID)         │
+                       │  3. Embed expanded query via Voyage   │
+                       │     AI (single embedding, reused)     │
                        │                                       │
-                       │  4. Build context from retrieved laws │
+                       │  4. Retrieve top 10 chunks from       │
+                       │     broader collection (cosine sim)   │
                        │                                       │
-                       │  5. Send to Claude with Fourth Umpire │
-                       │     persona (prompts/system.md)       │
+                       │  5. Hybrid retrieval: union of        │
+                       │     cosine top-5 + reranked top-5     │
+                       │     (deduplicated → 5-10 chunks)      │
+                       │                                       │
+                       │  6. Build context from unique chunks  │
+                       │                                       │
+                       │  7. Send to Claude Sonnet with        │
+                       │     Fourth Umpire persona + tools     │
+                       │     (calculator, overs↔balls)         │
+                       │                                       │
+                       │  8. Stream response token-by-token    │
+                       │     (Streamlit) or return full (CLI)  │
                        └──────────────┬───────────────────────┘
                                       │
                                       ▼
@@ -98,11 +115,21 @@ AI-powered cricket umpiring assistant that uses RAG (Retrieval-Augmented Generat
                        │  - Thinking process (analysis)        │
                        │  - Definitive ruling with law cites   │
                        │  - Detailed explanation               │
+                       │  - Expandable citations (Streamlit)   │
                        │                                       │
                        │  If laws don't cover the scenario:    │
                        │  → States this clearly                │
                        │  → Provides guidance from closest     │
                        │    related laws                       │
+                       └──────────────┬───────────────────────┘
+                                      │
+                                      ▼
+                       ┌──────────────────────────────────────┐
+                       │      User Feedback (optional)         │
+                       │                                       │
+                       │  Thumbs up/down on each ruling        │
+                       │  → Google Sheets (production)         │
+                       │  → Local JSONL (development)          │
                        └──────────────────────────────────────┘
 
 
@@ -117,7 +144,11 @@ AI-powered cricket umpiring assistant that uses RAG (Retrieval-Augmented Generat
                        ├──────────────────────────────────────┤
                        │  prompts/system.md  (AI persona)      │
                        │   Editable without touching code      │
-                       │   Structured: Rules, Format, Context  │
+                       │   Structured: Rules, Tools, Format    │
+                       ├──────────────────────────────────────┤
+                       │  tools.py           (calculations)    │
+                       │   calculator, overs_to_balls,         │
+                       │   balls_to_overs                      │
                        ├──────────────────────────────────────┤
                        │  init_db.py         (DB setup)        │
                        │   Safe by default — preserves data    │
@@ -129,18 +160,27 @@ AI-powered cricket umpiring assistant that uses RAG (Retrieval-Augmented Generat
 
 ```
 fourth_umpire_ai/
+├── app.py                                     # Streamlit web app (chat UI, streaming, feedback)
+├── query.py                                   # RAG pipeline (retrieval, hybrid rerank, streaming, tool loop)
+├── query_expansion.py                         # Query rewriting + off-topic rejection (Haiku)
+├── tools.py                                   # Cricket calculation tools (calculator, overs/balls)
 ├── config.py                                  # Shared settings (models, paths, collections)
 ├── prompts/
 │   └── system.md                              # Fourth Umpire AI persona prompt
 ├── ingest_pdf.py                              # PDF → JSON chunks
 ├── init_db.py                                 # Create ChromaDB collections
-├── ingest_to_db.py                            # Embed chunks → ChromaDB (smart)
-├── query.py                                   # Interactive RAG query pipeline
+├── ingest_to_db.py                            # Embed chunks → ChromaDB (smart re-embedding)
+├── run_eval.py                                # Evaluation runner with LLM judge
+├── generate_eval_dataset.py                   # Golden dataset generator
+├── evals/
+│   ├── golden_dataset.json                    # 51-question eval set with expected answers
+│   └── results/                               # Eval run results (JSON)
 ├── real_cricket_rules_broader_chunking.json   # 279 chunks (N.N level)
 ├── real_cricket_rules_finer_chunking.json     # 717 chunks (N.N + N.N.N level)
+├── chroma_storage/                            # ChromaDB vector database (committed for deployment)
+├── feedback/                                  # Local feedback logs (dev only, gitignored)
 ├── requirements.txt                           # Python dependencies
-├── .env                                       # API keys (not in repo)
-└── chroma_storage/                            # Local vector DB (not in repo)
+└── .env                                       # API keys (not in repo)
 ```
 
 ## Setup
@@ -187,11 +227,16 @@ python3 ingest_to_db.py
 
 ## Usage
 
+**Live app:** [fourth-umpire-ai.streamlit.app](https://fourth-umpire-ai.streamlit.app/)
+
 ```bash
-# Start the interactive umpire
-python3 query.py                   # Compare both collections
+# Web app (primary — chat UI with streaming, citations, feedback)
+streamlit run app.py
+
+# CLI (development/testing)
+python3 query.py                   # Both collections
+python3 query.py --broader         # Broader collection only (production default)
 python3 query.py --finer           # Finer collection only
-python3 query.py --broader         # Broader collection only
 ```
 
 ### Example
@@ -213,19 +258,34 @@ to the batting side...
 
 | Component | Technology |
 |---|---|
-| LLM | Claude Sonnet (Anthropic) |
+| LLM | Claude Sonnet 4.6 (Anthropic) |
+| Query Expansion | Claude Haiku 4.5 (Anthropic) |
 | Embeddings | Voyage AI (voyage-4-lite) |
-| Vector Database | ChromaDB (local, persistent) |
+| Reranking | Voyage AI (rerank-2.5-lite) |
+| Vector Database | ChromaDB (persistent) |
+| Web App | Streamlit |
+| Feedback Storage | Google Sheets (production) / JSONL (development) |
 | PDF Extraction | PyPDF2 |
 | Language | Python 3.13 |
 
 ## Key Design Decisions
 
-- **Two chunking strategies** for evaluation: broader (279 chunks at N.N level) vs finer (717 chunks at N.N + N.N.N level)
+- **Broader chunks won**: Evaluated two chunking strategies — broader (279 chunks at N.N level) vs finer (717 chunks at N.N + N.N.N level). Broader outperformed on all metrics and is used in production
+- **Hybrid retrieval**: Fetch 10 chunks via cosine similarity, then take the union of cosine top-5 + reranked top-5 (deduplicated by chunk ID). Neither method can veto a chunk the other ranked highly — produces 5-10 high-signal chunks
+- **Query expansion**: Haiku rewrites casual user language to formal MCC Laws terminology before embedding (e.g., "batter" to "striker"). The original question is still used for ruling generation — expanded version is only for retrieval
+- **Off-topic rejection**: Query expansion doubles as a gatekeeper — returns `[OFF_TOPIC]` for non-cricket questions, avoiding unnecessary API calls for retrieval and ruling generation
+- **Tool calling**: Claude has access to calculation tools (calculator, overs_to_balls, balls_to_overs) for match arithmetic — only invoked when the question involves numbers
+- **Streaming**: Token-by-token response via Claude's streaming API, integrated with Streamlit's `st.write_stream()` for real-time display
+- **Feedback loop**: Thumbs up/down on each ruling flows to Google Sheets in production, local JSONL in development
 - **Smart re-embedding**: MD5 hash per chunk — only re-embeds when text actually changes, saving API costs
-- **Single question embedding**: embeds the user's question once and reuses the vector across both collections
 - **Separated AI persona**: `prompts/system.md` can be edited without touching code
 - **Centralized config**: all settings in `config.py` — no duplicated values across scripts
+
+## Feedback
+
+User feedback is collected via thumbs up/down on each ruling in the Streamlit app. Each feedback entry captures: timestamp, question asked, ruling given, retrieved chunk IDs, and positive/negative rating.
+
+**Feedback data:** [Google Sheets](https://docs.google.com/spreadsheets/d/1m_TypklqIS8TFzRzUjGR3E4Cp6DZ4sXatdx9Y5j6SA0/edit?usp=sharing)
 
 ## Learnings
 

@@ -1,0 +1,252 @@
+=======================================================
+  FOURTH UMPIRE AI — Evaluation Runner
+=======================================================
+  Mode: broader | Retrieve 10 → Rerank to 5 | Questions: 51
+  Note: Hybrid retrieval (union cosine+reranked top-5) + anti-hedging prompt rules
+
+── Step 1: Expanding Questions ──────────────────────────────
+  Expanded 1/51 questions
+  Expanded 2/51 questions
+  Expanded 3/51 questions
+  Expanded 4/51 questions
+  Expanded 5/51 questions
+  Expanded 6/51 questions
+  Expanded 7/51 questions
+  Expanded 8/51 questions
+  Expanded 9/51 questions
+  Expanded 10/51 questions
+  Expanded 11/51 questions
+  Expanded 12/51 questions
+  Expanded 13/51 questions
+  Expanded 14/51 questions
+  Expanded 15/51 questions
+  Expanded 16/51 questions
+  Expanded 17/51 questions
+  Expanded 18/51 questions
+  Expanded 19/51 questions
+  Expanded 20/51 questions
+  Expanded 21/51 questions
+  Expanded 22/51 questions
+  Expanded 23/51 questions
+  Expanded 24/51 questions
+  Expanded 25/51 questions
+  Expanded 26/51 questions
+  Expanded 27/51 questions
+  Expanded 28/51 questions
+  Expanded 29/51 questions
+  Expanded 30/51 questions
+  Expanded 31/51 questions
+  Expanded 32/51 questions
+  Expanded 33/51 questions
+  Expanded 34/51 questions
+  Expanded 35/51 questions
+  Expanded 36/51 questions
+  Expanded 37/51 questions
+  Expanded 38/51 questions
+  Expanded 39/51 questions
+  Expanded 40/51 questions
+  Expanded 41/51 questions
+  Expanded 42/51 questions
+  Expanded 43/51 questions
+  Expanded 44/51 questions
+  Expanded 45/51 questions
+  Expanded 46/51 questions
+  Expanded 47/51 questions
+  Expanded 48/51 questions
+  Expanded 49/51 questions
+  Expanded 50/51 questions
+  Expanded 51/51 questions
+
+── Step 2: Embedding Questions ──────────────────────────────
+  Embedded 20/51 questions
+  Waiting 25s for rate limit...
+  Embedded 40/51 questions
+  Waiting 25s for rate limit...
+  Embedded 51/51 questions
+
+── Step 3: Retrieving & Reranking Chunks ────────────────────
+  broader: retrieved & reranked 20/51 questions
+  broader: retrieved & reranked 40/51 questions
+  broader: retrieved & reranked 51/51 questions
+  broader: done
+
+── Step 4: Generating Rulings ──────────────────────────────
+  [broader] Ruling 1/51 (bcci_001)
+  [broader] Ruling 2/51 (bcci_002)
+  [broader] Ruling 3/51 (bcci_003)
+  [broader] Ruling 4/51 (bcci_004)
+  [broader] Ruling 5/51 (bcci_005)
+  [broader] Ruling 6/51 (bcci_006)
+  [broader] Ruling 7/51 (bcci_007)
+  [broader] Ruling 8/51 (bcci_008)
+  [broader] Ruling 9/51 (blog_001)
+  [broader] Ruling 10/51 (blog_002)
+  [broader] Ruling 11/51 (blog_003)
+  [broader] Ruling 12/51 (blog_004)
+  [broader] Ruling 13/51 (blog_005)
+  [broader] Ruling 14/51 (blog_006)
+  [broader] Ruling 15/51 (blog_007)
+  [broader] Ruling 16/51 (blog_008)
+  [broader] Ruling 17/51 (blog_009)
+  [broader] Ruling 18/51 (blog_010)
+  [broader] Ruling 19/51 (blog_011)
+  [broader] Ruling 20/51 (blog_012)
+  [broader] Ruling 21/51 (blog_013)
+  [broader] Ruling 22/51 (blog_014)
+  [broader] Ruling 23/51 (blog_015)
+  [broader] Ruling 24/51 (llm_001)
+  [broader] Ruling 25/51 (llm_002)
+  [broader] Ruling 26/51 (llm_003)
+  [broader] Ruling 27/51 (llm_004)
+  [broader] Ruling 28/51 (llm_005)
+  [broader] Ruling 29/51 (llm_006)
+  [broader] Ruling 30/51 (llm_007)
+  [broader] Ruling 31/51 (llm_008)
+  [broader] Ruling 32/51 (llm_009)
+  [broader] Ruling 33/51 (llm_010)
+  [broader] Ruling 34/51 (llm_011)
+  [broader] Ruling 35/51 (llm_012)
+  [broader] Ruling 36/51 (llm_013)
+  [broader] Ruling 37/51 (llm_014)
+  [broader] Ruling 38/51 (llm_015)
+  [broader] Ruling 39/51 (llm_016)
+  [broader] Ruling 40/51 (llm_017)
+  [broader] Ruling 41/51 (llm_018)
+  [broader] Ruling 42/51 (web_001)
+  [broader] Ruling 43/51 (web_002)
+  [broader] Ruling 44/51 (web_003)
+  [broader] Ruling 45/51 (web_004)
+  [broader] Ruling 46/51 (web_005)
+  [broader] Ruling 47/51 (web_006)
+  [broader] Ruling 48/51 (web_007)
+  [broader] Ruling 49/51 (web_008)
+  [broader] Ruling 50/51 (web_009)
+  [broader] Ruling 51/51 (web_010)
+
+── Step 5: Context Recall & Precision ────────────────────
+  Computed for all collections (instant)
+
+── Step 6: Judging Faithfulness ─────────────────────────
+  [broader] Judged 1/51 (bcci_001): 1.0
+  [broader] Judged 2/51 (bcci_002): 0.5
+  [broader] Judged 3/51 (bcci_003): 0.0
+  [broader] Judged 4/51 (bcci_004): 1.0
+  [broader] Judged 5/51 (bcci_005): 0.5
+  [broader] Judged 6/51 (bcci_006): 1.0
+  [broader] Judged 7/51 (bcci_007): 1.0
+  [broader] Judged 8/51 (bcci_008): 1.0
+  [broader] Judged 9/51 (blog_001): 1.0
+  [broader] Judged 10/51 (blog_002): 1.0
+  [broader] Judged 11/51 (blog_003): 1.0
+  [broader] Judged 12/51 (blog_004): 0.5
+  [broader] Judged 13/51 (blog_005): 1.0
+  [broader] Judged 14/51 (blog_006): 0.5
+  [broader] Judged 15/51 (blog_007): 0.5
+  [broader] Judged 16/51 (blog_008): 1.0
+  [broader] Judged 17/51 (blog_009): 1.0
+  [broader] Judged 18/51 (blog_010): 1.0
+  [broader] Judged 19/51 (blog_011): 1.0
+  [broader] Judged 20/51 (blog_012): 1.0
+  [broader] Judged 21/51 (blog_013): 0.0
+  [broader] Judged 22/51 (blog_014): 1.0
+  [broader] Judged 23/51 (blog_015): 1.0
+  [broader] Judged 24/51 (llm_001): 1.0
+  [broader] Judged 25/51 (llm_002): 1.0
+  [broader] Judged 26/51 (llm_003): 1.0
+  [broader] Judged 27/51 (llm_004): 1.0
+  [broader] Judged 28/51 (llm_005): 1.0
+  [broader] Judged 29/51 (llm_006): 1.0
+  [broader] Judged 30/51 (llm_007): 1.0
+  [broader] Judged 31/51 (llm_008): 1.0
+  [broader] Judged 32/51 (llm_009): 1.0
+  [broader] Judged 33/51 (llm_010): 1.0
+  [broader] Judged 34/51 (llm_011): 1.0
+  [broader] Judged 35/51 (llm_012): 1.0
+  [broader] Judged 36/51 (llm_013): 1.0
+  [broader] Judged 37/51 (llm_014): 1.0
+  [broader] Judged 38/51 (llm_015): 1.0
+  [broader] Judged 39/51 (llm_016): 1.0
+  [broader] Judged 40/51 (llm_017): 0.5
+  [broader] Judged 41/51 (llm_018): 1.0
+  [broader] Judged 42/51 (web_001): 0.5
+  [broader] Judged 43/51 (web_002): 0.5
+  [broader] Judged 44/51 (web_003): 1.0
+  [broader] Judged 45/51 (web_004): 1.0
+  [broader] Judged 46/51 (web_005): 0.5
+  [broader] Judged 47/51 (web_006): 0.5
+  [broader] Judged 48/51 (web_007): 1.0
+  [broader] Judged 49/51 (web_008): 1.0
+  [broader] Judged 50/51 (web_009): 1.0
+  [broader] Judged 51/51 (web_010): 0.0
+
+── Step 7: Judging Answer Relevance ────────────────────
+  [broader] Judged 1/51 (bcci_001): 0.5
+  [broader] Judged 2/51 (bcci_002): 0.5
+  [broader] Judged 3/51 (bcci_003): 0.5
+  [broader] Judged 4/51 (bcci_004): 0.0
+  [broader] Judged 5/51 (bcci_005): 0.0
+  [broader] Judged 6/51 (bcci_006): 1.0
+  [broader] Judged 7/51 (bcci_007): 0.5
+  [broader] Judged 8/51 (bcci_008): 0.5
+  [broader] Judged 9/51 (blog_001): 1.0
+  [broader] Judged 10/51 (blog_002): 1.0
+  [broader] Judged 11/51 (blog_003): 1.0
+  [broader] Judged 12/51 (blog_004): 0.5
+  [broader] Judged 13/51 (blog_005): 0.0
+  [broader] Judged 14/51 (blog_006): 1.0
+  [broader] Judged 15/51 (blog_007): 0.0
+  [broader] Judged 16/51 (blog_008): 0.0
+  [broader] Judged 17/51 (blog_009): 1.0
+  [broader] Judged 18/51 (blog_010): 1.0
+  [broader] Judged 19/51 (blog_011): 1.0
+  [broader] Judged 20/51 (blog_012): 1.0
+  [broader] Judged 21/51 (blog_013): 0.5
+  [broader] Judged 22/51 (blog_014): 0.0
+  [broader] Judged 23/51 (blog_015): 1.0
+  [broader] Judged 24/51 (llm_001): 0.0
+  [broader] Judged 25/51 (llm_002): 1.0
+  [broader] Judged 26/51 (llm_003): 1.0
+  [broader] Judged 27/51 (llm_004): 1.0
+  [broader] Judged 28/51 (llm_005): 1.0
+  [broader] Judged 29/51 (llm_006): 0.0
+  [broader] Judged 30/51 (llm_007): 0.5
+  [broader] Judged 31/51 (llm_008): 0.0
+  [broader] Judged 32/51 (llm_009): 0.0
+  [broader] Judged 33/51 (llm_010): 1.0
+  [broader] Judged 34/51 (llm_011): 0.5
+  [broader] Judged 35/51 (llm_012): 1.0
+  [broader] Judged 36/51 (llm_013): 1.0
+  [broader] Judged 37/51 (llm_014): 1.0
+  [broader] Judged 38/51 (llm_015): 1.0
+  [broader] Judged 39/51 (llm_016): 1.0
+  [broader] Judged 40/51 (llm_017): 0.0
+  [broader] Judged 41/51 (llm_018): 1.0
+  [broader] Judged 42/51 (web_001): 1.0
+  [broader] Judged 43/51 (web_002): 1.0
+  [broader] Judged 44/51 (web_003): 0.5
+  [broader] Judged 45/51 (web_004): 1.0
+  [broader] Judged 46/51 (web_005): 1.0
+  [broader] Judged 47/51 (web_006): 0.0
+  [broader] Judged 48/51 (web_007): 1.0
+  [broader] Judged 49/51 (web_008): 1.0
+  [broader] Judged 50/51 (web_009): 1.0
+  [broader] Judged 51/51 (web_010): 0.5
+
+=======================================================
+  SCORECARD
+=======================================================
+
+  BROADER (279 chunks):
+    Answer Relevance:  0.657
+    Faithfulness:      0.843
+    Context Recall:    0.724
+    Context Precision: 0.626
+
+    By Difficulty:
+      easy       (n=13): AR=0.654  F=0.885  CR=0.729  CP=0.656
+      hard       (n=26): AR=0.673  F=0.846  CR=0.721  CP=0.623
+      edge_case  (n=12): AR=0.625  F=0.792  CR=0.724  CP=0.6
+
+  Results saved: evals/results/eval_20260414_193249.json
+  README.md updated with eval summary.
+=======================================================

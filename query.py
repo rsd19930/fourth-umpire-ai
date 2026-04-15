@@ -19,7 +19,7 @@ from anthropic import Anthropic
 
 from config import (
     CHROMA_PATH, COLLECTIONS, EMBEDDING_MODEL, LLM_MODEL,
-    RETRIEVAL_K, RERANK_K, RERANK_MODEL, PROMPTS_DIR, DEFAULT_QUESTION,
+    RETRIEVAL_K, RERANK_K, HYBRID_FINAL_K, RERANK_MODEL, PROMPTS_DIR, DEFAULT_QUESTION,
 )
 from tools import TOOL_DEFINITIONS, execute_tool
 from query_expansion import expand_query
@@ -83,22 +83,26 @@ def rerank_chunks(voyage_client, question, chunks, top_n=RERANK_K):
     return reranked
 
 
-def hybrid_retrieve(voyage_client, question, chunks, cosine_k=RERANK_K, rerank_k=RERANK_K):
-    """Union of cosine top-K and reranked top-K, deduplicated by chunk ID.
+def hybrid_retrieve(voyage_client, question, chunks, cosine_k=RERANK_K, rerank_k=RERANK_K, final_k=HYBRID_FINAL_K):
+    """Union of cosine top-K and reranked top-K, capped at final_k.
 
-    Ensures neither cosine similarity nor the reranker can veto a chunk
-    the other method ranked highly. Returns 5-10 unique chunks.
+    Cosine top-K goes in first (stable baseline), then the highest-ranked
+    reranker additions fill remaining slots up to final_k. This preserves
+    the hybrid benefit (reranker can rescue 1 chunk cosine missed) while
+    limiting noise from extra chunks.
     """
     cosine_top = chunks[:cosine_k]
     reranked_top = rerank_chunks(voyage_client, question, chunks, top_n=rerank_k)
 
-    # Union, preserving order: cosine first, then reranked additions
+    # Union, capped: cosine first, then reranked additions up to final_k
     seen = set()
     result = []
     for c in cosine_top + reranked_top:
         if c["id"] not in seen:
             seen.add(c["id"])
             result.append(c)
+        if len(result) >= final_k:
+            break
     return result
 
 

@@ -375,3 +375,19 @@ Adding a reranker (fetch 10 → keep 5) improved faithfulness from 0.70 to 0.81 
 **Runtime:** 46m 13s | **Tokens:** 426.3K input + 64.4K output
 **What changed:** Added reranker (rerank-2.5-lite, fetch 10 → keep 5), fixed empty-content retry, improved tool call prompt
 **Results file:** `evals/results/eval_20260412_215120.json`
+
+### Eval Run — 2026-04-14
+
+**Broader Chunks (279):**
+
+| | Answer Relevance | Faithfulness | Context Recall | Context Precision |
+|---|---|---|---|---|
+| **Overall** | 0.66 | 0.84 | 0.72 | 0.63 |
+| Easy (13) | 0.65 | 0.89 | 0.73 | 0.66 |
+| Hard (26) | 0.67 | 0.85 | 0.72 | 0.62 |
+| Edge Case (12) | 0.62 | 0.79 | 0.72 | 0.60 |
+
+**Config:** Retrieve 10 → Rerank to 5 (rerank-2.5-lite), model=claude-sonnet-4-6, judge=claude-haiku-4-5-20251001
+**Runtime:** 49m 2s | **Tokens:** 524.6K input + 70.7K output
+**What changed:** Hybrid retrieval (union cosine+reranked top-5) + anti-hedging prompt rules
+**Results file:** `evals/results/eval_20260414_193249.json`

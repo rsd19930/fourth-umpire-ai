@@ -17,6 +17,7 @@ EXPANSION_MODEL = "claude-haiku-4-5-20251001"
 # RAG settings
 RETRIEVAL_K = 10    # Fetch from ChromaDB (wider net)
 RERANK_K = 5        # Keep after reranking (focused context)
+HYBRID_FINAL_K = 6  # Max chunks after hybrid retrieval
 RERANK_MODEL = "rerank-2.5-lite"
 
 # Voyage AI rate limits (free tier)

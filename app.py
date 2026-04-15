@@ -9,6 +9,7 @@ Usage:
 """
 
 import os
+import re
 import json
 from datetime import datetime
 import streamlit as st
@@ -70,6 +71,93 @@ def render_citations(chunks):
         label = format_chunk_label(chunk)
         with st.expander(label):
             st.markdown(chunk["text"])
+
+
+# ─── Thinking-tag filters ─────────────────────────────────────────────────────
+
+THINKING_OPEN_RE = re.compile(r'<\s*[Tt]hinking\s*>')
+THINKING_CLOSE_RE = re.compile(r'<\s*/\s*[Tt]hinking\s*>')
+LOOKAHEAD = 30  # chars retained to detect a tag spanning a token boundary
+
+
+def filter_thinking_stream(token_iter, thinking_accum):
+    """Stream-filter that strips <Thinking>...</Thinking> in real time.
+
+    Yields user-facing tokens immediately (minus a tiny lookahead buffer
+    needed to detect tag boundaries that span token edges). Captures
+    thinking text into thinking_accum (a list, appended in place).
+    """
+    buffer = ""
+    inside = False
+    for token in token_iter:
+        buffer += token
+        while True:
+            if inside:
+                m = THINKING_CLOSE_RE.search(buffer)
+                if m:
+                    thinking_accum.append(buffer[:m.start()])
+                    buffer = buffer[m.end():]
+                    inside = False
+                    continue
+                if len(buffer) > LOOKAHEAD:
+                    thinking_accum.append(buffer[:-LOOKAHEAD])
+                    buffer = buffer[-LOOKAHEAD:]
+                break
+            else:
+                m = THINKING_OPEN_RE.search(buffer)
+                if m:
+                    if m.start() > 0:
+                        yield buffer[:m.start()]
+                    buffer = buffer[m.end():]
+                    inside = True
+                    continue
+                if len(buffer) > LOOKAHEAD:
+                    yield buffer[:-LOOKAHEAD]
+                    buffer = buffer[-LOOKAHEAD:]
+                break
+    # Flush remaining buffer at end of stream
+    if inside:
+        thinking_accum.append(buffer)
+    elif buffer:
+        yield buffer
+
+
+def strip_thinking_tags(text):
+    """Non-streaming version for chat history replay."""
+    pattern = r'<\s*[Tt]hinking\s*>(.*?)<\s*/\s*[Tt]hinking\s*>'
+    thinking_parts = re.findall(pattern, text, re.DOTALL)
+    clean = re.sub(pattern, '', text, flags=re.DOTALL).strip()
+    thinking = "\n".join(t.strip() for t in thinking_parts) if thinking_parts else ""
+    return clean, thinking
+
+
+# ─── Conversation memory ──────────────────────────────────────────────────────
+
+def summarise_history(anthropic_client, messages):
+    """Summarise conversation history using Haiku for context continuity."""
+    if not messages:
+        return ""
+
+    # Build conversation text from last N messages (cap to avoid token overload)
+    recent = messages[-10:]
+    convo_text = ""
+    for msg in recent:
+        role = "User" if msg["role"] == "user" else "Fourth Umpire"
+        content = msg["content"][:500]  # Truncate long rulings
+        convo_text += f"{role}: {content}\n\n"
+
+    response = anthropic_client.messages.create(
+        model="claude-haiku-4-5-20251001",
+        max_tokens=500,
+        system=(
+            "Summarise this cricket rules conversation in 3-5 sentences. "
+            "Focus on: what scenarios were discussed, what rulings were given, "
+            "and any specific laws referenced. This summary will be used as context "
+            "for the next question in the conversation."
+        ),
+        messages=[{"role": "user", "content": convo_text}],
+    )
+    return response.content[0].text.strip()
 
 
 # ─── Feedback helpers ─────────────────────────────────────────────────────────
@@ -197,7 +285,19 @@ if "msg_counter" not in st.session_state:
 # Display existing chat messages
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
-        st.markdown(msg["content"])
+        if msg["role"] == "assistant":
+            # Prefer the pre-stripped thinking field; fall back to parsing
+            # the content for legacy messages that still contain raw tags.
+            clean_content = msg["content"]
+            thinking_text = msg.get("thinking", "")
+            if not thinking_text and ("<Thinking" in clean_content or "<thinking" in clean_content):
+                clean_content, thinking_text = strip_thinking_tags(clean_content)
+            st.markdown(clean_content)
+            if thinking_text:
+                with st.expander("Thinking process", expanded=False):
+                    st.markdown(thinking_text)
+        else:
+            st.markdown(msg["content"])
         if msg.get("chunks"):
             render_citations(msg["chunks"])
         if msg["role"] == "assistant" and msg.get("msg_id") is not None:
@@ -213,54 +313,105 @@ if question := st.chat_input("Ask a cricket rules question..."):
 
     # Process the question through the RAG pipeline
     with st.chat_message("assistant"):
-        with st.status("Analyzing your question...", expanded=True) as status:
+        status = st.status("Analyzing your question...", expanded=True)
 
-            # Step 1: Query expansion + off-topic check
-            status.update(label="Understanding your question...")
-            try:
-                expanded, _ = expand_query(anthropic_client, question)
-            except Exception as e:
-                expanded = question  # Fallback to original on error
+        # Step 1: Query expansion + off-topic check
+        status.update(label="Understanding your question...")
+        try:
+            expanded, _ = expand_query(anthropic_client, question)
+        except Exception:
+            expanded = question  # Fallback to original on error
 
-            # Off-topic rejection
-            if expanded == "[OFF_TOPIC]":
-                status.update(label="Off-topic detected", state="error", expanded=False)
+        # Off-topic / greeting / cricket-but-not-rules — handle before retrieval
+        if expanded in ("[GREETING]", "[CRICKET_OFF_TOPIC]", "[OFF_TOPIC]"):
+            status.update(label="", state="complete", expanded=False)
+
+            if expanded == "[GREETING]":
+                response_text = (
+                    "Hey there! While I appreciate the pleasantries, every question here "
+                    "costs real money (post-tax + GST, no less!) 😄 So let's skip the small talk "
+                    "and get straight to business!\n\n"
+                    "Ask me about any cricket scenario where you need a ruling — for example:\n"
+                    '*\"Can a batsman be ruled out if he hits the wicket while completing a run?\"*'
+                )
+            elif expanded == "[CRICKET_OFF_TOPIC]":
+                response_text = (
+                    "I appreciate the cricket enthusiasm, but I'm specifically built to help with "
+                    "**cricket rules and match scenarios** — not general cricket knowledge, team rankings, "
+                    "or player stats.\n\n"
+                    "Try asking me about a specific situation where you need a ruling — for example:\n"
+                    '*\"Can a batsman be ruled out if he hits the wicket while completing a run?\"*'
+                )
+            else:  # [OFF_TOPIC]
                 response_text = (
                     "I'm the Fourth Umpire AI — I can only help with cricket rules, "
                     "laws, and match situations. Please ask a cricket-related question!"
                 )
-                st.markdown(response_text)
-                st.session_state.messages.append({"role": "assistant", "content": response_text})
-                st.stop()
 
-            # Step 2: Embed + Retrieve + Hybrid rerank
-            status.update(label="Retrieving relevant cricket laws...")
+            st.markdown(response_text)
+            st.session_state.messages.append({"role": "assistant", "content": response_text})
+            st.stop()
+
+        # Step 2: Embed + Retrieve + Hybrid rerank
+        status.update(label="Retrieving relevant cricket laws...")
+        try:
+            query_embedding = embed_question(voyage_client, expanded)
+            chunks = retrieve(collection, query_embedding)
+            chunks = hybrid_retrieve(voyage_client, question, chunks)
+        except Exception as e:
+            status.update(label="Error retrieving laws", state="error", expanded=False)
+            response_text = f"Sorry, I encountered an error retrieving the relevant laws. Please try again. ({e})"
+            st.markdown(response_text)
+            st.session_state.messages.append({"role": "assistant", "content": response_text})
+            st.stop()
+
+        # Step 3: Build context
+        context = build_context(chunks)
+
+        # Step 4: Conversation memory (Haiku summary of prior turns)
+        # Note: ONLY the user_message passed to generate_ruling_stream gets the
+        # summary prepended. embed_question / retrieve / hybrid_retrieve above
+        # used the original `question` and `expanded` — unchanged.
+        conversation_summary = ""
+        if st.session_state.messages:
+            status.update(label="Recalling earlier discussion...")
             try:
-                query_embedding = embed_question(voyage_client, expanded)
-                chunks = retrieve(collection, query_embedding)
-                chunks = hybrid_retrieve(voyage_client, question, chunks)
-            except Exception as e:
-                status.update(label="Error retrieving laws", state="error", expanded=False)
-                response_text = f"Sorry, I encountered an error retrieving the relevant laws. Please try again. ({e})"
-                st.markdown(response_text)
-                st.session_state.messages.append({"role": "assistant", "content": response_text})
-                st.stop()
+                conversation_summary = summarise_history(
+                    anthropic_client, st.session_state.messages
+                )
+            except Exception:
+                conversation_summary = ""  # Fail silently
 
-            # Step 3: Build context
-            context = build_context(chunks)
+        user_message = question
+        if conversation_summary:
+            user_message = (
+                f"[Previous conversation context: {conversation_summary}]\n\n{question}"
+            )
 
-            status.update(label="Done!", state="complete", expanded=False)
+        # Step 5: Stream the ruling — status stays open while streaming
+        status.update(label="Generating ruling...", state="running", expanded=False)
 
-        # Stream the ruling token-by-token
+        thinking_chunks = []
         try:
             ruling = st.write_stream(
-                generate_ruling_stream(
-                    anthropic_client, system_prompt, question, context
+                filter_thinking_stream(
+                    generate_ruling_stream(
+                        anthropic_client, system_prompt, user_message, context
+                    ),
+                    thinking_chunks,
                 )
             )
         except Exception as e:
             ruling = f"Sorry, I encountered an error generating the ruling. Please try again. ({e})"
             st.markdown(ruling)
+
+        status.update(label="Done!", state="complete", expanded=False)
+
+        # Display thinking (collapsible) if any was captured
+        thinking_text = "".join(thinking_chunks).strip()
+        if thinking_text:
+            with st.expander("Thinking process", expanded=False):
+                st.markdown(thinking_text)
 
         # Display citations
         render_citations(chunks)
@@ -271,6 +422,7 @@ if question := st.chat_input("Ask a cricket rules question..."):
         msg_data = {
             "role": "assistant",
             "content": ruling,
+            "thinking": thinking_text,
             "chunks": chunks,
             "msg_id": msg_id,
             "question": question,

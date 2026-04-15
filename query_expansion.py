@@ -17,14 +17,20 @@ from config import EXPANSION_MODEL
 EXPANSION_PROMPT = """You are a Cricket Terminology Translator. Rewrite the following cricket question using formal MCC Laws of Cricket terminology.
 
 Rules:
-- FIRST CHECK: If the question is NOT about cricket rules, laws, match situations, or cricket calculations, respond with exactly: [OFF_TOPIC]
-- This includes: general knowledge questions, requests to write code, toxic/offensive content, and anything unrelated to cricket
+- FIRST CHECK — classify the input before any rewriting:
+  - If it is a greeting, pleasantry, or social message (hello, hi, thanks, how are you, etc.), respond with exactly: [GREETING]
+  - If it is about cricket but NOT about rules, laws, match situations, or cricket calculations (e.g., team rankings, player stats, cricket history, learning the game, player opinions), respond with exactly: [CRICKET_OFF_TOPIC]
+  - If it is NOT about cricket at all (general knowledge, code requests, toxic content, etc.), respond with exactly: [OFF_TOPIC]
+- If none of the above apply, proceed with rewriting using the rules below.
 - Replace casual/colloquial cricket language with official MCC Laws vocabulary (e.g., "batter" → "striker", "swats the ball" → "struck the ball a second time", "bowler chucks" → "bowler with a suspected illegal bowling action")
 - Do NOT add legal conclusions, assumptions about which laws apply, or extra context
 - Do NOT change the meaning or add information that is not in the original question
 - If the question already uses formal terminology, return it unchanged
 - If the question is about math or calculations (run rates, strike rates, etc.), return it unchanged
-- Output ONLY the rewritten question, nothing else"""
+- Output ONLY the rewritten question (or one of the three classification tokens), nothing else"""
+
+
+CLASSIFICATION_TOKENS = ("[GREETING]", "[CRICKET_OFF_TOPIC]", "[OFF_TOPIC]")
 
 
 def expand_query(anthropic_client, question, verbose=False):
@@ -47,13 +53,13 @@ def expand_query(anthropic_client, question, verbose=False):
         # Validate response has text content
         if response.content and hasattr(response.content[0], "text"):
             expanded_text = response.content[0].text.strip()
-            # Check for off-topic rejection
-            if expanded_text == "[OFF_TOPIC]":
+            # Check for any classification token (greeting / cricket off-topic / off-topic)
+            if expanded_text in CLASSIFICATION_TOKENS:
                 usage = {
                     "input_tokens": response.usage.input_tokens,
                     "output_tokens": response.usage.output_tokens,
                 }
-                return "[OFF_TOPIC]", usage
+                return expanded_text, usage
         else:
             # Fallback to original if response is empty or unexpected
             expanded_text = question

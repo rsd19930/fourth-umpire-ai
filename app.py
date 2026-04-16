@@ -331,10 +331,13 @@ if question := st.chat_input("Ask a cricket rules question..."):
         except Exception:
             expanded = question  # Fallback to original on error
 
-        # Off-topic / greeting / cricket-but-not-rules — handle before retrieval
+        # Off-topic / greeting / cricket-but-not-rules — handle before retrieval.
+        # We do NOT render the response inline here. Instead we append it to
+        # session state and trigger st.rerun(), so only the history loop
+        # renders it. This eliminates the dual render path (inline + history)
+        # that caused the ghost-flash of the prior off-topic response in the
+        # next turn's assistant bubble.
         if expanded in ("[GREETING]", "[CRICKET_OFF_TOPIC]", "[OFF_TOPIC]"):
-            status.update(label="Done", state="complete", expanded=False)
-
             if expanded == "[GREETING]":
                 response_text = (
                     "Hey there! While I appreciate the pleasantries, every question here "
@@ -357,9 +360,8 @@ if question := st.chat_input("Ask a cricket rules question..."):
                     "laws, and match situations. Please ask a cricket-related question!"
                 )
 
-            st.markdown(response_text)
             st.session_state.messages.append({"role": "assistant", "content": response_text})
-            st.stop()
+            st.rerun()
 
         # Step 2: Embed + Retrieve + Hybrid rerank
         status.update(label="Retrieving relevant cricket laws...")

@@ -74,13 +74,17 @@ def expand_query(anthropic_client, question, verbose=False):
         # Validate response has text content
         if response.content and hasattr(response.content[0], "text"):
             expanded_text = response.content[0].text.strip()
-            # Check for any classification token (greeting / cricket off-topic / off-topic)
-            if expanded_text in CLASSIFICATION_TOKENS:
+            # Check for any classification token. We compare leniently so minor
+            # model-side formatting variations (trailing period, quotes, newline)
+            # do not cause us to miss a classification and fall through to
+            # treating a greeting as a genuine question.
+            token_candidate = expanded_text.strip(" \t\n.,!?:;'\"")
+            if token_candidate in CLASSIFICATION_TOKENS:
                 usage = {
                     "input_tokens": response.usage.input_tokens,
                     "output_tokens": response.usage.output_tokens,
                 }
-                return expanded_text, usage
+                return token_candidate, usage
         else:
             # Fallback to original if response is empty or unexpected
             expanded_text = question

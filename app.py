@@ -134,7 +134,12 @@ def strip_thinking_tags(text):
 # ─── Conversation memory ──────────────────────────────────────────────────────
 
 def summarise_history(anthropic_client, messages):
-    """Summarise conversation history using Haiku for context continuity."""
+    """Summarise conversation history using Haiku for scenario continuity.
+
+    Captures factual scenario setup ONLY (what happened, who was where, what
+    the ball did) — NOT the rulings or laws cited. This prevents the next
+    turn's Claude from re-adjudicating prior answers.
+    """
     if not messages:
         return ""
 
@@ -148,12 +153,16 @@ def summarise_history(anthropic_client, messages):
 
     response = anthropic_client.messages.create(
         model="claude-haiku-4-5-20251001",
-        max_tokens=500,
+        max_tokens=400,
         system=(
-            "Summarise this cricket rules conversation in 3-5 sentences. "
-            "Focus on: what scenarios were discussed, what rulings were given, "
-            "and any specific laws referenced. This summary will be used as context "
-            "for the next question in the conversation."
+            "Summarise this cricket rules conversation in 2-4 sentences, "
+            "focusing ONLY on the factual scenarios and situational details "
+            "(e.g., \"the ball was a wide\", \"the batter was at the striker's end\", "
+            "\"the ball hit a fielder's helmet on the ground\"). "
+            "Do NOT mention the rulings given (OUT / NOT OUT / penalty runs). "
+            "Do NOT mention specific law numbers or quote any laws. "
+            "This summary exists only so the next question's references like "
+            "\"that scenario\" or \"in that case\" can be resolved."
         ),
         messages=[{"role": "user", "content": convo_text}],
     )
@@ -324,7 +333,7 @@ if question := st.chat_input("Ask a cricket rules question..."):
 
         # Off-topic / greeting / cricket-but-not-rules — handle before retrieval
         if expanded in ("[GREETING]", "[CRICKET_OFF_TOPIC]", "[OFF_TOPIC]"):
-            status.update(label="", state="complete", expanded=False)
+            status.update(label="Done", state="complete", expanded=False)
 
             if expanded == "[GREETING]":
                 response_text = (
@@ -385,25 +394,37 @@ if question := st.chat_input("Ask a cricket rules question..."):
         user_message = question
         if conversation_summary:
             user_message = (
-                f"[Previous conversation context: {conversation_summary}]\n\n{question}"
+                "[Previous conversation scenarios — for reference only. "
+                "Use this ONLY to resolve pronouns or references like 'that case' "
+                "or 'in that situation' in the new question. "
+                "Do NOT re-evaluate, confirm, or contradict any prior ruling.]\n"
+                f"{conversation_summary}\n\n"
+                f"[Current question]\n{question}"
             )
 
-        # Step 5: Stream the ruling — status stays open while streaming
+        # Step 5: Stream the ruling into an explicit placeholder
+        # We use st.empty() instead of st.write_stream() to give the DOM element
+        # a fresh identity each rerun. Without this, Streamlit's reconciliation
+        # briefly reuses the previous turn's streamed content in the new
+        # assistant bubble before diffing it out (causing the "flash" bug).
         status.update(label="Generating ruling...", state="running", expanded=False)
 
+        placeholder = st.empty()
         thinking_chunks = []
+        accumulated = ""
         try:
-            ruling = st.write_stream(
-                filter_thinking_stream(
-                    generate_ruling_stream(
-                        anthropic_client, system_prompt, user_message, context
-                    ),
-                    thinking_chunks,
-                )
-            )
+            for token in filter_thinking_stream(
+                generate_ruling_stream(
+                    anthropic_client, system_prompt, user_message, context
+                ),
+                thinking_chunks,
+            ):
+                accumulated += token
+                placeholder.markdown(accumulated)
+            ruling = accumulated
         except Exception as e:
             ruling = f"Sorry, I encountered an error generating the ruling. Please try again. ({e})"
-            st.markdown(ruling)
+            placeholder.markdown(ruling)
 
         status.update(label="Done!", state="complete", expanded=False)
 

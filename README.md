@@ -1,6 +1,6 @@
 # Fourth Umpire AI
 
-AI-powered cricket umpiring assistant that uses RAG (Retrieval-Augmented Generation) over the latest MCC Laws of Cricket to help answer complex umpiring decisions with accuracy and rule references.
+An agentic chatbot that umpires cricket. Fourth Umpire AI blends retrieval-augmented generation over the MCC Laws of Cricket with tool-calling for match arithmetic (run rates, overs↔balls), conversation memory so follow-up questions keep their scenario context, a three-way intent classifier that routes greetings, cricket-chat, and off-topic inputs away from the ruling engine, and hybrid retrieval (cosine ∪ reranker) that keeps multi-law scenarios grounded. Responses stream in real time with the model's private reasoning filtered out, every ruling cites the specific Law number, and a thumbs-up/down feedback loop captures disagreement for later review.
 
 **Try it live:** [fourth-umpire-ai.streamlit.app](https://fourth-umpire-ai.streamlit.app/)
 
@@ -391,3 +391,19 @@ Adding a reranker (fetch 10 → keep 5) improved faithfulness from 0.70 to 0.81 
 **Runtime:** 49m 2s | **Tokens:** 524.6K input + 70.7K output
 **What changed:** Hybrid retrieval (union cosine+reranked top-5) + anti-hedging prompt rules
 **Results file:** `evals/results/eval_20260414_193249.json`
+
+### Eval Run — 2026-04-17
+
+**Broader Chunks (279):**
+
+| | Answer Relevance | Faithfulness | Context Recall | Context Precision |
+|---|---|---|---|---|
+| **Overall** | 0.68 | 0.78 | 0.61 | 0.57 |
+| Easy (13) | 0.69 | 0.89 | 0.61 | 0.55 |
+| Hard (26) | 0.67 | 0.71 | 0.60 | 0.58 |
+| Edge Case (12) | 0.67 | 0.83 | 0.64 | 0.60 |
+
+**Config:** Retrieve 10 → Rerank to 5 (rerank-2.5-lite), model=claude-sonnet-4-6, judge=claude-haiku-4-5-20251001
+**Runtime:** 49m 30s | **Tokens:** 486.6K input + 75.4K output
+**What changed:** Hybrid cap HYBRID_FINAL_K=6 + anti-hedging Rule 3 + thorough-reading Rule 7 (commit ab5c5ec)
+**Results file:** `evals/results/eval_20260417_185128.json`

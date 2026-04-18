@@ -350,6 +350,8 @@ def main():
                         help="Document what changed for this run")
     parser.add_argument("--dataset", type=str, default=DEFAULT_DATASET,
                         help="Path to golden dataset JSON")
+    parser.add_argument("--graph-rag", action="store_true",
+                        help="Enable one-hop Graph RAG expansion (eval-only, cross-reference hop over Laws)")
     args = parser.parse_args()
 
     if args.both:
@@ -399,6 +401,10 @@ def main():
     # Rerank API has same rate limits as embeddings (3 RPM free tier)
     # Process in batches of BATCH_SIZE with WAIT_SECONDS delays
     print(f"\n── Step 3: Retrieving & Reranking Chunks {'─' * 20}")
+    if args.graph_rag:
+        from graph_rag import graph_expand
+        print("  [graph-rag] One-hop cross-reference expansion ENABLED (eval-only)")
+    graph_expansion_stats = {}
     retrieval_results = {}
     for key in collections_to_eval:
         retrieval_results[key] = []
@@ -412,6 +418,9 @@ def main():
                 # On rate limit or other error, keep original top-K without reranking
                 print(f"    Hybrid retrieve failed for {q['id']}, using cosine top chunks: {e}")
                 chunks = chunks[:RERANK_K]
+            if args.graph_rag:
+                chunks, log = graph_expand(chunks, chroma_collections[key].name)
+                graph_expansion_stats.setdefault(key, {})[q["id"]] = log
             retrieval_results[key].append({
                 "chunks": chunks,
                 "retrieved_ids": [c["id"] for c in chunks],
@@ -510,13 +519,15 @@ def main():
     # ── Save results ──
     elapsed_seconds = round(time.time() - start_time)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    results_file = os.path.join(RESULTS_DIR, f"eval_{timestamp}.json")
+    suffix = "_graph_rag" if args.graph_rag else ""
+    results_file = os.path.join(RESULTS_DIR, f"eval_{timestamp}{suffix}.json")
 
     total_input = token_counts["expansion_input"] + token_counts["ruling_input"] + token_counts["judge_input"]
     total_output = token_counts["expansion_output"] + token_counts["ruling_output"] + token_counts["judge_output"]
 
     run_config = {
         "timestamp": datetime.now().isoformat(),
+        "pipeline": "graph_rag" if args.graph_rag else "standard",
         "mode": "+".join(collections_to_eval),
         "retrieval_k": RETRIEVAL_K,
         "rerank_k": RERANK_K,
@@ -547,6 +558,8 @@ def main():
         "summary": summary,
         "per_question": per_question,
     }
+    if args.graph_rag:
+        output["graph_expansion_stats"] = graph_expansion_stats
 
     with open(results_file, "w", encoding="utf-8") as f:
         json.dump(output, f, indent=2, ensure_ascii=False)

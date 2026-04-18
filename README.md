@@ -407,3 +407,19 @@ Adding a reranker (fetch 10 → keep 5) improved faithfulness from 0.70 to 0.81 
 **Runtime:** 49m 30s | **Tokens:** 486.6K input + 75.4K output
 **What changed:** Hybrid cap HYBRID_FINAL_K=6 + anti-hedging Rule 3 + thorough-reading Rule 7 (commit ab5c5ec)
 **Results file:** `evals/results/eval_20260417_185128.json`
+
+### Eval Run — 2026-04-18
+
+**Broader Chunks (279):**
+
+| | Answer Relevance | Faithfulness | Context Recall | Context Precision |
+|---|---|---|---|---|
+| **Overall** | 0.65 | 0.77 | 0.62 | 0.40 |
+| Easy (13) | 0.73 | 0.96 | 0.67 | 0.42 |
+| Hard (26) | 0.60 | 0.65 | 0.57 | 0.39 |
+| Edge Case (12) | 0.67 | 0.79 | 0.69 | 0.41 |
+
+**Config:** Retrieve 10 → Rerank to 5 (rerank-2.5-lite), model=claude-sonnet-4-6, judge=claude-haiku-4-5-20251001
+**Runtime:** 52m 5s | **Tokens:** 735.5K input + 80.4K output
+**What changed:** Graph RAG v1: one-hop cross-ref expansion (cap 5 new chunks)
+**Results file:** `evals/results/eval_20260418_121410_graph_rag.json`
